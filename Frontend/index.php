@@ -516,4 +516,82 @@ include '../Frontend/includes/header.php';
             </div>
  </section>
 
+<!-- testimonials -->
+<section class="py-8 bg-gray-50">
+  <div class="max-w-4xl mx-auto px-4">
+     <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-800 mb-2">What Our Clients Say</h1>
+        <p class="text-lg text-gray-600">Real feedback from our valued customers</p>
+        <div class="w-24 h-1 bg-gradient-to-r from-green-400 to-blue-500 mx-auto mt-4 rounded"></div>
+    </div>
+
+    <div class="carousel w-full relative">
+      <!-- Feedback 3 -->
+      <div id="feedback3" class="carousel-item w-full flex justify-center">
+        <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 w-full max-w-2xl">
+          <div class="flex flex-col md:flex-row items-center gap-6">
+            <figure class="flex-shrink-0">
+              <img class="w-24 h-24 rounded-full object-cover border-4 border-purple-100" 
+                   src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face" 
+                   alt="Sarah Johnson">
+            </figure>
+            <div class="text-center md:text-left flex-1">
+              <div class="flex justify-center md:justify-start mb-2 text-yellow-400 text-xl">★★★★★</div>
+              <h2 class="text-xl font-semibold text-gray-800 mb-2">Sarah Johnson</h2>
+              <p class="text-gray-600 mb-3 leading-relaxed">"Incredible results! They understood our vision perfectly and brought it to life. The whole process was smooth and professional."</p>
+              <p class="text-sm text-purple-600 font-medium">Delighted Client</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feedback 4 -->
+      <div id="feedback4" class="carousel-item w-full flex justify-center">
+        <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 w-full max-w-2xl">
+          <div class="flex flex-col md:flex-row items-center gap-6">
+            <figure class="flex-shrink-0">
+              <img class="w-24 h-24 rounded-full object-cover border-4 border-red-100" 
+                   src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face" 
+                   alt="David Wilson">
+            </figure>
+            <div class="text-center md:text-left flex-1">
+              <div class="flex justify-center md:justify-start mb-2 text-yellow-400 text-xl">★★★★★</div>
+              <h2 class="text-xl font-semibold text-gray-800 mb-2">David Wilson</h2>
+              <p class="text-gray-600 mb-3 leading-relaxed">"Top-notch quality and service! They exceeded all our expectations and delivered on time. Couldn't be happier with the results."</p>
+              <p class="text-sm text-red-600 font-medium">Loyal Customer</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feedback 5 -->
+      <div id="feedback5" class="carousel-item w-full flex justify-center">
+        <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 w-full max-w-2xl">
+          <div class="flex flex-col md:flex-row items-center gap-6">
+            <figure class="flex-shrink-0">
+              <img class="w-24 h-24 rounded-full object-cover border-4 border-indigo-100" 
+                   src="https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=150&h=150&fit=crop&crop=face" 
+                   alt="Emma Davis">
+            </figure>
+            <div class="text-center md:text-left flex-1">
+              <div class="flex justify-center md:justify-start mb-2 text-yellow-400 text-xl">★★★★★</div>
+              <h2 class="text-xl font-semibold text-gray-800 mb-2">Emma Davis</h2>
+              <p class="text-gray-600 mb-3 leading-relaxed">"Amazing experience! Their creativity and professionalism made our project a huge success. I highly recommend their services to everyone."</p>
+              <p class="text-sm text-indigo-600 font-medium">Happy Customer</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Indicator dots -->
+    <div class="flex justify-center mt-6 space-x-2">
+      <a href="#feedback3" class="w-3 h-3 rounded-full bg-gray-300 hover:bg-gray-400"></a>
+      <a href="#feedback4" class="w-3 h-3 rounded-full bg-gray-300 hover:bg-gray-400"></a>
+      <a href="#feedback5" class="w-3 h-3 rounded-full bg-gray-300 hover:bg-gray-400"></a>
+    </div>
+  </div>
+</section>
+
+
 <?php include '../Frontend/includes/footer.php';?>
