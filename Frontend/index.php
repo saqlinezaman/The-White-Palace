@@ -422,4 +422,98 @@ include '../Frontend/includes/header.php';
     </div>
 </section>
 
+<!-- why use our room blog  -->
+
+<!-- Why use  -->
+ <section class="my-10 mx-3 md:mx-16">
+    <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-800 mb-2">Why You Should Use <br> our rooms</h1>
+        <p class="text-lg text-gray-600">Choose from our carefully curated selection of rooms</p>
+        <div class="w-24 h-1 bg-gradient-to-r from-green-400 to-blue-500 mx-auto mt-4 rounded"></div>
+    </div>
+      <!-- Blog Cards Row -->
+      <div class="flex flex-wrap justify-center gap-6">
+                <!-- card 1 -->
+                <div class="card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group hover:bg-success border border-base-300" style=" width: 350px; ">
+                    <figure class="overflow-hidden">
+                        <img
+                            src="assets/images/blog1.jpg"
+                            alt="Best Hotels in Paris"
+                            class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                    </figure>
+                    
+                    <div class="card-body p-6 pb-0">
+                        <span>2025/8/23</span>
+                        <h3 class=" text-2xl font-bold mb-4 text-base-content group-hover:text-white transition-colors duration-300">
+                            Best Hotels in Paris
+                        </h3>
+                        
+                        <p class="text-base-content/70 text-base leading-relaxed group-hover:text-white/90 transition-colors duration-300">
+                            Discover luxury accommodations in the City of Light with our curated selection of top-rated hotels.
+                        </p>
+                    </div>
+                    
+                    <div class="bg-red-200 py-6 px-6">
+                        <button class="  bg-green-500 text-white py-2 px-5 rounded">
+                            Read More
+                        </button>
+                    </div>
+                </div>
+                <!-- card 2 -->
+                <div class="card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group hover:bg-success border border-base-300" style=" width: 350px; ">
+                    <figure class="overflow-hidden">
+                        <img
+                            src="assets/images/blog2.jpg"
+                            class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                    </figure>
+                    
+                    <div class="card-body p-6 pb-0">
+                        <span>2025/8/23</span>
+                        <h3 class="text-2xl font-bold mb-4 text-base-content group-hover:text-white transition-colors duration-300">
+                            Holiday discount
+                        </h3>
+                        
+                        <p class="text-base-content/70 text-base leading-relaxed group-hover:text-white/90 transition-colors duration-300">
+                            Discover luxury accommodations in the City of Light with our curated selection of top-rated hotels.
+                        </p>
+                    </div>
+                    
+                    <div class="bg-red-200 py-6 px-6">
+                        <button class="  bg-green-500 text-white py-2 px-5 rounded">
+                            Read More
+                        </button>
+                    </div>
+                </div>
+                <!-- car-3 -->
+                <div class="card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group hover:bg-success border border-base-300" style=" width: 350px; ">
+                    <figure class="overflow-hidden">
+                        <img
+                             src="assets/images/blog3.jpg"
+                            class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                    </figure>
+                    
+                    <div class="card-body p-6 pb-0">
+                        <span>2025/8/23</span>
+                        <h3 class=" text-2xl font-bold mb-4 text-base-content group-hover:text-white transition-colors duration-300">
+                            Best view in Hawai
+                        </h3>
+                        
+                        <p class="text-base-content/70 text-base leading-relaxed group-hover:text-white/90 transition-colors duration-300">
+                            Discover luxury accommodations in the City of Light with our curated selection of top-rated hotels.
+                        </p>
+                    </div>
+                    
+                    <div class="bg-red-200 py-6 px-6">
+                        <button class="  bg-green-500 text-white py-2 px-5 rounded">
+                            Read More
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+ </section>
+
 <?php include '../Frontend/includes/footer.php';?>

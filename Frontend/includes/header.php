@@ -23,9 +23,10 @@
         <header>
             <!-- top bar -->
             <div
-                class="max-h-max py-1 bg-purple-700 text-white md:flex items-center text-center md:justify-end gap-2 px-3 font-normal">
+                class="max-h-max py-1 bg-success text-white md:flex items-center text-center md:justify-end gap-2 px-3 font-normal">
                 <p><i class="fa-solid fa-phone"></i>+88 01745-654534</p>
                 <p><i class="fa-solid fa-envelope"></i></i>+88 01745-654534</p>
+                <p><i class="fa-solid fa-location-dot"></i></i></i>Paola Castillo 	Avenida Juan, 82,</p>
             </div>
 
             <!-- navbar -->
@@ -40,7 +41,7 @@
                             class="fa-brands fa-youtube"></i></a>
                 </div>
                 <div class="navbar-center">
-                    <a class="text-3xl text-lime-700 font-semibold">The white Palace </a>
+                    <a class="text-3xl text-black font-semibold">The White Palace </a>
                 </div>
                 <div class="navbar-end relative">
                     <div class="dropdown dropdown-end">
