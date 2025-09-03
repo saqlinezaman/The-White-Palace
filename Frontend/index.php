@@ -1,6 +1,15 @@
-
 <?php
 include '../Frontend/includes/header.php';
+require_once __DIR__ . '/../admin/config/db_config.php';
+
+// Database connection
+$database = new Database();
+$db_connection = $database->db_connection();
+
+
+$statement = $db_connection->prepare("SELECT * FROM categories ORDER BY id DESC");
+$statement->execute();
+$categories = $statement->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 
@@ -32,7 +41,8 @@ include '../Frontend/includes/header.php';
 
         <!-- Transparent Form -->
         <div class="w-full max-w-md mx-auto">
-            <div class="rounded-2xl shadow-2xl p-6 border border-white backdrop-blur-sm" style="background-color: rgba(255, 255, 255, 0.10); border-color: rgba(255, 255, 255, 0.3);">
+            <div class="rounded-2xl shadow-2xl p-6 border border-white backdrop-blur-sm"
+                style="background-color: rgba(255, 255, 255, 0.10); border-color: rgba(255, 255, 255, 0.3);">
                 <h2 class="text-2xl font-bold text-center text-white mb-6 drop-shadow-lg">Book Your Stay</h2>
 
                 <form class="space-y-2">
@@ -71,10 +81,14 @@ include '../Frontend/includes/header.php';
                             style="background-color: rgba(255, 255, 255, 0.2); border-color: rgba(255, 255, 255, 0.4); color: white;"
                             name="room_type" required>
                             <option disabled selected style="color: #666;">Select room type</option>
-                            <option value="single" style="color: #333; background-color: white;">Single Room (1 Person)</option>
-                            <option value="double" style="color: #333; background-color: white;">Double Room (2 Persons)</option>
-                            <option value="family" style="color: #333; background-color: white;">Family Suite (3-4 Persons)</option>
-                            <option value="deluxe" style="color: #333; background-color: white;">Deluxe Suite (2 Persons)</option>
+                            <option value="single" style="color: #333; background-color: white;">Single Room (1 Person)
+                            </option>
+                            <option value="double" style="color: #333; background-color: white;">Double Room (2 Persons)
+                            </option>
+                            <option value="family" style="color: #333; background-color: white;">Family Suite (3-4
+                                Persons)</option>
+                            <option value="deluxe" style="color: #333; background-color: white;">Deluxe Suite (2
+                                Persons)</option>
                         </select>
                     </div>
 
@@ -109,7 +123,9 @@ include '../Frontend/includes/header.php';
                     <!-- Additional Info -->
                     <div class="text-center mt-4 p-3 rounded-lg" style="background-color: rgba(255, 255, 255, 0.1);">
                         <p class="text-sm text-white drop-shadow">
-                            Need help? <a href="#" class="text-cyan-300 font-medium hover:underline hover:text-cyan-200 transition-colors duration-300">Contact us</a>
+                            Need help? <a href="#"
+                                class="text-cyan-300 font-medium hover:underline hover:text-cyan-200 transition-colors duration-300">Contact
+                                us</a>
                         </p>
                     </div>
                 </form>
@@ -117,6 +133,27 @@ include '../Frontend/includes/header.php';
         </div>
     </div>
 </div>
+
+<section class="my-10 mx-3 md:mx-16">
+    <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-800 mb-2">Our Room Categories</h1>
+        <div class="w-24 h-1 bg-gradient-to-r from-green-400 to-blue-500 mx-auto mt-4 rounded"></div>
+        <div class="">
+            <div class="flex flex-wrap justify-center gap-6">
+                <?php foreach ($categories as $category): ?>
+                <div class="card bg-base-100 w-64 shadow-lg p-5">
+                    <figure>
+                        <img class="w-40 h-40 object-cover"  src="<?php echo '../admin/uploads/' . $category['image']; ?>" />
+                    </figure>
+                    <div class="card-body">
+                        <h2 class="text-center text-lg font-semibold"><?= $category['room_type'] ?></h2>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+</section>
 
 <!-- Room Options Section -->
 <section class="my-10 mx-3 md:mx-16">
@@ -501,7 +538,7 @@ include '../Frontend/includes/header.php';
                 </p>
             </div>
 
-             <div class="bg-gray-900 py-6 px-6">
+            <div class="bg-gray-900 py-6 px-6">
                 <button class="bg-white font-medium text-gray-900 py-2 px-5 rounded">
                     Read More
                 </button>
@@ -544,8 +581,7 @@ include '../Frontend/includes/header.php';
 
             <div class="card-body p-6 pb-0">
                 <span>2025/8/23</span>
-                <h3
-                    class=" text-2xl font-bold text-base-content group-hover:text-white transition-colors duration-300">
+                <h3 class=" text-2xl font-bold text-base-content group-hover:text-white transition-colors duration-300">
                     Best view in Hawai
                 </h3>
 
