@@ -32,6 +32,14 @@
                     <div class="menu-title">Categories</div>
                   </a>
                 </li>
+                <!-- Rooms -->
+                <li>
+                  <a href="<?= BASE_URL ?>pages/rooms/room.php">
+                    <div class="parent-icon"><span class="material-symbols-outlined">home</span>
+                    </div>
+                    <div class="menu-title">Rooms</div>
+                  </a>
+                </li>
 
               </ul>
               <!--end navigation-->
