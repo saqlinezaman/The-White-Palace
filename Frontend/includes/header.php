@@ -97,9 +97,9 @@
                 <div class="navbar-end hidden md:block" id="desktop-menu">
                     <ul class="menu menu-horizontal  rounded-lg px-1">
                         <li><a class="text-gray-900 hover:bg-green-600 hover:text-white transition-colors duration-300 mx-1"
-                                href="#">Homepage</a></li>
+                                href="../index.php">Homepage</a></li>
                         <li><a class="text-gray-900 hover:bg-green-600 hover:text-white transition-colors duration-300 mx-1"
-                                href="#">Portfolio</a></li>
+                                href="pages/rooms.php">Our Rooms</a></li>
                         <li><a class="text-gray-900 hover:bg-green-600 hover:text-white transition-colors duration-300 mx-1"
                                 href="#">About</a></li>
                         <li><a class="text-gray-900 hover:bg-green-600 hover:text-white transition-colors duration-300 mx-1"

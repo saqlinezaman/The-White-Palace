@@ -53,19 +53,18 @@ $rooms = $roomsStmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
 
         <!-- Booking Search Form -->
-        <form action="#" method="GET"
+        <form action="pages/rooms.php" method="GET"
             class="w-full md:w-4/5 lg:w-2/3 flex flex-wrap items-center gap-4 bg-white shadow-lg rounded-xl px-8 py-4 text-gray-800 mx-auto">
 
             <!-- Room Select -->
             <div class="flex-1 min-w-[180px]">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Room Type</label>
                 <select name="room"
-                    class="w-full border rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500">
-                    <option value="">Select Room</option>
-                    <option value="1">Deluxe</option>
-                    <option value="2">Suite</option>
-                    <option value="3">Single</option>
-                    <option value="4">Double</option>
+                class="w-full border rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500">
+                <option value="">Select Room</option>
+                <?php foreach ($categories as $category): ?>
+                    <option value="<?= $category['id'] ?>"><?= htmlspecialchars($category['room_type']) ?></option>         
+                    <?php endforeach; ?>
                 </select>
             </div>
 
