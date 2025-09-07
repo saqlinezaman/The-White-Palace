@@ -37,7 +37,7 @@ if (!empty($room['gallery_images'])) {
 }
 
 // Main image path
-$mainImage = !empty($room['image_url']) ? '/thewhitepalace/admin/' . trim($room['image_url']) : '/thewhitepalace/Frontend/assets/images/default-room.jpg';
+$mainImage = !empty($room['image_url']) ? '/thewhitepalace/' . trim($room['image_url']) : '/thewhitepalace/Frontend/assets/images/default-room.jpg';
 ?>
 
 <div class="mx-5 md:mx-20 my-10 flex mt-10">
@@ -51,7 +51,7 @@ $mainImage = !empty($room['image_url']) ? '/thewhitepalace/admin/' . trim($room[
     <?php if (!empty($galleryImages)): ?>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 my-6">
             <?php foreach ($galleryImages as $image): ?>
-                <?php $galleryPath = '/thewhitepalace/admin/' . trim($image); ?>
+                <?php $galleryPath = '/thewhitepalace/' . trim($image); ?>
                 <div class="overflow-hidden rounded-lg shadow-md">
                     <img src="<?= $galleryPath ?>" 
                          alt="<?= htmlspecialchars($room['name']) ?>" 

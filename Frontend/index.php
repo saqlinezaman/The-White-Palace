@@ -140,7 +140,7 @@ $rooms = $roomsStmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 h-full">
                         <!-- Image Section -->
                         <div class="relative overflow-hidden">
-                            <img src="<?= '../admin/' . trim($room['image_url']) ?>"
+                            <img src="<?= '../' . trim($room['image_url']) ?>"
                                 alt="<?= htmlspecialchars($room['name']) ?>"
                                 class="w-full lg:h-full object-cover transition-transform duration-500 hover:scale-110" />
                             <!-- Price Badge -->
