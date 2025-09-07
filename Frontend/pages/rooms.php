@@ -98,7 +98,7 @@ $rooms = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </h3>
                     <p class="text-sm text-gray-500 mb-2"><?= htmlspecialchars($room['category_name']); ?></p>
                     <p class="text-green-600 font-bold">৳<?= $room['price']; ?>/night</p>
-                    <a href="room_details.php?id=<?= $room['id']; ?>" 
+                    <a href="view_room.php?id=<?= $room['id'] ?>" 
                        class="mt-3 inline-block bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
                         View Details
                     </a>

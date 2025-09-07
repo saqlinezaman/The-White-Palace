@@ -24,7 +24,7 @@ $rooms = $roomsStmt->fetchAll(PDO::FETCH_ASSOC);
 
 
 <!-- hero section -->
-<div class="hero bg-base-200  relative" style="background-image: url(assets/images/hero-4.jpg);">
+<div class="hero bg-base-200  relative" style="background-image: url(assets/images/hero4.jpg);">
     <!-- Dark overlay -->
     <div class="absolute inset-0 bg-black" style="opacity: 0.6;"></div>
 
@@ -53,17 +53,17 @@ $rooms = $roomsStmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
 
         <!-- Booking Search Form -->
-        <form action="pages/rooms.php" method="GET"
+        <form action="pages/rooms.php" method="GET" id="bookingForm"
             class="w-full md:w-4/5 lg:w-2/3 flex flex-wrap items-center gap-4 bg-white shadow-lg rounded-xl px-8 py-4 text-gray-800 mx-auto">
 
             <!-- Room Select -->
             <div class="flex-1 min-w-[180px]">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Room Type</label>
                 <select name="room"
-                class="w-full border rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500">
-                <option value="">Select Room</option>
-                <?php foreach ($categories as $category): ?>
-                    <option value="<?= $category['id'] ?>"><?= htmlspecialchars($category['room_type']) ?></option>         
+                    class="w-full border rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500">
+                    <option value="">Select Room</option>
+                    <?php foreach ($categories as $category): ?>
+                        <option value="<?= $category['id'] ?>"><?= htmlspecialchars($category['room_type']) ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -140,7 +140,7 @@ $rooms = $roomsStmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 h-full">
                         <!-- Image Section -->
                         <div class="relative overflow-hidden">
-                            <img src="<?='../admin/'. trim($room['image_url']) ?>"
+                            <img src="<?= '../admin/' . trim($room['image_url']) ?>"
                                 alt="<?= htmlspecialchars($room['name']) ?>"
                                 class="w-full lg:h-full object-cover transition-transform duration-500 hover:scale-110" />
                             <!-- Price Badge -->
@@ -192,10 +192,10 @@ $rooms = $roomsStmt->fetchAll(PDO::FETCH_ASSOC);
                                     class="btn bg-green-500 flex-1 text-white font-semibold hover:scale-105 transition-all duration-300">
                                     Book Now
                                 </button>
-                                <button
-                                    class="btn btn-outline btn-primary font-semibold hover:scale-105 transition-all duration-300">
+                                <a href="pages/view_room.php?id=<?= $room['id'] ?>"
+                                    class="btn btn-outline btn-primary font-semibold hover:scale-105 transition-all duration-300 flex-1 text-center">
                                     View Details
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </div>
