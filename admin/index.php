@@ -1,4 +1,10 @@
 <?php
+session_start();
+if(!isset($_SESSION['admin_logged_in'])){
+    header('Location: login.php');
+    exit;
+}
+
 include __DIR__.'/includes/header.php';
 include __DIR__.'/includes/sidebar.php';
 
