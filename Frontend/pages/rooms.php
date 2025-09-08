@@ -89,7 +89,7 @@ $rooms = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php if(count($rooms) > 0): ?>
         <?php foreach($rooms as $room): ?>
             <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <img src="../../admin/<?= $room['image_url']; ?>" 
+                <img src="../../<?= $room['image_url']; ?>" 
                      alt="<?= htmlspecialchars($room['name']); ?>" 
                      class="w-full h-48 object-cover">
                 <div class="p-4">

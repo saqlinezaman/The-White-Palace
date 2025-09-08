@@ -21,7 +21,7 @@ if (isset($_POST['addCategory'])) {
     } elseif (empty($image)) {
         $errorMessage = "Category image is required.";
     } else {
-        $targetDir = __DIR__ . "/../../uploads/";
+        $targetDir = __DIR__ . "/../uploads/categories/";
         if (!is_dir($targetDir)) mkdir($targetDir, 0777, true);
 
         $targetFile = $targetDir . basename($image);
@@ -35,7 +35,7 @@ if (isset($_POST['addCategory'])) {
             if ($insert_statement->execute()) {
                 $successMessage = "Category added successfully!";
                 // redirect to prevent duplicate insert
-                header("Location: add_categories.php?success=1");
+               echo "<script>window.location.href='index.php?page=add_categories&success=1';</script>";
                 exit;
             } else {
                 $errorMessage = "Failed to add category. Please try again.";

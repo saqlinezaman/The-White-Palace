@@ -140,8 +140,7 @@ $rooms = $roomsStmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 h-full">
                         <!-- Image Section -->
                         <div class="relative overflow-hidden">
-                            <img src="<?= '../' . trim($room['image_url']) ?>"
-                                alt="<?= htmlspecialchars($room['name']) ?>"
+                            <img src="<?= '../' . trim($room['image_url']) ?>" alt="<?= htmlspecialchars($room['name']) ?>"
                                 class="w-full lg:h-full object-cover transition-transform duration-500 hover:scale-110" />
                             <!-- Price Badge -->
                             <div class="absolute top-4 right-4">
@@ -188,10 +187,10 @@ $rooms = $roomsStmt->fetchAll(PDO::FETCH_ASSOC);
 
                             <!-- Action Buttons -->
                             <div class="flex gap-3 mt-auto">
-                                <button
-                                    class="btn bg-green-500 flex-1 text-white font-semibold hover:scale-105 transition-all duration-300">
-                                    Book Now
-                                </button>
+                                <!-- যদি তোর কাছে check_in/check_out আছে (from search) pass করো, না থাকলে খালি রাখো -->
+                                <a href="pages/book_room.php?room_id=<?= $room['id'] ?>&check_in=<?= $_GET['check_in'] ?? '' ?>&check_out=<?= $_GET['check_out'] ?? '' ?>"
+                                    class="btn bg-green-500 px-20 py-2">Book Your Stay</a>
+
                                 <a href="pages/view_room.php?id=<?= $room['id'] ?>"
                                     class="btn btn-outline btn-primary font-semibold hover:scale-105 transition-all duration-300 flex-1 text-center">
                                     View Details

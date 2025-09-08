@@ -39,11 +39,18 @@
       </li>
       <!-- Rooms -->
       <li>
-        <a href="index.php?page=rooms/room">
+        <a href="index.php?page=room">
            <div class="parent-icon"><span class="material-symbols-outlined">hotel</span></div>
           <div class="menu-title">Rooms</div>
         </a>
       </li>
+     <!-- Bookings -->
+<li>
+  <a href="index.php?page=manage_bookings">
+    <div class="parent-icon"><span class="material-symbols-outlined">book</span></div>
+    <div class="menu-title">Bookings</div>
+  </a>
+</li>
 
     </ul>
     <!--end navigation-->

@@ -38,7 +38,7 @@ if (isset($_POST['updateCategory'])) {
 
         // Handle new image upload
         if (!empty($_FILES['category_image']['name'])) {
-            $uploadDir = __DIR__ . '/../../Uploads/';
+            $uploadDir = __DIR__ . '/../uploads/';
             if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0777, true);
             }
@@ -107,7 +107,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                 <input type="file" class="form-control" name="category_image">
                 <?php if (!empty($category['image'])): ?>
                     <p class="mt-2">Current Image:</p>
-                    <img src="<?= BASE_URL ?>Uploads/<?= htmlspecialchars($category['image']) ?>" width="100"
+                    <img src="<?= BASE_URL ?>uploads/<?= htmlspecialchars($category['image']) ?>" width="100"
                         alt="Category Image">
                 <?php endif; ?>
             </div>
