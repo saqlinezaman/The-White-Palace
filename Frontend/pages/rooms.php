@@ -5,13 +5,14 @@ include '../includes/header.php';
 $database = new Database();
 $db_connection = $database->db_connection();
 
-// Category গুলো নেব
+// Get all categories
 $statement = $db_connection->prepare("SELECT * FROM categories ORDER BY id DESC");
 $statement->execute();
 $categories = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-$checkIn = $_GET['check_in'] ?? '';
-$checkOut = $_GET['check_out'] ?? '';
+// Get check-in and check-out from GET, or set default
+$checkIn = $_GET['check_in'] ?? date('Y-m-d'); // default today
+$checkOut = $_GET['check_out'] ?? date('Y-m-d', strtotime($checkIn . ' +1 day')); // default tomorrow
 $errorMsg = '';
 
 // PHP server-side validation
@@ -22,35 +23,22 @@ if (!empty($checkIn) && !empty($checkOut)) {
     }
 }
 
-// Build Query
-if (!empty($checkIn) && !empty($checkOut) && empty($errorMsg)) {
-    // Availability check
-    $query = "
-        SELECT r.*, c.room_type as category_name,
-        (
-            r.total_rooms - (
-                SELECT COUNT(*) FROM bookings b
-                WHERE b.room_id = r.id
-                  AND b.status IN ('pending','approved')
-                  AND NOT (b.check_out <= ? OR b.check_in >= ?)
-            )
-        ) AS available_rooms
-        FROM rooms r
-        JOIN categories c ON r.category_id = c.id
-        WHERE 1
-    ";
-    $params = [$checkIn, $checkOut];
-} else {
-    // Default: show total rooms
-    $query = "
-        SELECT r.*, c.room_type as category_name,
-               r.total_rooms AS available_rooms
-        FROM rooms r
-        JOIN categories c ON r.category_id = c.id
-        WHERE 1
-    ";
-    $params = [];
-}
+// Build Query with availability calculation
+$query = "
+    SELECT r.*, c.room_type as category_name,
+    (
+        r.total_rooms - (
+            SELECT COUNT(*) FROM bookings b
+            WHERE b.room_id = r.id
+              AND b.status IN ('pending','approved')
+              AND NOT (b.check_out <= ? OR b.check_in >= ?)
+        )
+    ) AS available_rooms
+    FROM rooms r
+    JOIN categories c ON r.category_id = c.id
+    WHERE 1
+";
+$params = [$checkIn, $checkOut];
 
 // Room type filter
 if (!empty($_GET['room'])) {
