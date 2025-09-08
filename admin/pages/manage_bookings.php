@@ -1,94 +1,151 @@
 <?php
-require_once __DIR__ . '/../config/db_config.php';
+// Start output buffering to prevent header issues
+ob_start();
 
+require_once __DIR__ . '/../config/db_config.php';
 $database = new Database();
 $db = $database->db_connection();
-
 $msg = '';
 
-if (isset($_GET['approve'])) {
-    $id = intval($_GET['approve']);
-    // get booking
-    $b = $db->prepare("SELECT * FROM bookings WHERE id = ?");
-    $b->execute([$id]);
-    $booking = $b->fetch(PDO::FETCH_ASSOC);
-    if ($booking) {
-        // conflict check: any other approved booking overlapping?
-        $check = $db->prepare("
-            SELECT COUNT(*) AS cnt FROM bookings
-            WHERE room_id = ?
-              AND status = 'approved'
-              AND id != ?
-              AND (check_in < :check_out AND check_out > :check_in)
-        ");
-        $check->execute([$booking['room_id'], $id, ':check_out' => $booking['check_out'], ':check_in' => $booking['check_in']]);
-        $row = $check->fetch(PDO::FETCH_ASSOC);
-        if (intval($row['cnt']) > 0) {
-            $msg = "Cannot approve: time conflict with another approved booking.";
-        } else {
-            $db->prepare("UPDATE bookings SET status='approved' WHERE id = ?")->execute([$id]);
-            $msg = "Booking approved.";
+// Handle status change
+if (isset($_POST['change_status'])) {
+    $id = intval($_POST['booking_id']);
+    $new_status = $_POST['status'];
+
+    // If approving, check for conflicts
+    if ($new_status === 'approved') {
+        $stmt = $db->prepare("SELECT * FROM bookings WHERE id = ?");
+        $stmt->execute([$id]);
+        $booking = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($booking) {
+            $check = $db->prepare("
+                SELECT COUNT(*) AS cnt 
+                FROM bookings 
+                WHERE room_id = ? AND status = 'approved' AND id != ? 
+                AND (
+                    (check_in <= ? AND check_out >= ?) OR
+                    (check_in <= ? AND check_out >= ?) OR
+                    (check_in >= ? AND check_out <= ?)
+                )
+            ");
+            $check->execute([
+                $booking['room_id'],
+                $id,
+                $booking['check_in'], $booking['check_in'],
+                $booking['check_out'], $booking['check_out'],
+                $booking['check_in'], $booking['check_out']
+            ]);
+            $row = $check->fetch(PDO::FETCH_ASSOC);
+
+            if (intval($row['cnt']) > 0) {
+                $msg = "Cannot approve: time conflict with another approved booking.";
+            } else {
+                $db->prepare("UPDATE bookings SET status = ? WHERE id = ?")->execute([$new_status, $id]);
+                $msg = "Booking status updated to Approved.";
+            }
         }
+    } else {
+        // For reject or pending, just update
+        $db->prepare("UPDATE bookings SET status = ? WHERE id = ?")->execute([$new_status, $id]);
+        $msg = "Booking status updated to " . ucfirst($new_status) . ".";
     }
+
+    // Redirect safely before any output
+   echo '<script>window.location.href="manage_bookings.php?msg=' . urlencode($msg) . '";</script>';
+    
 }
 
-if (isset($_GET['reject'])) {
-    $id = intval($_GET['reject']);
-    $db->prepare("UPDATE bookings SET status='rejected' WHERE id = ?")->execute([$id]);
-    $msg = "Booking rejected.";
-}
+// Fetch all bookings
+$rows = $db->query("
+    SELECT b.*, r.name AS room_name 
+    FROM bookings b 
+    JOIN rooms r ON b.room_id = r.id 
+    ORDER BY b.created_at DESC
+")->fetchAll(PDO::FETCH_ASSOC);
 
-// fetch all bookings
-$rows = $db->query("SELECT b.*, r.name AS room_name FROM bookings b JOIN rooms r ON b.room_id = r.id ORDER BY b.created_at DESC")->fetchAll(PDO::FETCH_ASSOC);
+// Get message from URL if available
+if (isset($_GET['msg'])) $msg = $_GET['msg'];
+
+require_once __DIR__ . '/../includes/header.php';
+require_once __DIR__ . '/../includes/sidebar.php';
 ?>
 
-<?php 
-// header include
-require_once __DIR__ . '/../includes/header.php'; 
-
-// sidebar include
-require_once __DIR__ . '/../includes/sidebar.php'; 
-?>
-<?php ob_start(); ?>
-<div class="p-6">
+<div class="container mt-4">
     <?php if ($msg): ?>
-        <div class="alert alert-info"><?= htmlspecialchars($msg) ?></div>
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <?= htmlspecialchars($msg) ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
     <?php endif; ?>
 
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>ID</th><th>Room</th><th>Name</th><th>Phone</th><th>Check In</th><th>Check Out</th><th>Nights</th><th>Total</th><th>Status</th><th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($rows as $b): ?>
+    <h3>Booking Management</h3>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped align-middle">
+            <thead class="table-dark">
                 <tr>
-                    <td><?= $b['id'] ?></td>
-                    <td><?= htmlspecialchars($b['room_name']) ?></td>
-                    <td><?= htmlspecialchars($b['user_name']) ?></td>
-                    <td><?= htmlspecialchars($b['user_phone']) ?></td>
-                    <td><?= $b['check_in'] ?></td>
-                    <td><?= $b['check_out'] ?></td>
-                    <td><?= $b['nights'] ?></td>
-                    <td>৳<?= number_format($b['total_price'],2) ?></td>
-                    <td><?= ucfirst($b['status']) ?></td>
-                    <td>
-                        <?php if ($b['status'] === 'pending'): ?>
-                            <a href="?approve=<?= $b['id'] ?>" class="btn btn-sm btn-success">Approve</a>
-                            <a href="?reject=<?= $b['id'] ?>" class="btn btn-sm btn-danger">Reject</a>
-                        <?php else: ?>
-                            <?= ucfirst($b['status']) ?>
-                        <?php endif; ?>
-                    </td>
+                    <th>ID</th>
+                    <th>Room</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Check In</th>
+                    <th>Check Out</th>
+                    <th>Nights</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Action</th>
                 </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <?php if (empty($rows)): ?>
+                    <tr>
+                        <td colspan="10" class="text-center">No bookings found</td>
+                    </tr>
+                <?php else: ?>
+                    <?php foreach ($rows as $b): ?>
+                        <tr>
+                            <td><?= $b['id'] ?></td>
+                            <td><?= htmlspecialchars($b['room_name']) ?></td>
+                            <td><?= htmlspecialchars($b['user_name']) ?></td>
+                            <td><?= htmlspecialchars($b['user_phone']) ?></td>
+                            <td><?= date('M j, Y', strtotime($b['check_in'])) ?></td>
+                            <td><?= date('M j, Y', strtotime($b['check_out'])) ?></td>
+                            <td><?= $b['nights'] ?></td>
+                            <td>৳<?= number_format($b['total_price'], 2) ?></td>
+                            <td>
+                                <?php 
+                                    $statusClass = match($b['status']) {
+                                        'pending' => 'bg-warning',
+                                        'approved' => 'bg-success',
+                                        'rejected' => 'bg-danger',
+                                        default => 'bg-secondary'
+                                    };
+                                ?>
+                                <span class="badge <?= $statusClass ?>"><?= ucfirst($b['status']) ?></span>
+                            </td>
+                            <td>
+                                <form method="post">
+                                    <input type="hidden" name="booking_id" value="<?= $b['id'] ?>">
+                                    <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                                        <option value="pending" <?= $b['status'] === 'pending' ? 'selected' : '' ?>>Pending</option>
+                                        <option value="approved" <?= $b['status'] === 'approved' ? 'selected' : '' ?>>Approved</option>
+                                        <option value="rejected" <?= $b['status'] === 'rejected' ? 'selected' : '' ?>>Rejected</option>
+                                    </select>
+                                    <input type="hidden" name="change_status" value="1">
+                                </form>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
 </div>
-<?php
-// Flush the output buffer
-ob_end_flush();
-?>
 
 <?php include __DIR__ . '/../includes/footer.php'; ?>
+
+<?php
+// Flush output buffer
+ob_end_flush();
+?>

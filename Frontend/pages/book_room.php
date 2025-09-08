@@ -27,8 +27,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nights = $date1->diff($date2)->days;
 
     try {
-        // 1. Room price বের করা (rooms টেবিল থেকে)
-        $roomStmt = $db->prepare("SELECT price FROM rooms WHERE id = :room_id LIMIT 1");
+        // 1. Room info বের করা (rooms টেবিল থেকে)
+        $roomStmt = $db->prepare("SELECT price, total_rooms FROM rooms WHERE id = :room_id LIMIT 1");
         $roomStmt->execute([':room_id' => $room_id]);
         $roomData = $roomStmt->fetch(PDO::FETCH_ASSOC);
 
@@ -36,10 +36,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new Exception("Room not found.");
         }
 
-        $room_price  = (float) $roomData['price'];
-        $total_price = $nights * $room_price;
+        $room_price   = (float) $roomData['price'];
+        $total_rooms  = (int) $roomData['total_rooms'];
+        $total_price  = $nights * $room_price;
 
-        // 2. Check availability
+        // 2. ওই তারিখে কত বুকিং আছে চেক করা
         $checkAvailability = $db->prepare("
             SELECT COUNT(*) 
             FROM bookings 
@@ -55,12 +56,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ':check_out' => $check_out
         ]);
 
-        $alreadyBooked = $checkAvailability->fetchColumn();
+        $alreadyBooked = (int) $checkAvailability->fetchColumn();
 
-        if ($alreadyBooked > 0) {
-            $message = "<p class='text-red-600 text-center font-bold'>❌ Sorry, this room is not available for the selected dates.</p>";
+        // 3. compare with total_rooms
+        if ($alreadyBooked >= $total_rooms) {
+            $message = "<p class='text-red-600 text-center font-bold'>❌ Sorry, all {$total_rooms} rooms are already booked for the selected dates.</p>";
         } else {
-            // 3. Insert booking
+            // 4. Insert booking
             $stmt = $db->prepare("
                 INSERT INTO bookings 
                 (room_id, user_name, user_email, user_phone, check_in, check_out, nights, total_price, status) 

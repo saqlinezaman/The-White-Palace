@@ -107,7 +107,7 @@ $categories = $statement->fetchAll(PDO::FETCH_ASSOC);
                         <td><?php echo $cat['id']; ?></td>
                         <td><?php echo $cat['room_type']; ?></td>
                         <td>
-                            <img class="rounded-circle" src="<?php echo BASE_URL . 'uploads/' . $cat['image']; ?>" alt="" width="50" height="55">
+                            <img class="rounded-circle" src="<?php echo BASE_URL . 'uploads/categories/' . $cat['image']; ?>" alt="" width="50" height="55">
                         </td>
                         <td>
                             <a href="index.php?page=edit_category&id=<?php echo $cat['id']; ?>" class="btn btn-primary btn-sm">Edit</a>

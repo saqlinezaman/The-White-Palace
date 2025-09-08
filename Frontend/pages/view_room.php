@@ -2,96 +2,120 @@
 include '../includes/header.php';
 require_once __DIR__ . '/../../admin/config/db_config.php';
 
-// Database connection
 $database = new Database();
 $db_connection = $database->db_connection();
 
-// Check if room id is provided
-if (!isset($_GET['id']) || empty($_GET['id'])) {
+// Room ID check
+$roomId = $_GET['id'] ?? 0;
+$roomId = intval($roomId);
+
+if ($roomId <= 0) {
     echo "<p>Invalid Room ID.</p>";
     exit;
 }
 
-$roomId = $_GET['id'];
+// Check-in & Check-out
+$checkIn = $_GET['check_in'] ?? '';
+$checkOut = $_GET['check_out'] ?? '';
 
-// Fetch room details
-$roomStmt = $db_connection->prepare("
-    SELECT r.*, c.room_type 
-    FROM rooms r 
-    JOIN categories c ON r.category_id = c.id 
-    WHERE r.id = :id
-");
-$roomStmt->bindParam(':id', $roomId, PDO::PARAM_INT);
-$roomStmt->execute();
-$room = $roomStmt->fetch(PDO::FETCH_ASSOC);
+// Fetch room info
+if (!empty($checkIn) && !empty($checkOut)) {
+    // Check availability based on bookings
+    $stmt = $db_connection->prepare("
+        SELECT r.*, c.room_type as category_name,
+        (
+            r.total_rooms - (
+                SELECT COUNT(*) FROM bookings b
+                WHERE b.room_id = r.id
+                  AND b.status IN ('pending','approved')
+                  AND NOT (b.check_out <= ? OR b.check_in >= ?)
+            )
+        ) AS available_rooms
+        FROM rooms r
+        JOIN categories c ON r.category_id = c.id
+        WHERE r.id = ?
+    ");
+    $stmt->execute([$checkIn, $checkOut, $roomId]);
+} else {
+    // Default → just show total_rooms
+    $stmt = $db_connection->prepare("
+        SELECT r.*, c.room_type as category_name,
+               r.total_rooms AS available_rooms
+        FROM rooms r
+        JOIN categories c ON r.category_id = c.id
+        WHERE r.id = ?
+    ");
+    $stmt->execute([$roomId]);
+}
+
+$room = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$room) {
     echo "<p>Room not found.</p>";
     exit;
 }
-
-// Decode gallery images if stored as JSON
-$galleryImages = [];
-if (!empty($room['gallery_images'])) {
-    $galleryImages = json_decode($room['gallery_images'], true);
-}
-
-// Main image path
-$mainImage = !empty($room['image_url']) ? '/thewhitepalace/' . trim($room['image_url']) : '/thewhitepalace/Frontend/assets/images/default-room.jpg';
 ?>
 
-<div class="mx-5 md:mx-20 my-10 flex mt-10">
-    <div class="w-full md:w-7/12">
-        <div class="h-[450px]">
-            <img src="<?= $mainImage ?>" 
-                 alt="<?= htmlspecialchars($room['name']) ?>" 
-                 class="w-full h-full object-cover rounded-lg shadow-md">
+<div class="max-w-6xl mx-auto my-10 px-5 md:px-0">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+            <img src="../../<?= $room['image_url']; ?>" 
+                 alt="<?= htmlspecialchars($room['name']); ?>" 
+                 class="w-full h-96 object-cover rounded-lg shadow-md">
         </div>
-         <!-- Gallery Images -->
-    <?php if (!empty($galleryImages)): ?>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 my-6">
-            <?php foreach ($galleryImages as $image): ?>
-                <?php $galleryPath = '/thewhitepalace/' . trim($image); ?>
-                <div class="overflow-hidden rounded-lg shadow-md">
-                    <img src="<?= $galleryPath ?>" 
-                         alt="<?= htmlspecialchars($room['name']) ?>" 
-                         class="w-full h-36 object-cover transition-transform duration-300 hover:scale-105">
-                </div>
-            <?php endforeach; ?>
-        </div>
-    <?php else: ?>
-        <p class="text-gray-500 mb-6">No gallery images available for this room.</p>
-    <?php endif; ?>
-    </div>
-    <div class="w-full md:w-5/12 pl-6">
-         <h1 class="text-4xl font-semibold mb-4"><?= htmlspecialchars($room['name']) ?></h1>
-         <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full font-medium">
-            <?= htmlspecialchars($room['room_type']) ?>
-        </span>
-        <p class="text-gray-600 mt-6"><?= nl2br(htmlspecialchars($room['description'])) ?></p>
-        <!-- Amenities -->
-    <?php if (!empty($room['amenities'])): ?>
-        <div class="my-5">
-            <div class="flex flex-wrap gap-2">
-                <?php foreach (json_decode($room['amenities'], true) as $amenity): ?>
-                    <span class="bg-blue-700 text-white px-3 py-1 rounded-full text-sm font-medium">
-                        <?= htmlspecialchars($amenity) ?>
+        <div>
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">
+                <?= htmlspecialchars($room['name']); ?>
+            </h1>
+            <div class="flex gap-2 items-center">
+                <span class="bg-gray-100 text-gray-700 text-sm px-3 py-1 rounded">
+                <?= htmlspecialchars($room['category_name']); ?>
+            </span>
+            <p class="">
+                <?php if (!empty($checkIn) && !empty($checkOut)): ?>
+                    <?php if ($room['available_rooms'] > 0): ?>
+                        <span class="bg-green-100 text-green-700 text-sm px-3 py-1 rounded">
+                            <?= $room['available_rooms']; ?> Available
+                        </span>
+                    <?php else: ?>
+                        <span class="bg-red-100 text-red-700 text-sm px-3 py-1 rounded">
+                            No room available
+                        </span>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <span class="bg-green-100 text-gray-900 text-sm px-3 py-1 rounded">
+                        <?= $room['available_rooms']; ?> Available rooms
                     </span>
-                <?php endforeach; ?>
+                <?php endif; ?>
+            </p>
             </div>
+
+            <p class="text-green-600 font-bold text-xl mt-4">৳<?= $room['price']; ?>/night</p>
+
+            <!-- Booking Form -->
+            <form action="book_room.php" method="GET" class="mt-6 space-y-4">
+                <input type="hidden" name="room_id" value="<?= $room['id']; ?>">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Check In</label>
+                    <input type="date" name="check_in" value="<?= htmlspecialchars($checkIn); ?>" class="w-full border rounded p-2">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Check Out</label>
+                    <input type="date" name="check_out" value="<?= htmlspecialchars($checkOut); ?>" class="w-full border rounded p-2">
+                </div>
+                <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition">
+                    Book Now
+                </button>
+            </form>
         </div>
-    <?php endif; ?>
-        <h1 class="text-3xl font-semibold mt-5 text-green-700">৳ <?= $room['price'] ?>/night  </h1>
-        <div class="flex flex-wrap gap-4 mt-5">
-        <a href="rooms.php" 
-           class="btn bg-gray-300 text-gray-800 font-semibold px-6 py-2 rounded hover:bg-gray-400 transition-all duration-300">
-            Back to Rooms
-        </a>
-        <a href="book_room.php?id=<?= $room['id'] ?>" 
-           class="btn bg-green-500 text-white font-semibold px-6 py-2 rounded hover:bg-green-600 transition-all duration-300">
-            Book Now
-        </a>
     </div>
+
+    <div class="mt-10">
+        <h2 class="text-2xl font-semibold mb-2">Room Details</h2>
+        <ul class="list-disc list-inside text-gray-700">
+            <p><?= $room['description']; ?>/night</p>
+            <!-- তুমি চাইলে আরও তথ্য add করতে পারো -->
+        </ul>
     </div>
 </div>
 

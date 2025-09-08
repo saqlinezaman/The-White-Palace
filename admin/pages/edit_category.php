@@ -107,7 +107,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                 <input type="file" class="form-control" name="category_image">
                 <?php if (!empty($category['image'])): ?>
                     <p class="mt-2">Current Image:</p>
-                    <img src="<?= BASE_URL ?>uploads/<?= htmlspecialchars($category['image']) ?>" width="100"
+                    <img src="<?= BASE_URL ?>uploads/categories/<?= htmlspecialchars($category['image']) ?>" width="100"
                         alt="Category Image">
                 <?php endif; ?>
             </div>

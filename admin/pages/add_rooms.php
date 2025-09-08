@@ -44,6 +44,7 @@ if (isset($_POST['save_room'])) {
     $category_id = $_POST['category_id'] ?? null;
     $price       = $_POST['price'] ?? 0;
     $capacity    = $_POST['capacity'] ?? 0;
+    $total_rooms = $_POST['total_rooms'] ?? 0;   // ✅ নতুন ফিল্ড
     $description = trim($_POST['description'] ?? '');
 
     // amenities input name="amenities[]" -> first item ধরেছি
@@ -90,15 +91,15 @@ if (isset($_POST['save_room'])) {
         if ($id) {
             $stmt = $db_connection->prepare("
                 UPDATE rooms 
-                   SET name=?, category_id=?, price=?, capacity=?, description=?, amenities=?, image_url=?, gallery_images=?
+                   SET name=?, category_id=?, price=?, capacity=?, total_rooms=?, description=?, amenities=?, image_url=?, gallery_images=?
                  WHERE id=?");
-            $stmt->execute([$name, $category_id, $price, $capacity, $description, $amenities, $image_url, $gallery_json, $id]);
+            $stmt->execute([$name, $category_id, $price, $capacity, $total_rooms, $description, $amenities, $image_url, $gallery_json, $id]);
             $successMessage = "Room updated successfully!";
         } else {
             $stmt = $db_connection->prepare("
-                INSERT INTO rooms (name, category_id, price, capacity, description, amenities, image_url, gallery_images)
-                VALUES (?,?,?,?,?,?,?,?)");
-            $stmt->execute([$name, $category_id, $price, $capacity, $description, $amenities, $image_url, $gallery_json]);
+                INSERT INTO rooms (name, category_id, price, capacity, total_rooms, description, amenities, image_url, gallery_images)
+                VALUES (?,?,?,?,?,?,?,?,?)");
+            $stmt->execute([$name, $category_id, $price, $capacity, $total_rooms, $description, $amenities, $image_url, $gallery_json]);
             $successMessage = "Room added successfully!";
         }
     } catch (PDOException $e) {
@@ -155,6 +156,14 @@ require_once __DIR__ . '/../includes/sidebar.php';
                     <label class="col-sm-3 col-form-label">Capacity</label>
                     <div class="col-sm-9">
                         <input type="number" name="capacity" class="form-control" placeholder="Enter Capacity" value="<?= htmlspecialchars($room['capacity'] ?? '') ?>">
+                    </div>
+                </div>
+
+                <!-- ✅ New field total_rooms -->
+                <div class="row mb-3">
+                    <label class="col-sm-3 col-form-label">Total Rooms</label>
+                    <div class="col-sm-9">
+                        <input type="number" name="total_rooms" class="form-control" placeholder="Enter Total Rooms" value="<?= htmlspecialchars($room['total_rooms'] ?? '') ?>">
                     </div>
                 </div>
 

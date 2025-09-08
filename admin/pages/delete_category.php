@@ -22,7 +22,7 @@ if (!$category) {
 }
 
 // delete image
-$uploadDir = __DIR__ . '/../../uploads/';
+$uploadDir = __DIR__ . '/../uploads/categories/';
 if (file_exists($uploadDir . $category['image'])) {
     unlink($uploadDir . $category['image']);
 }
