@@ -126,7 +126,7 @@ if (!empty($room['gallery_images'])) {
                     <input type="date" name="check_out" value="<?= htmlspecialchars($checkOut); ?>" class="w-full border rounded p-2">
                 </div>
 
-                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition"
+                <button type="submit" class="w-full bg-green-500 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition"
                         <?= ($room['available_rooms'] <= 0) ? 'disabled' : ''; ?>>
                     <?= ($room['available_rooms'] > 0) ? 'Book Now' : 'Unavailable'; ?>
                 </button>

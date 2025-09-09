@@ -11,15 +11,31 @@ $check_in  = $_GET['check_in'] ?? $_POST['check_in'] ?? '';
 $check_out = $_GET['check_out'] ?? $_POST['check_out'] ?? '';
 
 $message = "";
+$advance_amount = 0;
+$room_price = 0;
+$total_price = 0;
+$payment_success = false;
+
+// -------- Room Price Load --------
+if ($room_id > 0) {
+    $stmt = $db->prepare("SELECT price, total_rooms FROM rooms WHERE id = :room_id LIMIT 1");
+    $stmt->execute([':room_id' => $room_id]);
+    $roomData = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($roomData) {
+        $room_price  = (float)$roomData['price'];
+        $total_rooms = (int)$roomData['total_rooms'];
+    }
+}
 
 // যদি ফর্ম সাবমিট করা হয়
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $user_name  = trim($_POST['name']);
-    $user_email = trim($_POST['email']);
-    $user_phone = trim($_POST['phone']);
-    $room_id    = intval($_POST['room_id']);
-    $check_in   = $_POST['check_in'];
-    $check_out  = $_POST['check_out'];
+    $user_name      = trim($_POST['name']);
+    $user_email     = trim($_POST['email']);
+    $user_phone     = trim($_POST['phone']);
+    $room_id        = intval($_POST['room_id']);
+    $check_in       = $_POST['check_in'];
+    $check_out      = $_POST['check_out'];
+    $transaction_id = trim($_POST['transaction_id'] ?? '');
 
     // nights হিসাব করা
     $date1 = new DateTime($check_in);
@@ -27,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nights = $date1->diff($date2)->days;
 
     try {
-        // 1. Room info বের করা (rooms টেবিল থেকে)
+        // আবারও room info বের করা যাতে fresh থাকে
         $roomStmt = $db->prepare("SELECT price, total_rooms FROM rooms WHERE id = :room_id LIMIT 1");
         $roomStmt->execute([':room_id' => $room_id]);
         $roomData = $roomStmt->fetch(PDO::FETCH_ASSOC);
@@ -36,11 +52,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new Exception("Room not found.");
         }
 
-        $room_price   = (float) $roomData['price'];
-        $total_rooms  = (int) $roomData['total_rooms'];
+        $room_price   = (float)$roomData['price'];
+        $total_rooms  = (int)$roomData['total_rooms'];
         $total_price  = $nights * $room_price;
+        $advance_amount = $total_price * 0.20; // 20% advance
 
-        // 2. ওই তারিখে কত বুকিং আছে চেক করা
+        // ওই তারিখে কত বুকিং আছে চেক করা
         $checkAvailability = $db->prepare("
             SELECT COUNT(*) 
             FROM bookings 
@@ -56,30 +73,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ':check_out' => $check_out
         ]);
 
-        $alreadyBooked = (int) $checkAvailability->fetchColumn();
+        $alreadyBooked = (int)$checkAvailability->fetchColumn();
 
-        // 3. compare with total_rooms
         if ($alreadyBooked >= $total_rooms) {
             $message = "<p class='text-red-600 text-center font-bold'>❌ Sorry, all {$total_rooms} rooms are already booked for the selected dates.</p>";
         } else {
-            // 4. Insert booking
+            // Insert booking
             $stmt = $db->prepare("
                 INSERT INTO bookings 
-                (room_id, user_name, user_email, user_phone, check_in, check_out, nights, total_price, status) 
-                VALUES (:room_id, :user_name, :user_email, :user_phone, :check_in, :check_out, :nights, :total_price, 'pending')
+                (room_id, user_name, user_email, user_phone, check_in, check_out, nights, total_price, advance_amount, transaction_id, status, payment_status) 
+                VALUES (:room_id, :user_name, :user_email, :user_phone, :check_in, :check_out, :nights, :total_price, :advance_amount, :transaction_id, 'pending', :payment_status)
             ");
+
+            $payment_status = !empty($transaction_id) ? 'paid' : 'pending';
+
             $stmt->execute([
-                ':room_id'     => $room_id,
-                ':user_name'   => $user_name,
-                ':user_email'  => $user_email,
-                ':user_phone'  => $user_phone,
-                ':check_in'    => $check_in,
-                ':check_out'   => $check_out,
-                ':nights'      => $nights,
-                ':total_price' => $total_price
+                ':room_id'        => $room_id,
+                ':user_name'      => $user_name,
+                ':user_email'     => $user_email,
+                ':user_phone'     => $user_phone,
+                ':check_in'       => $check_in,
+                ':check_out'      => $check_out,
+                ':nights'         => $nights,
+                ':total_price'    => $total_price,
+                ':advance_amount' => $advance_amount,
+                ':transaction_id' => $transaction_id ?: null,
+                ':payment_status' => $payment_status
             ]);
 
-            $message = "<p class='text-green-600 text-center font-bold'>✅ Booking successful! Total price: <strong>{$total_price}</strong> (for {$nights} nights)</p>";
+            if ($payment_status === 'paid') {
+                $message = "<p class='text-green-600 text-center font-bold'>✅ Booking successful & advance payment received!</p>";
+                $payment_success = true;
+            } else {
+                $message = "<p class='text-green-600 text-center font-bold'>✅ Booking successful! Please complete your payment.</p>";
+            }
         }
     } catch (Exception $e) {
         $message = "<p class='text-red-600 text-center font-bold'>❌ Error: " . $e->getMessage() . "</p>";
@@ -87,64 +114,107 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<div class="flex justify-center items-center min-h-screen bg-gray-50 py-10">
-  <form method="POST" class="w-full max-w-lg bg-white shadow-lg rounded-xl p-8 space-y-5">
-    <input type="hidden" name="room_id" value="<?= $room_id ?>">
+<div class="mx-5 md:mx-20">
+  <div class="items-center min-h-screen bg-gray-50 py-10">
+    <form method="POST" class="w-full max-w-lg bg-white shadow-lg rounded-xl p-8 space-y-5">
+      <input type="hidden" name="room_id" value="<?= $room_id ?>">
 
-    <h2 class="text-2xl font-bold text-center text-gray-800">Book Your Stay</h2>
+      <h2 class="text-2xl font-bold text-center text-gray-800">Book Your Stay</h2>
 
-    <?= $message ?>
+      <?= $message ?>
 
-    <!-- Check In -->
-    <div class="form-control">
-      <label class="label">
-        <span class="label-text font-semibold">Check-In</span>
-      </label>
-      <input type="date" name="check_in" value="<?= htmlspecialchars($check_in) ?>"
-             class="input input-bordered w-full" required>
-    </div>
+      <!-- Payment Success Alert -->
+      <?php if ($payment_success): ?>
+        <div class="alert alert-success shadow-lg my-4">
+          <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                    d="M9 12l2 2l4-4m6 2a9 9 0 11-18 0a9 9 0 0118 0z" />
+            </svg>
+            <span>✅ Payment successful! We received your advance of <strong><?= $advance_amount ?></strong> Tk.</span>
+          </div>
+        </div>
+      <?php endif; ?>
 
-    <!-- Check Out -->
-    <div class="form-control">
-      <label class="label">
-        <span class="label-text font-semibold">Check-Out</span>
-      </label>
-      <input type="date" name="check_out" value="<?= htmlspecialchars($check_out) ?>"
-             class="input input-bordered w-full" required>
-    </div>
+      <!-- Name -->
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text font-semibold">Your Name</span>
+        </label>
+        <input type="text" name="name" placeholder="Enter your name"
+               class="input input-bordered w-full" required>
+      </div>
 
-    <!-- Name -->
-    <div class="form-control">
-      <label class="label">
-        <span class="label-text font-semibold">Your Name</span>
-      </label>
-      <input type="text" name="name" placeholder="Enter your name"
-             class="input input-bordered w-full" required>
-    </div>
+      <!-- Email -->
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text font-semibold">Email</span>
+        </label>
+        <input type="email" name="email" placeholder="Enter your email"
+               class="input input-bordered w-full" required>
+      </div>
 
-    <!-- Email -->
-    <div class="form-control">
-      <label class="label">
-        <span class="label-text font-semibold">Email</span>
-      </label>
-      <input type="email" name="email" placeholder="Enter your email"
-             class="input input-bordered w-full" required>
-    </div>
+      <!-- Phone -->
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text font-semibold">Phone</span>
+        </label>
+        <input type="text" name="phone" placeholder="Enter your phone number"
+               class="input input-bordered w-full" required>
+      </div>
+      
+      <!-- Check In -->
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text font-semibold">Check-In</span>
+        </label>
+        <input type="date" name="check_in" value="<?= htmlspecialchars($check_in) ?>"
+               class="input input-bordered w-full" required>
+      </div>
 
-    <!-- Phone -->
-    <div class="form-control">
-      <label class="label">
-        <span class="label-text font-semibold">Phone</span>
-      </label>
-      <input type="text" name="phone" placeholder="Enter your phone number"
-             class="input input-bordered w-full" required>
-    </div>
+      <!-- Check Out -->
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text font-semibold">Check-Out</span>
+        </label>
+        <input type="date" name="check_out" value="<?= htmlspecialchars($check_out) ?>"
+               class="input input-bordered w-full" required>
+      </div>
+<!-- Payment Instruction -->
+      <div class="mt-4">
+        <p class="text-sm text-gray-600 bg-gray-100 p-3 rounded-lg border">
+          💡 Please send <strong>
+            <?php 
+              if (!empty($check_in) && !empty($check_out) && $room_price > 0) {
+                  $nights = (new DateTime($check_in))->diff(new DateTime($check_out))->days;
+                  $total_price = $nights * $room_price;
+                  $advance_amount = $total_price * 0.20;
+                  echo $advance_amount . " Tk (20% advance)";
+              } else {
+                  echo "20% advance payment";
+              }
+            ?>
+          </strong> 
+          to <b>017XXXXXXXX</b> (bKash/Nagad - Send Money).
+        </p>
+      </div>
+      <!-- Transaction ID -->
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text font-semibold">Transaction ID (after bKash/Nagad Send money )</span>
+        </label>
+        <input type="text" name="transaction_id" placeholder="Enter your bKash/Nagad Txn ID"
+               class="input input-bordered w-full">
+      </div>
 
-    <!-- Submit -->
-    <div class="form-control mt-6">
-      <button type="submit" class="btn btn-success w-full text-lg">Confirm Booking</button>
-    </div>
-  </form>
+      
+
+      <!-- Submit -->
+      <div class="form-control mt-6">
+        <button type="submit" class="btn bg-green-500 text-white w-full text-lg">Confirm Booking</button>
+      </div>
+    </form>
+  </div>
 </div>
 
 <?php include __DIR__ . '/../includes/footer.php'; ?>
