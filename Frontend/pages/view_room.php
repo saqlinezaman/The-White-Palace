@@ -48,7 +48,7 @@ if (!empty($room['gallery_images'])) {
 }
 ?>
 
-<div class="max-w-7xl mx-auto my-10 px-5 md:px-0">
+<div class="max-w-7xl mx-auto my-10 px-5 md:px-12">
     <!-- Main section -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <!-- Left side: Main Image + Gallery -->
