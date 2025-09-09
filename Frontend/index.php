@@ -165,8 +165,7 @@ $rooms = $roomsStmt->fetchAll(PDO::FETCH_ASSOC);
                                 </span>
                             </div>
 
-                            <p class="text-green-500 mb-6 text-4xl font-semibold leading-relaxed">
-                                <?= htmlspecialchars($room['price']) ?>
+                            <p class="text-green-500 mb-6 text-4xl font-semibold leading-relaxed"> ৳<?= htmlspecialchars($room['price']) ?>
                             </p>
 
                             <?php if (!empty($room['amenities'])): ?>
