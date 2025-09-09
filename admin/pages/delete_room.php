@@ -1,31 +1,39 @@
 <?php
 require_once __DIR__ . '/../config/db_config.php';
 
+// Database connection
 $database = new Database();
 $db_connection = $database->db_connection();
 
-// Delete Room
-if(isset($_GET['id'])){
-    $roomId = $_GET['id'];
+// Get Room ID
+$roomId = $_GET['id'] ?? null;
+if (!$roomId) {
+    die("Invalid room ID.");
+}
 
-    // Fetch room to delete image
-    $stmt = $db_connection->prepare("SELECT image_url FROM rooms WHERE id=?");
-    $stmt->execute([$roomId]);
-    $room = $stmt->fetch(PDO::FETCH_ASSOC);
+// Fetch room info
+$stmt = $db_connection->prepare("SELECT * FROM rooms WHERE id = :id");
+$stmt->bindParam(':id', $roomId, PDO::PARAM_INT);
+$stmt->execute();
+$room = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Delete image if exists
-    if($room && !empty($room['image_url']) && file_exists(__DIR__ . '/../../' . $room['image_url'])){
-        unlink(__DIR__ . '/../../' . $room['image_url']);
-    }
+if (!$room) {
+    die("Room not found.");
+}
 
-    // Delete room from DB
-    $stmt = $db_connection->prepare("DELETE FROM rooms WHERE id=?");
-    $stmt->execute([$roomId]);
+// Delete main image
+$uploadDir = __DIR__ . '/../uploads/rooms/';
+if (!empty($room['image_url']) && file_exists($uploadDir . $room['image_url'])) {
+    unlink($uploadDir . $room['image_url']);
+}
 
-   echo "<script>window.location.href = 'index.php?page=room&deleted=1';</script>";
+// Delete room record
+$deleteStmt = $db_connection->prepare("DELETE FROM rooms WHERE id = :id");
+$deleteStmt->bindParam(':id', $roomId, PDO::PARAM_INT);
+
+if ($deleteStmt->execute()) {
+    echo "<script>window.location.href = 'index.php?page=room&deleted=1';</script>";
     exit;
 } else {
-    header("Location: room.php");
-    exit;
+    die("Failed to delete room.");
 }
-?>

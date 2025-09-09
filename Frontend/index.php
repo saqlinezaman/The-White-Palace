@@ -54,7 +54,7 @@ $rooms = $roomsStmt->fetchAll(PDO::FETCH_ASSOC);
 
         <!-- Booking Search Form -->
         <form action="pages/rooms.php" method="GET" id="bookingForm"
-            class="w-full md:w-4/5 lg:w-2/3 flex flex-wrap items-center gap-4 bg-white shadow-lg rounded-xl px-8 py-4 text-gray-800 mx-auto">
+            class="w-full md:w-4/5 lg:w-5/6 flex flex-wrap items-center gap-4 bg-white shadow-lg rounded-xl px-8 py-4 text-gray-800 mx-auto">
 
             <!-- Room Select -->
             <div class="flex-1 min-w-[180px]">
@@ -131,83 +131,80 @@ $rooms = $roomsStmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
     <!-- Room Carousel -->
-    <div class="carousel w-full rounded-xl overflow-hidden shadow-lg">
-        <?php $slideIndex = 1; ?>
-        <?php foreach ($rooms as $room): ?>
+    <div class="carousel w-full h-[400px] rounded-xl overflow-hidden shadow-lg">
+    <?php $slideIndex = 1; ?>
+    <?php foreach ($rooms as $room): ?>
+        <div id="slide<?= $slideIndex ?>" class="carousel-item relative w-full h-[400px]">
+            <div class="w-full h-full bg-white">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 h-full">
+                    
+                    <!-- Image Section -->
+                    <div class="relative h-[400px] overflow-hidden">
+                        <img src="<?= '../' . trim($room['image_url']) ?>" 
+                             alt="<?= htmlspecialchars($room['name']) ?>"
+                             class="w-full h-full object-cover transition-transform duration-500 hover:scale-110" />
+                        
+                        <!-- Price Badge -->
+                        <div class="absolute top-4 right-4">
+                            <span class="bg-black text-white px-4 py-2 rounded-full font-bold text-lg shadow-lg">
+                                ৳<?= $room['price'] ?>/night
+                            </span>
+                        </div>
+                    </div>
 
-            <div id="slide<?= $slideIndex ?>" class="carousel-item relative w-full">
-                <div class="w-full bg-white">
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 h-full">
-                        <!-- Image Section -->
-                        <div class="relative overflow-hidden">
-                            <img src="<?= '../' . trim($room['image_url']) ?>" alt="<?= htmlspecialchars($room['name']) ?>"
-                                class="w-full h-[300px] object-cover transition-transform duration-500 hover:scale-110" />
-                            <!-- Price Badge -->
-                            <div class="absolute top-4 right-4">
-                                <span class="bg-black text-white px-4 py-2 rounded-full font-bold text-lg shadow-lg">
-                                    ৳<?= $room['price'] ?>/night
+                    <!-- Content Section -->
+                    <div class="p-6 lg:p-8 flex flex-col justify-between h-[400px] overflow-y-auto">
+                        <div>
+                            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4 gap-2">
+                                <h3 class="text-2xl lg:text-3xl font-bold text-gray-800">
+                                    <?= htmlspecialchars($room['name']) ?>
+                                </h3>
+                                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold w-fit">
+                                    <?= htmlspecialchars($room['capacity']) ?> 
+                                    Person<?= $room['capacity'] > 1 ? 's' : '' ?>
                                 </span>
                             </div>
+
+                            <p class="text-green-500 mb-6 text-4xl font-semibold leading-relaxed">
+                                <?= htmlspecialchars($room['price']) ?>
+                            </p>
+
+                            <?php if (!empty($room['amenities'])): ?>
+                                <div class="mb-6">
+                                    <h4 class="font-semibold text-gray-800 mb-3">Amenities:</h4>
+                                    <div class="flex flex-wrap gap-2">
+                                        <?php foreach (json_decode($room['amenities'], true) as $amenity): ?>
+                                            <span class="bg-blue-700 text-white px-3 py-1 rounded-full text-sm font-medium">
+                                                <?= htmlspecialchars($amenity) ?>
+                                            </span>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
                         </div>
 
-                        <!-- Content Section -->
-                        <div class="p-6 lg:p-8 flex flex-col justify-between">
-                            <div>
-                                <!-- Room Title & Capacity -->
-                                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4 gap-2">
-                                    <h3 class="text-2xl lg:text-3xl font-bold text-gray-800">
-                                        <?= htmlspecialchars($room['name']) ?>
-                                    </h3>
-                                    <span
-                                        class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold w-fit">
-                                        <?= htmlspecialchars($room['capacity']) ?>
-                                        Person<?= $room['capacity'] > 1 ? 's' : '' ?>
-                                    </span>
-                                </div>
-
-                                <!-- Description -->
-                                <p class="text-green-500 mb-6 text-4xl font-semibold leading-relaxed">
-                                    <?= htmlspecialchars($room['price']) ?>
-                                </p>
-
-                                <!-- Amenities -->
-                                <?php if (!empty($room['amenities'])): ?>
-                                    <div class="mb-6">
-                                        <h4 class="font-semibold text-gray-800 mb-3">Amenities:</h4>
-                                        <div class="flex flex-wrap gap-2">
-                                            <?php foreach (json_decode($room['amenities'], true) as $amenity): ?>
-                                                <span class="bg-blue-700 text-white px-3 py-1 rounded-full text-sm font-medium">
-                                                    <?= htmlspecialchars($amenity) ?>
-                                                </span>
-                                            <?php endforeach; ?>
-                                        </div>
-                                    </div>
-                                <?php endif; ?>
-                            </div>
-
-                            <!-- Action Buttons -->
-                            <div class="flex gap-3 mt-auto">
-                                <a href="pages/view_room.php?id=<?= $room['id'] ?>"
-                                    class="bg-green-500 text-white py-2 rounded font-semibold hover:scale-105 transition-all duration-300 flex-1 text-center">
-                                    View Details
-                                </a>
-                            </div>
+                        <div class="flex gap-3 mt-auto">
+                            <a href="pages/view_room.php?id=<?= $room['id'] ?>"
+                               class="bg-green-500 text-white py-2 rounded font-semibold hover:scale-105 transition-all duration-300 flex-1 text-center">
+                                View Details
+                            </a>
                         </div>
                     </div>
                 </div>
-
-                <!-- Navigation Buttons -->
-                <div
-                    class="absolute left-2 right-2 md:left-5 md:right-5 top-1/2 flex -translate-y-1/2 transform justify-between z-10">
-                    <a href="#slide<?= $slideIndex == 1 ? count($rooms) : $slideIndex - 1 ?>"
-                        class="btn btn-circle btn-sm md:btn-md bg-black bg-opacity-50 text-white border-none hover:bg-opacity-75 transition-all duration-300">❮</a>
-                    <a href="#slide<?= $slideIndex == count($rooms) ? 1 : $slideIndex + 1 ?>"
-                        class="btn btn-circle btn-sm md:btn-md bg-black bg-opacity-50 text-white border-none hover:bg-opacity-75 transition-all duration-300">❯</a>
-                </div>
             </div>
-            <?php $slideIndex++; ?>
-        <?php endforeach; ?>
-    </div>
+
+            <!-- Navigation -->
+            <div class="absolute left-2 right-2 md:left-5 md:right-5 top-1/2 flex -translate-y-1/2 justify-between z-10">
+                <a href="#slide<?= $slideIndex == 1 ? count($rooms) : $slideIndex - 1 ?>"
+                   class="btn btn-circle btn-sm md:btn-md bg-black bg-opacity-50 text-white border-none hover:bg-opacity-75 transition-all duration-300">❮</a>
+                <a href="#slide<?= $slideIndex == count($rooms) ? 1 : $slideIndex + 1 ?>"
+                   class="btn btn-circle btn-sm md:btn-md bg-black bg-opacity-50 text-white border-none hover:bg-opacity-75 transition-all duration-300">❯</a>
+            </div>
+        </div>
+        <?php $slideIndex++; ?>
+    <?php endforeach; ?>
+</div>
+
 
     <!-- Carousel Indicators -->
     <div class="flex justify-center mt-6 space-x-2">

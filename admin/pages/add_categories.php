@@ -120,4 +120,4 @@ $categories = $statement->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </div>
 
-<?php include __DIR__ . '/../includes/footer.php'; ?>
+<?php include __DIR__ . '/../includes/footer.php'?>

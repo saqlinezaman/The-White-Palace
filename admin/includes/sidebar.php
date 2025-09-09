@@ -18,43 +18,62 @@
       
       <!-- View Website -->
       <li>
-        <a href="<?= BASE_URL ?>" target="_blank">
-          <div class="parent-icon"><span class="material-symbols-outlined">home</span></div>
+        <a href="../Frontend/index.php" target="_blank">
+          <div class="parent-icon"><span class="material-symbols-outlined">language</span></div>
           <div class="menu-title">View Website</div>
         </a>
       </li>
-       <!-- Dashboard -->
+
+      <!-- Dashboard -->
       <li>
         <a href="index.php?page=dashboard">
           <div class="parent-icon"><span class="material-symbols-outlined">dashboard</span></div>
           <div class="menu-title">Dashboard</div>
         </a>
       </li>
+
       <!-- Categories -->
       <li>
         <a href="index.php?page=add_categories">
-           <div class="parent-icon"><span class="material-symbols-outlined">category</span></div>
+          <div class="parent-icon"><span class="material-symbols-outlined">category</span></div>
           <div class="menu-title">Categories</div>
         </a>
       </li>
+
       <!-- Rooms -->
       <li>
         <a href="index.php?page=room">
-           <div class="parent-icon"><span class="material-symbols-outlined">hotel</span></div>
+          <div class="parent-icon"><span class="material-symbols-outlined">hotel</span></div>
           <div class="menu-title">Rooms</div>
         </a>
       </li>
-     <!-- Bookings -->
-<li>
-  <a href="index.php?page=manage_bookings">
-    <div class="parent-icon"><span class="material-symbols-outlined">book</span></div>
-    <div class="menu-title">Bookings</div>
-  </a>
-</li>
+
+      <!-- Bookings -->
+      <li>
+        <a href="index.php?page=manage_bookings">
+          <div class="parent-icon"><span class="material-symbols-outlined">event_available</span></div>
+          <div class="menu-title">Bookings</div>
+        </a>
+      </li>
+
+      <!-- Blog -->
+      <li>
+        <a href="index.php?page=manage_blog">
+          <div class="parent-icon"><span class="material-symbols-outlined">article</span></div>
+          <div class="menu-title">Blog</div>
+        </a>
+      </li>
+
+      <!-- Testimonials -->
+      <li>
+        <a href="index.php?page=manage_testimonial">
+          <div class="parent-icon"><span class="material-symbols-outlined">reviews</span></div>
+          <div class="menu-title">Testimonials</div>
+        </a>
+      </li>
 
     </ul>
     <!--end navigation-->
-
 
   </div>
   <div class="sidebar-bottom dropdown dropup-center dropup">
@@ -81,7 +100,7 @@
           </span><span>Dashboard</span></a>
       </li>
       <li><a class="dropdown-item" href="javascript:;"><span class="material-symbols-outlined me-2">
-            account_balance
+            account_balance_wallet
           </span><span>Earnings</span></a>
       </li>
       <li><a class="dropdown-item" href="javascript:;"><span class="material-symbols-outlined me-2">
