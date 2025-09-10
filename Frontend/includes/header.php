@@ -37,9 +37,9 @@
                     <a class="text-2xl font-semibold text-black">The White Palace</a>
 
                     <!-- Desktop Menu -->
-                    <div class="hidden md:flex space-x-4">
+                    <div class="hidden md:flex space-x-2">
                         <a href="../index.php"
-                            class="px-3 py-2 text-gray-900 hover:bg-green-600 hover:text-white rounded transition">Homepage</a>
+                            class="px-3 py-2 text-gray-900 hover:bg-green-600 hover:text-white rounded transition">Home</a>
                         <a href="pages/rooms.php"
                             class="px-3 py-2 text-gray-900 hover:bg-green-600 hover:text-white rounded transition">Our
                             Rooms</a>

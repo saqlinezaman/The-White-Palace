@@ -14,7 +14,6 @@ $message = "";
 $advance_amount = 0;
 $room_price = 0;
 $total_price = 0;
-$payment_success = false;
 
 // -------- Room Price Load --------
 if ($room_id > 0) {
@@ -27,7 +26,7 @@ if ($room_id > 0) {
     }
 }
 
-// যদি ফর্ম সাবমিট করা হয়
+// যদি ফর্ম সাবমিট করা হয়
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user_name      = trim($_POST['name']);
     $user_email     = trim($_POST['email']);
@@ -76,7 +75,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $alreadyBooked = (int)$checkAvailability->fetchColumn();
 
         if ($alreadyBooked >= $total_rooms) {
-            $message = "<p class='text-red-600 text-center font-bold'>❌ Sorry, all {$total_rooms} rooms are already booked for the selected dates.</p>";
+            $message = "
+                <div class='alert alert-error shadow-lg my-4'>
+                    <div>
+                        <svg xmlns='http://www.w3.org/2000/svg' class='stroke-current flex-shrink-0 h-6 w-6' fill='none' viewBox='0 0 24 24'>
+                            <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z' />
+                        </svg>
+                        <span>❌ Sorry, all {$total_rooms} rooms are already booked for the selected dates.</span>
+                    </div>
+                </div>
+            ";
         } else {
             // Insert booking
             $stmt = $db->prepare("
@@ -102,14 +110,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
 
             if ($payment_status === 'paid') {
-                $message = "<p class='text-green-600 text-center font-bold'>✅ Booking successful & advance payment received!</p>";
-                $payment_success = true;
+                $message = "
+                    <div class='alert alert-success shadow-lg my-4'>
+                        <div>
+                            <svg xmlns='http://www.w3.org/2000/svg' class='stroke-current flex-shrink-0 h-6 w-6' fill='none' viewBox='0 0 24 24'>
+                                <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' 
+                                      d='M9 12l2 2l4-4m6 2a9 9 0 11-18 0a9 9 0 0118 0z' />
+                            </svg>
+                            <span>✅ Booking successful & advance payment received! We received your advance of <strong>" . number_format($advance_amount, 0) . " Tk</strong>.</span>
+                        </div>
+                    </div>
+                ";
             } else {
-                $message = "<p class='text-green-600 text-center font-bold'>✅ Booking successful! Please complete your payment.</p>";
+                $message = "
+                    <div class='alert alert-success shadow-lg my-4'>
+                        <div>
+                            <svg xmlns='http://www.w3.org/2000/svg' class='stroke-current flex-shrink-0 h-6 w-6' fill='none' viewBox='0 0 24 24'>
+                                <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' 
+                                      d='M9 12l2 2l4-4m6 2a9 9 0 11-18 0a9 9 0 0118 0z' />
+                            </svg>
+                            <span>✅ Booking successful! Please complete your payment.</span>
+                        </div>
+                    </div>
+                ";
             }
         }
     } catch (Exception $e) {
-        $message = "<p class='text-red-600 text-center font-bold'>❌ Error: " . $e->getMessage() . "</p>";
+        $message = "
+            <div class='alert alert-error shadow-lg my-4'>
+                <div>
+                    <svg xmlns='http://www.w3.org/2000/svg' class='stroke-current flex-shrink-0 h-6 w-6' fill='none' viewBox='0 0 24 24'>
+                        <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z' />
+                    </svg>
+                    <span>❌ Error: " . $e->getMessage() . "</span>
+                </div>
+            </div>
+        ";
     }
 }
 ?>
@@ -122,19 +158,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <h2 class="text-2xl font-bold text-center text-gray-800">Book Your Stay</h2>
 
       <?= $message ?>
-
-      <!-- Payment Success Alert -->
-      <?php if ($payment_success): ?>
-        <div class="alert alert-success shadow-lg my-4">
-          <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                    d="M9 12l2 2l4-4m6 2a9 9 0 11-18 0a9 9 0 0118 0z" />
-            </svg>
-            <span>✅ Payment successful! We received your advance of <strong><?= $advance_amount ?></strong> Tk.</span>
-          </div>
-        </div>
-      <?php endif; ?>
 
       <!-- Name -->
       <div class="form-control">
@@ -180,7 +203,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input type="date" name="check_out" value="<?= htmlspecialchars($check_out) ?>"
                class="input input-bordered w-full" required>
       </div>
-<!-- Payment Instruction -->
+
+      <!-- Payment Instruction -->
       <div class="mt-4">
         <p class="text-sm text-gray-600 bg-gray-100 p-3 rounded-lg border">
           💡 Please send <strong>
@@ -189,7 +213,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $nights = (new DateTime($check_in))->diff(new DateTime($check_out))->days;
                   $total_price = $nights * $room_price;
                   $advance_amount = $total_price * 0.20;
-                  echo $advance_amount . " Tk (20% advance)";
+                  echo number_format($advance_amount, 0) . " Tk (20% advance)";
               } else {
                   echo "20% advance payment";
               }
@@ -198,6 +222,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           to <b>017XXXXXXXX</b> (bKash/Nagad - Send Money).
         </p>
       </div>
+
       <!-- Transaction ID -->
       <div class="form-control">
         <label class="label">
@@ -206,8 +231,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input type="text" name="transaction_id" placeholder="Enter your bKash/Nagad Txn ID"
                class="input input-bordered w-full">
       </div>
-
-      
 
       <!-- Submit -->
       <div class="form-control mt-6">
