@@ -102,7 +102,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
 
     <div class="table-responsive">
       <table class="table table-bordered table-striped align-middle" id="bookingTable">
-        <thead class="table-dark text-center">
+        <thead class=" text-center">
           <tr>
             <th>ID</th>
             <th>Room</th>
@@ -213,7 +213,6 @@ require_once __DIR__ . '/../includes/sidebar.php';
 </div>
 
 <?php ob_end_flush(); ?>
-<?php include __DIR__ . '/../includes/footer.php'; ?>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {

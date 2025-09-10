@@ -68,7 +68,7 @@ class User
         $insert_query = $this->connection->prepare("INSERT INTO users (username, email, password, token, verified) VALUES (?,?,?,?,0)");
         $insert_query->execute([$username, $email, $hash, $token]);
 
-        $verifyLink = $this->baseUrl . "/auth/verify.php?token=" . urlencode($token) . "&email=" . urlencode($email);
+        $verifyLink =$this->baseUrl ."/auth/verify.php?token=" . urlencode($token) . "&email=" . urlencode($email);
 
         $msg = '
         <div style="font-family: Arial; font-size: 14px; line-height: 1.6; color: #333;">
@@ -107,7 +107,7 @@ class User
         $_SESSION['user_email'] = $u['email'];
         $_SESSION['user_name'] = $u['username'];
 
-        header('Location:' . $this->baseUrl . '/');
+        header('Location:' . $this->baseUrl . '/Frontend');
         exit;
     }
 

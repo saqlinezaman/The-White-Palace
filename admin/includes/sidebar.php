@@ -32,14 +32,14 @@
         </a>
       </li>
 
-      <!-- Categories -->
+
+      <!-- categories -->
       <li>
         <a href="index.php?page=add_categories">
           <div class="parent-icon"><span class="material-symbols-outlined">category</span></div>
           <div class="menu-title">Categories</div>
         </a>
       </li>
-
       <!-- Rooms -->
       <li>
         <a href="index.php?page=room">
