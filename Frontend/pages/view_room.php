@@ -46,6 +46,9 @@ $galleryImages = [];
 if (!empty($room['gallery_images'])) {
     $galleryImages = json_decode($room['gallery_images'], true);
 }
+
+// Login check
+$isLoggedIn = !empty($_SESSION['user_id']);
 ?>
 
 <div class="max-w-7xl mx-auto my-10 px-5 md:px-12">
@@ -100,20 +103,22 @@ if (!empty($room['gallery_images'])) {
             </div>
 
             <p class="text-2xl font-bold text-green-600">৳<?= $room['price']; ?>/night</p>
-                    <?php if (!empty($room['amenities'])): ?>
-                                <div class="mb-6">
-                                    <h4 class="font-semibold text-gray-800 mb-3">Amenities:</h4>
-                                    <div class="flex flex-wrap gap-2">
-                                        <?php foreach (json_decode($room['amenities'], true) as $amenity): ?>
-                                            <span class="bg-blue-700 text-white px-3 py-1 rounded-full text-sm font-medium">
-                                                <?= htmlspecialchars($amenity) ?>
-                                            </span>
-                                        <?php endforeach; ?>
-                                    </div>
-                                </div>
-                            <?php endif; ?>
+
+            <?php if (!empty($room['amenities'])): ?>
+                <div class="mb-6">
+                    <h4 class="font-semibold text-gray-800 mb-3">Amenities:</h4>
+                    <div class="flex flex-wrap gap-2">
+                        <?php foreach (json_decode($room['amenities'], true) as $amenity): ?>
+                            <span class="bg-blue-700 text-white px-3 py-1 rounded-full text-sm font-medium">
+                                <?= htmlspecialchars($amenity) ?>
+                            </span>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            <?php endif; ?>
+
             <!-- Booking Form -->
-            <form action="book_room.php" method="GET" class="space-y-4 bg-gray-50 p-5 rounded-lg shadow-md">
+            <form action="<?= $isLoggedIn ? 'book_room.php' : '../../auth/login.php' ?>" method="GET" class="space-y-4 bg-gray-50 p-5 rounded-lg shadow-md">
                 <input type="hidden" name="room_id" value="<?= $room['id']; ?>">
 
                 <div>
@@ -128,7 +133,9 @@ if (!empty($room['gallery_images'])) {
 
                 <button type="submit" class="w-full bg-green-500 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition"
                         <?= ($room['available_rooms'] <= 0) ? 'disabled' : ''; ?>>
-                    <?= ($room['available_rooms'] > 0) ? 'Book Now' : 'Unavailable'; ?>
+                    <?= $isLoggedIn 
+                        ? (($room['available_rooms'] > 0) ? 'Book Now' : 'Unavailable') 
+                        : 'Login to Book Room'; ?>
                 </button>
             </form>
         </div>

@@ -53,7 +53,7 @@ $userName = $_SESSION['user_name'] ?? '';
                     <a href="<?= $BASE_URL ?>/pages/rooms.php" class="px-3 py-2 text-gray-900 hover:bg-green-600 hover:text-white rounded transition">Our Rooms</a>
                     <a href="#" class="px-3 py-2 text-gray-900 hover:bg-green-600 hover:text-white rounded transition">About</a>
                     <a href="#" class="px-3 py-2 text-gray-900 hover:bg-green-600 hover:text-white rounded transition">Services</a>
-                    <a href="#" class="px-3 py-2 text-gray-900 hover:bg-green-600 hover:text-white rounded transition">Contact</a>
+                    <a href="<?= $BASE_URL ?>/pages/contact_us.php" class="px-3 py-2 text-gray-900 hover:bg-green-600 hover:text-white rounded transition">Contact</a>
                 </div>
 
                 <!-- Auth Buttons / User Dropdown -->
@@ -70,6 +70,10 @@ $userName = $_SESSION['user_name'] ?? '';
                             <a href="<?= $BASE_URL ?>/../auth/logout.php"
                                class="block px-4 py-2 text-gray-900 hover:bg-red-500 hover:text-white transition rounded">
                                 Logout
+                            </a>
+                            <a href="<?= $BASE_URL ?>/pages/booking_history.php"
+                               class="block px-4 py-2 text-gray-900 hover:bg-green-500 hover:text-white transition rounded">
+                                My Bookings
                             </a>
                         </div>
 
@@ -108,7 +112,7 @@ $userName = $_SESSION['user_name'] ?? '';
             <a href="<?= $BASE_URL ?>/pages/rooms.php" class="block px-4 py-2 text-green-400 hover:bg-green-600 hover:text-white">Our Rooms</a>
             <a href="#" class="block px-4 py-2 text-green-400 hover:bg-green-600 hover:text-white">About</a>
             <a href="#" class="block px-4 py-2 text-green-400 hover:bg-green-600 hover:text-white">Services</a>
-            <a href="#" class="block px-4 py-2 text-green-400 hover:bg-green-600 hover:text-white">Contact</a>
+            <a href="<?= $BASE_URL ?>/pages/contact_us.php" class="block px-4 py-2 text-green-400 hover:bg-green-600 hover:text-white">Contact</a>
         </div>
     </nav>
 </header>

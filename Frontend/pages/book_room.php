@@ -2,6 +2,8 @@
 include __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../../admin/config/db_config.php';
 
+if (session_status() === PHP_SESSION_NONE) session_start();
+
 // Database connection
 $database = new Database();
 $db = $database->db_connection();
@@ -35,6 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $check_in       = $_POST['check_in'];
     $check_out      = $_POST['check_out'];
     $transaction_id = trim($_POST['transaction_id'] ?? '');
+    $user_id        = $_SESSION['user_id'] ?? 0; // session থেকে ইউজার আইডি
 
     // nights হিসাব করা
     $date1 = new DateTime($check_in);
@@ -89,13 +92,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Insert booking
             $stmt = $db->prepare("
                 INSERT INTO bookings 
-                (room_id, user_name, user_email, user_phone, check_in, check_out, nights, total_price, advance_amount, transaction_id, status, payment_status) 
-                VALUES (:room_id, :user_name, :user_email, :user_phone, :check_in, :check_out, :nights, :total_price, :advance_amount, :transaction_id, 'pending', :payment_status)
+                (user_id, room_id, user_name, user_email, user_phone, check_in, check_out, nights, total_price, advance_amount, transaction_id, status, payment_status) 
+                VALUES (:user_id, :room_id, :user_name, :user_email, :user_phone, :check_in, :check_out, :nights, :total_price, :advance_amount, :transaction_id, 'pending', :payment_status)
             ");
 
             $payment_status = !empty($transaction_id) ? 'paid' : 'pending';
 
             $stmt->execute([
+                ':user_id'        => $user_id,
                 ':room_id'        => $room_id,
                 ':user_name'      => $user_name,
                 ':user_email'     => $user_email,
