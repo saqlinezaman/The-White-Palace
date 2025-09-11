@@ -68,13 +68,13 @@ class User
         $insert_query = $this->connection->prepare("INSERT INTO users (username, email, password, token, verified) VALUES (?,?,?,?,0)");
         $insert_query->execute([$username, $email, $hash, $token]);
 
-        $verifyLink =$this->baseUrl ."/auth/verify.php?token=" . urlencode($token) . "&email=" . urlencode($email);
+        $verifyLink = $this->baseUrl . "/auth/verify.php?token=" . urlencode($token) . "&email=" . urlencode($email);
 
         $msg = '
         <div style="font-family: Arial; font-size: 14px; line-height: 1.6; color: #333;">
             <h2 style="margin: 0 0 12px;">Verify your email</h2>
             <p>Hi ' . htmlspecialchars($username) . ',</p>
-            <p>Please click the button bellow to verify your account:</p>
+            <p>Please click the button below to verify your account:</p>
             <p style="margin: 16px 0;">
                 <a href="' . htmlspecialchars($verifyLink) . '" target="_blank" style="background: #007bff; color: white; text-decoration: none; padding: 10px 18px; border-radius: 6px; display: inline-block;">
                    Verify my account
@@ -196,7 +196,7 @@ class User
         return true;
     }
 
-   // send invoice (email)
+    // send invoice (email)
     public function sendInvoice($email, $booking, $room)
     {
         $due_amount = $booking['total_price'] - $booking['advance_amount'];
@@ -210,12 +210,14 @@ class User
             <p>Hi ' . htmlspecialchars($booking['user_name']) . ',</p>
             <p>Thank you for booking with us. Here are your booking details:</p>
             <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; margin: 12px 0; width: 100%;">
+                <tr><td><strong>Date</strong></td><td>' . htmlspecialchars($booking['created_at']) . '</td></tr>
                 <tr><td><strong>Booking ID</strong></td><td>' . htmlspecialchars($booking['id']) . '</td></tr>
                 <tr><td><strong>Room</strong></td><td>' . htmlspecialchars($room['name']) . '</td></tr>
                 <tr><td><strong>Name</strong></td><td>' . htmlspecialchars($booking['user_name']) . '</td></tr>
                 <tr><td><strong>Phone</strong></td><td>' . htmlspecialchars($booking['user_phone']) . '</td></tr>
                 <tr><td><strong>Check-in</strong></td><td>' . htmlspecialchars($booking['check_in']) . '</td></tr>
                 <tr><td><strong>Check-out</strong></td><td>' . htmlspecialchars($booking['check_out']) . '</td></tr>
+                <tr><td><strong>Total Nights</strong></td><td>' . htmlspecialchars($booking['nights'] ?? '') . '</td></tr>
                 <tr><td><strong>Total Price</strong></td><td>Taka: ' . number_format((float)$booking['total_price'], 2, '.', ',') . '</td></tr>
                 <tr><td><strong>Advance Paid</strong></td><td>Taka: ' . number_format((float)$booking['advance_amount'], 2, '.', ',') . '</td></tr>
                 <tr><td><strong>Due Amount</strong></td><td>Taka: ' . number_format((float)htmlspecialchars($due_amount), 2, '.', ',') . '</td></tr>
@@ -230,8 +232,8 @@ class User
         return $this->sendMail($email, $subject, $message);
     }
 
-    // sendMail function
-    private function sendMail($email, $subject, $message)
+    // sendMail function (changed to public)
+    public function sendMail($email, $subject, $message)
     {
         require_once __DIR__ . '/mailer/PHPMailer.php';
         require_once __DIR__ . '/mailer/SMTP.php';
@@ -244,7 +246,7 @@ class User
         $mail->Password = 'pejgwhvsrltwfdfe';
         $mail->SMTPSecure = 'tls';
         $mail->Port = 587;
-        $mail->setFrom('szmoaj100@gmail.com', 'Marhaba e-commerce');
+        $mail->setFrom('szmoaj100@gmail.com', 'The White Palace');
         $mail->addAddress($email);
         $mail->isHTML(true);
         $mail->Subject = $subject;

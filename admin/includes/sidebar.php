@@ -71,6 +71,13 @@
           <div class="menu-title">Testimonials</div>
         </a>
       </li>
+      <!-- Testimonials -->
+      <li>
+        <a href="index.php?page=contact">
+          <div class="parent-icon"><span class="material-symbols-outlined">review</span></div>
+          <div class="menu-title">Contact</div>
+        </a>
+      </li>
 
     </ul>
     <!--end navigation-->

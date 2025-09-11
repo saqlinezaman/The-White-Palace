@@ -66,14 +66,15 @@ $userName = $_SESSION['user_name'] ?? '';
                         </button>
 
                         <!-- Dropdown Menu -->
-                        <div id="user-menu" class="absolute right-0 mt-2 w-32 bg-white border rounded shadow-lg hidden z-50">
-                            <a href="<?= $BASE_URL ?>/../auth/logout.php"
-                               class="block px-4 py-2 text-gray-900 hover:bg-red-500 hover:text-white transition rounded">
-                                Logout
-                            </a>
+                        <div id="user-menu" class="absolute right-0 mt-2 w-36 bg-white border rounded shadow-lg hidden z-50">
+                            
                             <a href="<?= $BASE_URL ?>/pages/booking_history.php"
-                               class="block px-4 py-2 text-gray-900 hover:bg-green-500 hover:text-white transition rounded">
+                               class="block px-4 py-2 mb-1 bg-green-500 hover:bg-green-600 text-white transition rounded">
                                 My Bookings
+                            </a>
+                            <a href="<?= $BASE_URL ?>/../auth/logout.php"
+                               class="block px-4 py-2 bg-red-500 hover:bg-red-600 text-white transition rounded">
+                                Logout
                             </a>
                         </div>
 

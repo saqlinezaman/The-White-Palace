@@ -36,14 +36,15 @@ try {
         <p class="text-gray-600">You haven't made any bookings yet.</p>
     <?php else: ?>
         <div class="overflow-x-auto">
-            <table class="min-w-full bg-white rounded-lg shadow-md">
+            <table class="min-w-full bg-white rounded-lg shadow-md  lg:text-md text-sm">
                 <thead>
                     <tr class="bg-green-500 text-white">
+                        <th class="py-3 px-4 text-left">Date</th>
                         <th class="py-3 px-4 text-left">Name</th>
-                        <th class="py-3 px-4 text-left">Check-in</th>
-                        <th class="py-3 px-4 text-left">Check-out</th>
                         <th class="py-3 px-4 text-left">Phone</th>
                         <th class="py-3 px-4 text-left">Email</th>
+                        <th class="py-3 px-4 text-left">Check-in</th>
+                        <th class="py-3 px-4 text-left">Check-out</th>
                         <th class="py-3 px-4 text-left">Status</th>
                         <th class="py-3 px-4 text-left">Payment</th>
                     </tr>
@@ -51,14 +52,15 @@ try {
                 <tbody>
                     <?php foreach ($bookings as $b): ?>
                         <tr class="border-b hover:bg-gray-50">
+                            <td class="py-2 px-4"><?= htmlspecialchars($b['created_at'] ?? ''); ?></td>
                             <td class="py-2 px-4"><?= htmlspecialchars($b['user_name'] ?? ''); ?></td>
-                            <td class="py-2 px-4"><?= htmlspecialchars($b['check_in'] ?? ''); ?></td>
-                            <td class="py-2 px-4"><?= htmlspecialchars($b['check_out'] ?? ''); ?></td>
                             <td class="py-2 px-4"><?= htmlspecialchars($b['user_phone'] ?? ''); ?></td>
                             <td class="py-2 px-4"><?= htmlspecialchars($b['user_email'] ?? ''); ?></td>
+                            <td class="py-2 px-4"><?= htmlspecialchars($b['check_in'] ?? ''); ?></td>
+                            <td class="py-2 px-4"><?= htmlspecialchars($b['check_out'] ?? ''); ?></td>
                             
                             <!-- Status -->
-                            <td class="py-2 px-4">
+                            <td class="py-2 px-4 text-xs">
                                 <?php
                                 $status = $b['status'] ?? 'pending';
                                 switch ($status) {
@@ -83,7 +85,7 @@ try {
                             </td>
                             
                             <!-- Payment Status -->
-                            <td class="py-2 px-4">
+                            <td class="py-2 px-4 text-xs">
                                 <?php
                                 $paymentStatus = $b['payment_status'] ?? 'checking';
                                 switch ($paymentStatus) {

@@ -315,6 +315,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
             currentDetails = `
             <div id="invoiceContent" style="font-family: Arial; font-size: 14px; color: #333;">
+                <h2 class="mb-1">The White Palace</h2>
+                <p class="mb-3">Address: 123 Main St, City, Country</p>
+                <hr/>
                 <h4 class="mb-3">Invoice</h4>
                 <table class="table table-bordered">
                     <tr><th>Booking ID</th><td>${id}</td></tr>
