@@ -193,44 +193,101 @@
     </section>
 
     <!-- Service Hours Section -->
-    <section class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                <div>
-                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-8">Service Hours & Contact</h2>
-                    <div class="space-y-6">
-                        <div class="bg-gray-50 p-6 rounded-xl">
-                            <h3 class="text-xl font-bold text-gray-900 mb-4">Front Desk</h3>
-                            <p class="text-gray-600 mb-2"><span class="font-semibold">Hours:</span> 24/7 Available</p>
-                            <p class="text-gray-600"><span class="font-semibold">Phone:</span> +880 1234-567890</p>
-                        </div>
-                        
-                        <div class="bg-gray-50 p-6 rounded-xl">
-                            <h3 class="text-xl font-bold text-gray-900 mb-4">Concierge Service</h3>
-                            <p class="text-gray-600 mb-2"><span class="font-semibold">Hours:</span> 6:00 AM - 11:00 PM</p>
-                            <p class="text-gray-600"><span class="font-semibold">Phone:</span> +880 1234-567891</p>
-                        </div>
-                        
-                        <div class="bg-gray-50 p-6 rounded-xl">
-                            <h3 class="text-xl font-bold text-gray-900 mb-4">Room Service</h3>
-                            <p class="text-gray-600 mb-2"><span class="font-semibold">Hours:</span> 24/7 Available</p>
-                            <p class="text-gray-600"><span class="font-semibold">Phone:</span> +880 1234-567892</p>
+<section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-8">Service Hours & Contact</h2>
+                <div class="space-y-6">
+                    <div class="bg-gray-50 p-6 rounded-xl hover:shadow-lg transition-shadow duration-300">
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center mr-4 flex-shrink-0">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-4m-5 0H9m0 0H5m0 0h4M9 7h6m-6 4h6m-6 4h6"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 mb-3">Front Desk</h3>
+                                <div class="flex items-center mb-2">
+                                    <svg class="w-4 h-4 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <p class="text-gray-600"><span class="font-semibold">Hours:</span> 24/7 Available</p>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                                    </svg>
+                                    <p class="text-gray-600"><span class="font-semibold">Phone:</span> +880 1234-567890</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="relative">
-                    <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
-                         alt="Hotel Services" 
-                         class="w-full h-[500px] object-cover rounded-2xl shadow-2xl">
-                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900/50 to-transparent rounded-2xl"></div>
-                    <div class="absolute bottom-8 left-8 right-8 text-white">
-                        <h3 class="text-2xl font-bold mb-2">Premium Service Standards</h3>
-                        <p class="text-gray-200">Experience hospitality excellence with our dedicated team</p>
+                    
+                    <div class="bg-gray-50 p-6 rounded-xl hover:shadow-lg transition-shadow duration-300">
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 bg-gray-900 rounded-xl flex items-center justify-center mr-4 flex-shrink-0">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 mb-3">Concierge Service</h3>
+                                <div class="flex items-center mb-2">
+                                    <svg class="w-4 h-4 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <p class="text-gray-600"><span class="font-semibold">Hours:</span> 6:00 AM - 11:00 PM</p>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                                    </svg>
+                                    <p class="text-gray-600"><span class="font-semibold">Phone:</span> +880 1234-567891</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-6 rounded-xl hover:shadow-lg transition-shadow duration-300">
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center mr-4 flex-shrink-0">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l-2.5-5M17 21a2 2 0 100-4 2 2 0 000 4zM9 21a2 2 0 100-4 2 2 0 000 4z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 mb-3">Room Service</h3>
+                                <div class="flex items-center mb-2">
+                                    <svg class="w-4 h-4 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <p class="text-gray-600"><span class="font-semibold">Hours:</span> 24/7 Available</p>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                                    </svg>
+                                    <p class="text-gray-600"><span class="font-semibold">Phone:</span> +880 1234-567892</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+            <div class="relative">
+                <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
+                     alt="Hotel Services" 
+                     class="w-full h-[500px] object-cover rounded-2xl shadow-2xl">
+                <div class="absolute inset-0 bg-gradient-to-t from-gray-900/50 to-transparent rounded-2xl"></div>
+                <div class="absolute bottom-8 left-8 right-8 text-white">
+                    <h3 class="text-2xl font-bold mb-2">Premium Service Standards</h3>
+                    <p class="text-gray-200">Experience hospitality excellence with our dedicated team</p>
+                </div>
+            </div>
         </div>
-    </section>
+    </div>
+</section>
 
     <!-- Call to Action Section -->
     <section class="h-[60vh] bg-gradient-to-br from-green-600 via-green-500 to-gray-800 relative overflow-hidden flex items-center justify-center">
