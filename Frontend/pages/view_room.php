@@ -1,60 +1,46 @@
 <?php
-include '../includes/header.php';
-require_once __DIR__ . '/../../admin/config/db_config.php';
+if (session_status() === PHP_SESSION_NONE) session_start();
 
+require_once __DIR__ . '/../../admin/config/db_config.php';
 $database = new Database();
 $db_connection = $database->db_connection();
 
 // Room ID check
-$roomId = $_GET['id'] ?? 0;
-$roomId = intval($roomId);
+$roomId = intval($_GET['id'] ?? 0);
+if ($roomId <= 0) { echo "<p>Invalid Room ID.</p>"; exit; }
 
-if ($roomId <= 0) {
-    echo "<p>Invalid Room ID.</p>";
-    exit;
-}
+// Check-in & Check-out
+$checkIn = $_GET['check_in'] ?? date('Y-m-d');
+$checkOut = $_GET['check_out'] ?? date('Y-m-d', strtotime($checkIn . ' +1 day'));
 
-// Check-in & Check-out, default to today & tomorrow
-$checkIn = $_GET['check_in'] ?? date('Y-m-d'); 
-$checkOut = $_GET['check_out'] ?? date('Y-m-d', strtotime($checkIn . ' +1 day')); 
-
-// Fetch room info with availability
+// Fetch room info
 $stmt = $db_connection->prepare("
     SELECT r.*, c.room_type as category_name,
-    (
-        r.total_rooms - (
-            SELECT COUNT(*) FROM bookings b
-            WHERE b.room_id = r.id
-              AND b.status IN ('pending','approved')
-              AND NOT (b.check_out <= ? OR b.check_in >= ?)
-        )
-    ) AS available_rooms
+    (r.total_rooms - (
+        SELECT COUNT(*) FROM bookings b
+        WHERE b.room_id = r.id
+          AND b.status IN ('pending','approved')
+          AND NOT (b.check_out <= ? OR b.check_in >= ?)
+    )) AS available_rooms
     FROM rooms r
     JOIN categories c ON r.category_id = c.id
     WHERE r.id = ?
 ");
 $stmt->execute([$checkIn, $checkOut, $roomId]);
 $room = $stmt->fetch(PDO::FETCH_ASSOC);
+if (!$room) { echo "<p>Room not found.</p>"; exit; }
 
-if (!$room) {
-    echo "<p>Room not found.</p>";
-    exit;
-}
-
-// Gallery images decode
 $galleryImages = [];
-if (!empty($room['gallery_images'])) {
-    $galleryImages = json_decode($room['gallery_images'], true);
-}
+if (!empty($room['gallery_images'])) $galleryImages = json_decode($room['gallery_images'], true);
 
-// Login check
-$isLoggedIn = !empty($_SESSION['user_id']);
+$isLoggedIn = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
+
+require_once '../includes/header.php';
 ?>
 
 <div class="max-w-7xl mx-auto my-10 px-5 md:px-12">
-    <!-- Main section -->
+    <!-- Main section: Room details + booking -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <!-- Left side: Main Image + Gallery -->
         <div class="space-y-4">
             <div class="rounded-lg overflow-hidden shadow-md">
                 <img src="../../<?= $room['image_url']; ?>" 
@@ -79,11 +65,9 @@ $isLoggedIn = !empty($_SESSION['user_id']);
             <?php endif; ?>
         </div>
 
-        <!-- Right side: Room info & Booking -->
         <div class="space-y-6">
             <h1 class="text-4xl font-bold text-gray-800"><?= htmlspecialchars($room['name']); ?></h1>
 
-            <!-- Category & Availability -->
             <div class="flex flex-wrap gap-3 items-center">
                 <span class="bg-gray-100 text-gray-700 text-sm px-3 py-1 rounded">
                     <?= htmlspecialchars($room['category_name']); ?>
@@ -117,20 +101,16 @@ $isLoggedIn = !empty($_SESSION['user_id']);
                 </div>
             <?php endif; ?>
 
-            <!-- Booking Form -->
             <form action="<?= $isLoggedIn ? 'book_room.php' : '../../auth/login.php' ?>" method="GET" class="space-y-4 bg-gray-50 p-5 rounded-lg shadow-md">
                 <input type="hidden" name="room_id" value="<?= $room['id']; ?>">
-
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Check In</label>
                     <input type="date" name="check_in" value="<?= htmlspecialchars($checkIn); ?>" class="w-full border rounded p-2">
                 </div>
-
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Check Out</label>
                     <input type="date" name="check_out" value="<?= htmlspecialchars($checkOut); ?>" class="w-full border rounded p-2">
                 </div>
-
                 <button type="submit" class="w-full bg-green-500 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition"
                         <?= ($room['available_rooms'] <= 0) ? 'disabled' : ''; ?>>
                     <?= $isLoggedIn 
@@ -141,11 +121,184 @@ $isLoggedIn = !empty($_SESSION['user_id']);
         </div>
     </div>
 
-    <!-- Full width Description -->
+    <!-- Description -->
     <div class="mt-12 bg-gray-50 p-6 rounded-lg shadow-md">
         <h2 class="text-2xl font-semibold mb-3">Room Details</h2>
         <p class="text-gray-700"><?= $room['description']; ?></p>
     </div>
 </div>
 
-<?php include '../includes/footer.php'; ?>
+<!-- Comments Section -->
+<div class="bg-gray-50">
+<section class="py-20 bg-white">
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center mb-6">
+    <h2 class="text-2xl font-semibold text-gray-900" id="commentsHeader">Comments</h2>
+</div>
+
+<?php if ($isLoggedIn): ?>
+<div class="bg-gray-50 rounded-2xl p-8 mb-12">
+<h3 class="text-xl font-bold text-gray-900 mb-6">Leave a Comment</h3>
+<form id="commentForm" class="space-y-6">
+    <textarea id="commentText" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="Write your comment here..." required></textarea>
+    <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105">Post Comment</button>
+</form>
+</div>
+<?php else: ?>
+<p class="text-center text-gray-600 mb-6">Please <a href="../../auth/login.php" class="text-green-600 underline">login</a> to leave a comment.</p>
+<?php endif; ?>
+
+<div id="commentsContainer" class="space-y-6"></div>
+<div id="paginationContainer" class="mt-6 flex justify-center space-x-2"></div>
+</div>
+</section>
+</div>
+
+<script>
+const roomId = <?= $roomId; ?>;
+let currentPage = 1;
+
+function loadComments(page = 1) {
+    currentPage = page;
+    fetch(`comments_ajax.php?room_id=${roomId}&page=${page}`)
+        .then(res => res.json())
+        .then(data => {
+            const container = document.getElementById('commentsContainer');
+            const pagination = document.getElementById('paginationContainer');
+            const header = document.getElementById('commentsHeader');
+            container.innerHTML = '';
+            pagination.innerHTML = '';
+
+            // Update total comment count
+            let totalComments = data.comments.reduce((sum,c)=>sum + 1 + c.replies.length,0);
+            header.textContent = `Comments (${totalComments})`;
+
+            if(data.comments.length===0){
+                container.innerHTML='<p class="text-gray-600">No comments yet. Be the first to comment!</p>';
+            }
+
+            data.comments.forEach(c=>{
+                const div = document.createElement('div');
+                div.className='bg-white p-6 rounded-2xl shadow-lg border border-gray-100';
+                div.innerHTML=`
+                    <div class="flex items-start space-x-4">
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-white font-bold">${c.username.charAt(0).toUpperCase()}</span>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between mb-3">
+                                <div>
+                                    <h4 class="font-bold text-gray-900">${c.username}</h4>
+                                    <p class="text-gray-500 text-sm">${c.created_at}</p>
+                                </div>
+                                ${c.canEdit ? `
+                                <div class="flex gap-2">
+                                    <button onclick="editComment(${c.id}, this)" class="text-blue-600 hover:underline text-sm">Edit</button>
+                                    <button onclick="deleteComment(${c.id})" class="text-red-600 hover:underline text-sm">Delete</button>
+                                </div>` : ''}
+                            </div>
+                            <p class="text-gray-700 leading-relaxed" id="commentText-${c.id}">${c.comment}</p>
+                            <div class="mt-2"><button onclick="replyComment(${c.id}, this)" class="text-green-600 hover:underline text-sm">Reply</button></div>
+                            <div id="replies-${c.id}" class="ml-6 mt-2"></div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(div);
+
+                const replyDiv = div.querySelector(`#replies-${c.id}`);
+                c.replies.forEach(r=>{
+                    const rDiv=document.createElement('div');
+                    rDiv.className='bg-gray-50 p-4 rounded-xl mb-2';
+                    rDiv.innerHTML=`
+                        <div class="flex items-start space-x-3">
+                            <div class="w-8 h-8 bg-green-400 rounded-full flex items-center justify-center flex-shrink-0">
+                                <span class="text-white font-bold">${r.username.charAt(0).toUpperCase()}</span>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex justify-between mb-1">
+                                    <h5 class="font-medium text-gray-800">${r.username}</h5>
+                                    <p class="text-xs text-gray-500">${r.created_at}</p>
+                                </div>
+                                <p class="text-gray-700 text-sm">${r.comment}</p>
+                            </div>
+                        </div>
+                    `;
+                    replyDiv.appendChild(rDiv);
+                });
+            });
+
+            for(let i=1;i<=data.totalPages;i++){
+                const btn=document.createElement('button');
+                btn.textContent=i;
+                btn.className=`px-3 py-1 rounded-lg ${i===data.currentPage?'bg-green-500 text-white':'bg-gray-200 text-gray-700 hover:bg-gray-300'}`;
+                btn.onclick=()=>loadComments(i);
+                pagination.appendChild(btn);
+            }
+        });
+}
+
+document.getElementById('commentForm')?.addEventListener('submit', e=>{
+    e.preventDefault();
+    const comment=document.getElementById('commentText').value.trim();
+    if(!comment) return;
+    fetch('comments_ajax.php',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({room_id: roomId, comment})
+    }).then(res=>res.json()).then(data=>{
+        if(data.success){ document.getElementById('commentText').value=''; loadComments(currentPage); }
+        else alert(data.msg);
+    });
+});
+
+function replyComment(parentId, btn){
+    if(document.getElementById(`replyBox-${parentId}`)) return;
+    const div=document.createElement('div');
+    div.id=`replyBox-${parentId}`;
+    div.className='mt-2';
+    div.innerHTML=`<textarea id="replyText-${parentId}" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="Write a reply..."></textarea>
+    <button class="bg-green-500 text-white px-4 py-2 rounded mt-1" onclick="sendReply(${parentId})">Reply</button>`;
+    btn.parentNode.appendChild(div);
+}
+
+function sendReply(parentId){
+    const text=document.getElementById(`replyText-${parentId}`).value.trim();
+    if(!text) return;
+    fetch('comments_ajax.php',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({room_id: roomId, comment:text, parent_id: parentId})
+    }).then(res=>res.json()).then(data=>{
+        if(data.success) loadComments(currentPage);
+        else alert(data.msg);
+    });
+}
+
+function editComment(id, btn){
+    const textP=document.getElementById(`commentText-${id}`);
+    const oldText=textP.textContent;
+    const textarea=document.createElement('textarea');
+    textarea.className='w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent';
+    textarea.value=oldText;
+    textP.replaceWith(textarea);
+    btn.textContent='Save';
+    btn.onclick=()=>{ 
+        fetch('comments_ajax.php',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({id, comment:textarea.value})})
+        .then(res=>res.json()).then(data=>{
+            if(data.success) loadComments(currentPage);
+            else alert(data.msg);
+        });
+    };
+}
+
+function deleteComment(id){
+    if(!confirm('Are you sure you want to delete this comment?')) return;
+    fetch('comments_ajax.php',{method:'DELETE',headers:{'Content-Type':'application/json'},body: JSON.stringify({id})})
+    .then(res=>res.json()).then(data=>{
+        if(data.success) loadComments(currentPage);
+        else alert(data.msg);
+    });
+}
+
+loadComments();
+</script>
