@@ -73,6 +73,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </iframe>
         </div>
     </div>
+        <!-- FAQ Section -->
+    <div class="mt-20 md:mx-40 shadow-lg p-8 rounded-lg bg-white">
+        <h2 class="text-3xl font-semibold mb-6 text-gray-800 text-center">Frequently Asked Questions</h2>
+        <div class="w-24 h-1 mx-auto bg-gradient-to-r from-green-400 to-blue-500 rounded mb-6 mt-3"></div>
+        <div class="space-y-4">
+            <div class="border-b border-gray-200">
+                <button class="w-full text-left py-3 px-4 flex justify-between items-center focus:outline-none faq-btn">
+                    <span class="font-medium text-gray-700">How can I book a room?</span>
+                    <i class="fa-solid fa-chevron-down text-gray-500"></i>
+                </button>
+                <div class="faq-content hidden px-4 pb-3 text-gray-600">
+                    You can book a room by selecting your desired room and dates on our website. You need to log in before booking.
+                </div>
+            </div>
+            <div class="border-b border-gray-200">
+                <button class="w-full text-left py-3 px-4 flex justify-between items-center focus:outline-none faq-btn">
+                    <span class="font-medium text-gray-700">What payment methods are accepted?</span>
+                    <i class="fa-solid fa-chevron-down text-gray-500"></i>
+                </button>
+                <div class="faq-content hidden px-4 pb-3 text-gray-600">
+                    We accept all major credit/debit cards and online payment methods.
+                </div>
+            </div>
+            <div class="border-b border-gray-200">
+                <button class="w-full text-left py-3 px-4 flex justify-between items-center focus:outline-none faq-btn">
+                    <span class="font-medium text-gray-700">Can I cancel my booking?</span>
+                    <i class="fa-solid fa-chevron-down text-gray-500"></i>
+                </button>
+                <div class="faq-content hidden px-4 pb-3 text-gray-600">
+                    Yes, you can cancel your booking according to our cancellation policy available on the booking page.
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Contact Form -->
     <div class="mt-12 bg-gray-50 p-8 rounded-lg shadow-md">
@@ -106,3 +140,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 
 <?php include '../includes/footer.php'; ?>
+<!-- FAQ JS -->
+<script>
+    document.querySelectorAll('.faq-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const content = btn.nextElementSibling;
+            content.classList.toggle('hidden');
+            btn.querySelector('i').classList.toggle('rotate-180');
+        });
+    });
+</script>

@@ -15,7 +15,7 @@
 
     <!--navigation-->
     <ul class="metismenu" id="menu">
-      
+
       <!-- View Website -->
       <li>
         <a href="../Frontend/index.php" target="_blank">
@@ -74,10 +74,11 @@
       <!-- Testimonials -->
       <li>
         <a href="index.php?page=contact">
-          <div class="parent-icon"><span class="material-symbols-outlined">review</span></div>
-          <div class="menu-title">Contact</div>
+          <div class="parent-icon"><span class="material-symbols-outlined">outgoing_mail</span></div>
+          <div class="menu-title">Reviews</div>
         </a>
       </li>
+
 
     </ul>
     <!--end navigation-->
