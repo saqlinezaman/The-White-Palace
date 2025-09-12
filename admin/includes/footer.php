@@ -60,16 +60,16 @@
     <!--end theme customization-->
 
     <!--plugins-->
-    <script src="<?= BASE_URL ?>/assets/js/jquery.min.js"></script>
-    <script src="<?= BASE_URL ?>/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
-    <script src="<?= BASE_URL ?>/assets/plugins/metismenu/js/metisMenu.min.js"></script>
-    <script src="<?= BASE_URL ?>/assets/plugins/simplebar/js/simplebar.min.js"></script>
-    <script src="<?= BASE_URL ?>/assets/plugins/apex/apexcharts.min.js"></script>
-    <script src="<?= BASE_URL ?>/assets/js/index.js"></script>
+    <script src="<?= BASE_URL ?>assets/js/jquery.min.js"></script>
+    <script src="<?= BASE_URL ?>assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+    <script src="<?= BASE_URL ?>assets/plugins/metismenu/js/metisMenu.min.js"></script>
+    <script src="<?= BASE_URL ?>assets/plugins/simplebar/js/simplebar.min.js"></script>
+    <script src="<?= BASE_URL ?>assets/plugins/apex/apexcharts.min.js"></script>
+    <script src="<?= BASE_URL ?>assets/js/index.js"></script>
     
     <!--BS Scripts-->
-    <script src="<?= BASE_URL ?>/assets/js/bootstrap.bundle.min.js"></script>
-    <script src="<?= BASE_URL ?>/assets/js/main.js"></script>
+    <script src="<?= BASE_URL ?>assets/js/bootstrap.bundle.min.js"></script>
+    <script src="<?= BASE_URL ?>assets/js/main.js"></script>
 
     <script>
         // Theme customization functionality

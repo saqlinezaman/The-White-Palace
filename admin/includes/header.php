@@ -12,13 +12,13 @@ define("BASE_URL", "/thewhitepalace/admin/");
   <!--plugins-->
   <link href="<?= BASE_URL ?>assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet">
   <link href="<?= BASE_URL ?>assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet">
-  <link href="<?= BASE_URL ?>../assets/plugins/simplebar/css/simplebar.css" rel="stylesheet">
+  <link href="<?= BASE_URL ?>assets/plugins/simplebar/css/simplebar.css" rel="stylesheet">
   <!-- loader-->
   <link href="<?= BASE_URL ?>assets/css/pace.min.css" rel="stylesheet">
   <script src="<?= BASE_URL ?>assets/js/pace.min.js"></script>
   <!--Styles-->
   <link href="<?= BASE_URL ?>assets/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="../../../../cdn.jsdelivr.net/npm/bootstrap-icons%401.10.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="<?= BASE_URL ?>assets/cdn.jsdelivr.net/npm/bootstrap-icons%401.10.3/font/bootstrap-icons.css">
   <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/icons.css">
 
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600&amp;display=swap"

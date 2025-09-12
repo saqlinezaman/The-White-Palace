@@ -121,7 +121,7 @@ $unread = $db->query("SELECT COUNT(*) FROM contact WHERE is_read = 0")->fetchCol
 
     <div class="table-responsive">
         <table class="table table-bordered table-hover text-center">
-            <thead class="table-dark">
+            <thead class="">
                 <tr>
                     <th><input type="checkbox" id="selectAll"></th>
                     <th>#</th>
@@ -173,6 +173,7 @@ $unread = $db->query("SELECT COUNT(*) FROM contact WHERE is_read = 0")->fetchCol
         </table>
     </div>
 </div>
+
 
 <script>
 // Vanilla JavaScript for toggling reply form and managing delete button visibility

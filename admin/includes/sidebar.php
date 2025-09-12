@@ -71,7 +71,7 @@
           <div class="menu-title">Testimonials</div>
         </a>
       </li>
-      <!-- Testimonials -->
+      <!-- Reviews -->
       <li>
         <a href="index.php?page=contact">
           <div class="parent-icon"><span class="material-symbols-outlined">outgoing_mail</span></div>
