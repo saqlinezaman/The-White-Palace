@@ -68,7 +68,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                        class="px-3 py-2  hover:bg-green-600 hover:text-white rounded transition <?= ($currentPage == 'about.php') ? 'bg-green-500 text-white font-bold' : '' ?>">
                         About
                     </a>
-                    <a href="#" 
+                    <a href="<?= $BASE_URL ?>/pages/service.php" 
                        class="px-3 py-2 text-gray-900 hover:bg-green-600 hover:text-white rounded transition">
                         Services
                     </a>
@@ -144,7 +144,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                    class="block px-4 py-3 hover:bg-green-600 hover:text-white rounded transition <?= ($currentPage == 'about.php') ? 'bg-green-500 text-white font-bold' : 'text-green-400' ?>">
                     <i class="fa-solid fa-info-circle mr-2"></i>About
                 </a>
-                <a href="#" 
+                <a href="<?= $BASE_URL ?>/pages/service.php" 
                    class="block px-4 py-3 text-green-400 hover:bg-green-600 hover:text-white rounded transition">
                     <i class="fa-solid fa-concierge-bell mr-2"></i>Services
                 </a>
