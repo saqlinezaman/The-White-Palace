@@ -5,9 +5,6 @@
     <section class="bg-gray-900 text-white py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
-                <span class="inline-block px-4 py-2 bg-green-500/20 text-green-400 rounded-full text-sm font-semibold mb-6 border border-green-500/30">
-                    Premium Hotel Services
-                </span>
                 <h1 class="text-4xl md:text-6xl font-bold mb-6">Our Exclusive Services</h1>
                 <p class="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto">
                     Experience world-class amenities and personalized services designed to make your stay unforgettable
@@ -24,6 +21,7 @@
                 <p class="text-xl text-gray-600 max-w-3xl mx-auto">
                     From luxury accommodations to personalized concierge services, we provide everything you need for a perfect stay
                 </p>
+                <div class="w-40 h-1 bg-gradient-to-r from-green-400 to-blue-500 mx-auto mt-4 rounded"></div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -146,6 +144,7 @@
                 <p class="text-xl text-gray-600 max-w-3xl mx-auto">
                     Additional luxury amenities to enhance your stay experience
                 </p>
+                <div class="w-40 h-1 bg-gradient-to-r from-green-400 to-blue-500 mx-auto mt-4 rounded"></div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -197,7 +196,8 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-8">Service Hours & Contact</h2>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Service Hours & Contact</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-green-400 to-blue-500  mb-8 rounded"></div>
                 <div class="space-y-6">
                     <div class="bg-gray-50 p-6 rounded-xl hover:shadow-lg transition-shadow duration-300">
                         <div class="flex items-start">

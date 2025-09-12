@@ -56,10 +56,11 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 
                 <!-- Desktop Menu -->
                 <div class="hidden lg:flex space-x-1">
-                    <a href="<?= $BASE_URL ?>/index.php" 
-                       class="px-3 py-2  hover:bg-green-600 hover:text-white rounded transition <?= ($currentPage == 'index.php') ? 'bg-green-500 text-white font-bold' : '' ?>">
+                     <a href="<?= $BASE_URL ?>/index.php" 
+                       class="px-3 py-2 text-gray-900 hover:bg-green-600 hover:text-white rounded transition">
                         Home
                     </a>
+                    
                     <a href="<?= $BASE_URL ?>/pages/rooms.php" 
                        class="px-3 py-2  hover:bg-green-600 hover:text-white rounded transition <?= ($currentPage == 'rooms.php') ? 'bg-green-500 text-white font-bold' : '' ?>">
                         Our Rooms
@@ -69,7 +70,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                         About
                     </a>
                     <a href="<?= $BASE_URL ?>/pages/service.php" 
-                       class="px-3 py-2 text-gray-900 hover:bg-green-600 hover:text-white rounded transition">
+                       class="px-3 py-2  hover:bg-green-600 hover:text-white rounded transition <?= ($currentPage == 'service.php') ? 'bg-green-500 text-white font-bold' : '' ?>">
                         Services
                     </a>
                     <a href="<?= $BASE_URL ?>/pages/contact_us.php" 
@@ -89,31 +90,24 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                         </button>
 
                         <!-- Dropdown Menu -->
-                        <div id="user-menu" class="absolute right-0 top-full mt-2 w-40 bg-white border rounded shadow-lg hidden z-50">
+                        <div id="user-menu" class="absolute right-0 top-full mt-2 w-40 bg-white border rounded shadow-lg hidden z-50 p-1">
+
+                        <a href="<?= $BASE_URL ?>/pages/profile.php"
+                               class="block px-4 py-2 mb-1 bg-gray-800 hover:bg-gray-900 text-white transition rounded">
+                                Profile
+                            </a>
+
                             <a href="<?= $BASE_URL ?>/pages/booking_history.php"
                                class="block px-4 py-2 mb-1 bg-green-500 hover:bg-green-600 text-white transition rounded">
                                 My Bookings
                             </a>
+                            
                             <a href="<?= $BASE_URL ?>/../auth/logout.php"
                                class="block px-4 py-2 bg-red-500 hover:bg-red-600 text-white transition rounded">
                                 Logout
                             </a>
                         </div>
 
-                        <script>
-                            const userBtn = document.getElementById('user-btn');
-                            const userMenu = document.getElementById('user-menu');
-
-                            userBtn.addEventListener('click', () => {
-                                userMenu.classList.toggle('hidden');
-                            });
-
-                            window.addEventListener('click', (e) => {
-                                if (!userBtn.contains(e.target) && !userMenu.contains(e.target)) {
-                                    userMenu.classList.add('hidden');
-                                }
-                            });
-                        </script>
                     <?php else: ?>
                         <a href="<?= $BASE_URL ?>/../auth/login.php" class="px-3 py-2 bg-green-600 text-white rounded transition hover:bg-green-700 text-sm">Login</a>
                         <a href="<?= $BASE_URL ?>/../auth/register.php" class="px-3 py-2 bg-gray-900 text-white rounded transition hover:bg-gray-800 text-sm">Register</a>
@@ -171,6 +165,20 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 
 <!-- JS for mobile menu toggle -->
 <script>
+    // button
+    const userBtn = document.getElementById('user-btn');
+                            const userMenu = document.getElementById('user-menu');
+
+                            userBtn.addEventListener('click', () => {
+                                userMenu.classList.toggle('hidden');
+                            });
+
+                            window.addEventListener('click', (e) => {
+                                if (!userBtn.contains(e.target) && !userMenu.contains(e.target)) {
+                                    userMenu.classList.add('hidden');
+                                }
+                            });
+
     const btn = document.getElementById('menu-btn');
     const menu = document.getElementById('mobile-menu');
     btn.addEventListener('click', () => {
@@ -184,3 +192,5 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         }
     });
 </script>
+
+                            

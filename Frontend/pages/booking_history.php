@@ -30,7 +30,8 @@ try {
 ?>
 
 <div class="max-w-7xl mx-auto my-12 px-5 md:px-12">
-    <h1 class="text-3xl font-bold mb-6 text-gray-800">My Bookings</h1>
+    <h1 class="text-3xl font-bold mb-4 text-gray-800">My Bookings</h1>
+    <div class="w-24 h-1 bg-gradient-to-r from-green-400 to-blue-500  mb-6 rounded"></div>
 
     <?php if (empty($bookings)): ?>
         <p class="text-gray-600">You haven't made any bookings yet.</p>

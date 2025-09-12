@@ -92,20 +92,6 @@ $rooms = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </form>
 </div>
 
-<!-- JS client-side validation -->
-<script>
-document.getElementById('searchForm').addEventListener('submit', function(e) {
-    const checkIn = document.querySelector('input[name="check_in"]').value;
-    const checkOut = document.querySelector('input[name="check_out"]').value;
-
-    if (checkIn && checkOut) {
-        if (checkOut <= checkIn) {
-            e.preventDefault();
-            alert('Check-out date must be after Check-in date.');
-        }
-    }
-});
-</script>
 
 <!-- Room Grid -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mx-5 md:mx-20 mb-10">
@@ -146,5 +132,19 @@ document.getElementById('searchForm').addEventListener('submit', function(e) {
         <p class="text-center col-span-3 text-gray-600">No rooms found for your search.</p>
     <?php endif; ?>
 </div>
+<!-- JS client-side validation -->
+<script>
+document.getElementById('searchForm').addEventListener('submit', function(e) {
+    const checkIn = document.querySelector('input[name="check_in"]').value;
+    const checkOut = document.querySelector('input[name="check_out"]').value;
+
+    if (checkIn && checkOut) {
+        if (checkOut <= checkIn) {
+            e.preventDefault();
+            alert('Check-out date must be after Check-in date.');
+        }
+    }
+});
+</script>
 
 <?php include '../includes/footer.php'; ?>
