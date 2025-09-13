@@ -20,6 +20,11 @@ $roomsStmt = $db_connection->prepare("
 ");
 $roomsStmt->execute();
 $rooms = $roomsStmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Fetch blogs
+$stmt = $db_connection->prepare("SELECT * FROM blogs ORDER BY id DESC");
+$stmt->execute();
+$blogs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 
@@ -216,98 +221,86 @@ $rooms = $roomsStmt->fetchAll(PDO::FETCH_ASSOC);
 
 
 
-<!-- Why use  blog -->
+
 <section class="my-10 mx-3 md:mx-16">
     <div class="text-center mb-8">
         <h1 class="text-4xl font-bold text-gray-800 mb-2">Why You Should Use <br> our rooms</h1>
         <p class="text-lg text-gray-600">Choose from our carefully curated selection of rooms</p>
         <div class="w-24 h-1 bg-gradient-to-r from-green-400 to-blue-500 mx-auto mt-4 rounded"></div>
     </div>
-    <!-- Blog Cards Row -->
-    <div class="flex flex-wrap justify-center gap-6">
-        <!-- card 1 -->
-        <div class="card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group hover:bg-success border border-base-300"
-            style=" width: 350px; ">
-            <figure class="overflow-hidden">
-                <img src="assets/images/blog1.jpg" alt="Best Hotels in Paris"
-                    class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105" />
-            </figure>
 
-            <div class="card-body p-6 pb-0">
-                <span>2025/8/23</span>
-                <h3
-                    class=" text-2xl font-bold mb-4 text-base-content group-hover:text-white transition-colors duration-300">
-                    Best Hotels in Paris
-                </h3>
+    <!-- Slider Container -->
+    <div class="relative">
+        <!-- Previous Button -->
+        <button onclick="previousSlide()" class="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white hover:bg-gray-100 rounded-full p-3 shadow-lg transition-all duration-300 -ml-4">
+            <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+        </button>
 
-                <p
-                    class="text-base-content/70 text-base leading-relaxed group-hover:text-white/90 transition-colors duration-300">
-                    Discover luxury accommodations in the City of Light with our curated selection of top-rated hotels.
-                </p>
-            </div>
+        <!-- Next Button -->
+        <button onclick="nextSlide()" class="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white hover:bg-gray-100 rounded-full p-3 shadow-lg transition-all duration-300 -mr-4">
+            <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+        </button>
 
-            <div class="bg-gray-900 py-6 px-6">
-                <button class="bg-white font-medium text-gray-900 py-2 px-5 rounded">
-                    Read More
-                </button>
-            </div>
-        </div>
-        <!-- card 2 -->
-        <div class="card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group hover:bg-success border border-base-300"
-            style=" width: 350px; ">
-            <figure class="overflow-hidden">
-                <img src="assets/images/blog2.jpg"
-                    class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105" />
-            </figure>
+        <!-- Slider -->
+        <div class="overflow-hidden">
+            <div id="sliderTrack" class="slider-track flex transition-transform duration-500">
+                <?php foreach ($blogs as $blog): ?>
+                <?php
+                    // Description Limit (15 words)
+                    $words = explode(" ", strip_tags($blog['description']));
+                    $shortDesc = implode(" ", array_slice($words, 0, 15)) . (count($words) > 15 ? "..." : "");
+                ?>
+                <div class="w-full md:w-1/3 flex-shrink-0 px-3">
+                    <div class="card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group hover:bg-success border border-base-300 w-full max-w-sm mx-auto h-[480px] flex flex-col">
+                        <figure class="overflow-hidden h-48">
+                            <img src="<?= htmlspecialchars($blog['image']) ?>" alt="<?= htmlspecialchars($blog['title']) ?>"
+                                class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105" />
+                        </figure>
 
-            <div class="card-body p-6 pb-0">
-                <span>2025/8/23</span>
-                <h3
-                    class="text-2xl font-bold mb-4 text-base-content group-hover:text-white transition-colors duration-300">
-                    Holiday discount
-                </h3>
+                        <div class="card-body p-6 flex-1">
+                            <span class="text-sm text-gray-500"><?= htmlspecialchars($blog['created_at']) ?></span>
+                            <h3 class="text-2xl font-bold mb-2 text-base-content group-hover:text-white transition-colors duration-300 line-clamp-2">
+                                <?= htmlspecialchars($blog['title']) ?>
+                            </h3>
 
-                <p
-                    class="text-base-content/70 text-base leading-relaxed group-hover:text-white/90 transition-colors duration-300">
-                    Discover luxury accommodations in the City of Light with our curated selection of top-rated hotels.
-                </p>
-            </div>
+                            <p class="text-base-content/70 text-base leading-relaxed group-hover:text-white/90 transition-colors duration-300">
+                                <?= htmlspecialchars($shortDesc) ?>
+                            </p>
+                        </div>
 
-            <div class="bg-gray-900 py-6 px-6">
-                <button class="bg-white font-medium text-gray-900 py-2 px-5 rounded">
-                    Read More
-                </button>
-            </div>
-        </div>
-        <!-- card-3 -->
-        <div class="card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group hover:bg-success border border-base-300"
-            style=" width: 350px; ">
-            <figure class="overflow-hidden">
-                <img src="assets/images/blog3.jpg"
-                    class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105" />
-            </figure>
-
-            <div class="card-body p-6 pb-0">
-                <span>2025/8/23</span>
-                <h3 class=" text-2xl font-bold text-base-content group-hover:text-white transition-colors duration-300">
-                    Best view in Hawai
-                </h3>
-
-                <p
-                    class="text-base-content/70 text-base leading-relaxed group-hover:text-white/90 transition-colors duration-300">
-                    Discover luxury accommodations in the City of Light with our curated selection of top-rated hotels.
-                </p>
-            </div>
-
-            <div class="bg-gray-900 py-6 px-6">
-                <button class="bg-white font-medium text-gray-900 py-2 px-5 rounded">
-                    Read More
-                </button>
+                        <div class="bg-gray-900 py-4 px-6">
+                            <button onclick="openModal('modal-<?= $blog['id'] ?>')" class="bg-white font-medium text-gray-900 py-2 px-5 rounded">
+                                Read More
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <?php endforeach; ?>
             </div>
         </div>
 
+        <!-- Dots Indicator -->
+        <div class="flex justify-center mt-8 space-x-2">
+            <?php 
+                // Show one dot per group of 3 blogs for desktop, no limit
+                $dotCount = ceil(count($blogs) / 3); 
+                for ($i = 0; $i < $dotCount; $i++): 
+            ?>
+                <button onclick="goToSlide(<?= $i ?>)" id="dot-<?= $i ?>" 
+                    class="w-3 h-3 rounded-full <?= $i === 0 ? 'bg-green-500' : 'bg-gray-300 hover:bg-gray-400' ?> transition-all duration-300"></button>
+            <?php endfor; ?>
+        </div>
     </div>
 </section>
+
+
+
+
+
 
 <!-- testimonials -->
 <section class="py-8 bg-gray-50">
@@ -413,5 +406,75 @@ $rooms = $roomsStmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </div>
 
+<script>
+    let currentSlide = 0;
+    const totalSlides = <?= count($blogs) ?>;
+    const track = document.getElementById('sliderTrack');
 
+    function updateSlider() {
+        const isMobile = window.innerWidth < 768;
+        let translateX = -currentSlide * 100;
+
+        track.style.transform = `translateX(${translateX}%)`;
+
+        // Update dots (dots are primarily for desktop, but we cap the active dot to available dots)
+        let dotCount;
+        if (isMobile) {
+            dotCount = totalSlides;  // In mobile, conceptually more dots, but since HTML has fewer, we use what's available
+        } else {
+            dotCount = Math.ceil(totalSlides / 3);
+        }
+        for (let i = 0; i < dotCount; i++) {
+            const dot = document.getElementById(`dot-${i}`);
+            if (dot) {
+                if (i === currentSlide) {
+                    dot.classList.remove('bg-gray-300', 'hover:bg-gray-400');
+                    dot.classList.add('bg-green-500');
+                } else {
+                    dot.classList.remove('bg-green-500');
+                    dot.classList.add('bg-gray-300', 'hover:bg-gray-400');
+                }
+            }
+        }
+    }
+
+    function nextSlide() {
+        const isMobile = window.innerWidth < 768;
+        let maxSlides;
+        if (isMobile) {
+            maxSlides = totalSlides;
+        } else {
+            maxSlides = Math.ceil(totalSlides / 3);
+        }
+        currentSlide = (currentSlide + 1) % maxSlides;
+        updateSlider();
+    }
+
+    function previousSlide() {
+        const isMobile = window.innerWidth < 768;
+        let maxSlides;
+        if (isMobile) {
+            maxSlides = totalSlides;
+        } else {
+            maxSlides = Math.ceil(totalSlides / 3);
+        }
+        currentSlide = (currentSlide - 1 + maxSlides) % maxSlides;
+        updateSlider();
+    }
+
+    function goToSlide(index) {
+        const isMobile = window.innerWidth < 768;
+        let maxSlides = isMobile ? totalSlides : Math.ceil(totalSlides / 3);
+        if (index >= 0 && index < maxSlides) {
+            currentSlide = index;
+            updateSlider();
+        }
+    }
+
+    // Update slider on window resize
+    window.addEventListener('resize', updateSlider);
+
+    // Initialize slider
+    updateSlider();
+</script>
 <?php include '../Frontend/includes/footer.php'; ?>

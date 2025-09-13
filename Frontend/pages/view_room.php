@@ -135,6 +135,7 @@ require_once '../includes/header.php';
 <div class="text-center mb-12">
     <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Comments</h2>
     <p class="text-lg text-gray-600">Share your thoughts and read what others have to say</p>
+     <div class="w-40 h-1 bg-gradient-to-r from-green-400 to-blue-500 mx-auto mt-4  mb-8 rounded"></div>
 </div>
 
 <?php if ($isLoggedIn): ?>
@@ -151,6 +152,7 @@ require_once '../includes/header.php';
 
 <div class="my-5">
     <h2 class="text-3xl font-bold" >Comments</h2>
+     <div class="w-24 h-1 bg-gradient-to-r from-green-400 to-blue-500  mt-4 mb-8 rounded"></div>
 </div>
 
 <div id="commentsContainer" class="space-y-6"></div>
