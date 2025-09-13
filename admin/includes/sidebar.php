@@ -55,14 +55,30 @@
           <div class="menu-title">Bookings</div>
         </a>
       </li>
-
-      <!-- Blog -->
-      <li>
-        <a href="index.php?page=manage_blog">
-          <div class="parent-icon"><span class="material-symbols-outlined">article</span></div>
-          <div class="menu-title">Blog</div>
+<li class="nav-item">
+  <a class="nav-link d-flex align-items-center" data-bs-toggle="collapse" href="#blogsMenu" role="button" aria-expanded="false" aria-controls="blogsMenu">
+    <div class="parent-icon">
+      <span class="material-symbols-outlined">article</span>
+    </div>
+    <div class="menu-title ms-2">Blogs</div>
+    <span class="ms-auto material-symbols-outlined">expand_more</span>
+  </a>
+  <div class="collapse" id="blogsMenu">
+    <ul class="nav flex-column ms-4">
+      <li class="nav-item">
+        <a class="nav-link" href="index.php?page=blogs">
+          <span class="material-symbols-outlined">chevron_right</span> All Blogs
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="index.php?page=add_blogs">
+          <span class="material-symbols-outlined">chevron_right</span> Write Blogs
+        </a>
+      </li>
+    </ul>
+  </div>
+</li>
+
 
       <!-- Testimonials -->
       <li>
@@ -94,7 +110,7 @@
   <div class="sidebar-bottom dropdown dropup-center dropup">
     <div class="dropdown-toggle d-flex align-items-center px-3 gap-3 w-100 h-100" data-bs-toggle="dropdown">
       <div class="user-img">
-        <img src="../assets/images/avatars/01.png" alt="">
+        <img src="../admin/assets/images/avatars/01.png" alt="">
       </div>
       <div class="user-info">
         <h5 class="mb-0 user-name">Jhon Maxwell</h5>

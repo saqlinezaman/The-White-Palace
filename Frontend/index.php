@@ -257,7 +257,7 @@ $blogs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="w-full md:w-1/3 flex-shrink-0 px-3">
                     <div class="card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group hover:bg-success border border-base-300 w-full max-w-sm mx-auto h-[480px] flex flex-col">
                         <figure class="overflow-hidden h-48">
-                            <img src="<?= htmlspecialchars($blog['image']) ?>" alt="<?= htmlspecialchars($blog['title']) ?>"
+                            <img src="<?php echo '../admin/uploads/blogs/'.htmlspecialchars($blog['image']) ?>" alt="<?= htmlspecialchars($blog['title']) ?>"
                                 class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105" />
                         </figure>
 

@@ -74,7 +74,7 @@ require_once __DIR__ . '/../includes/header.php';
 
     <div class="table-responsive">
         <table class="table table-bordered table-hover text-center">
-            <thead class="table-dark">
+            <thead class="">
                 <tr>
                     <th><input type="checkbox" id="selectAll"></th>
                     <th>#</th>
