@@ -132,8 +132,9 @@ require_once '../includes/header.php';
 <div class="bg-gray-50">
 <section class="py-20 bg-white">
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-<div class="text-center mb-6">
-    <h2 class="text-2xl font-semibold text-gray-900" id="commentsHeader">Comments</h2>
+<div class="text-center mb-12">
+    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Comments</h2>
+    <p class="text-lg text-gray-600">Share your thoughts and read what others have to say</p>
 </div>
 
 <?php if ($isLoggedIn): ?>
@@ -147,6 +148,10 @@ require_once '../includes/header.php';
 <?php else: ?>
 <p class="text-center text-gray-600 mb-6">Please <a href="../../auth/login.php" class="text-green-600 underline">login</a> to leave a comment.</p>
 <?php endif; ?>
+
+<div class="my-5">
+    <h2 class="text-3xl font-bold" >Comments</h2>
+</div>
 
 <div id="commentsContainer" class="space-y-6"></div>
 <div id="paginationContainer" class="mt-6 flex justify-center space-x-2"></div>
@@ -165,22 +170,17 @@ function loadComments(page = 1) {
         .then(data => {
             const container = document.getElementById('commentsContainer');
             const pagination = document.getElementById('paginationContainer');
-            const header = document.getElementById('commentsHeader');
             container.innerHTML = '';
             pagination.innerHTML = '';
 
-            // Update total comment count
-            let totalComments = data.comments.reduce((sum,c)=>sum + 1 + c.replies.length,0);
-            header.textContent = `Comments (${totalComments})`;
-
-            if(data.comments.length===0){
-                container.innerHTML='<p class="text-gray-600">No comments yet. Be the first to comment!</p>';
+            if(data.comments.length === 0){
+                container.innerHTML = '<p class="text-gray-600">No comments yet. Be the first to comment!</p>';
             }
 
-            data.comments.forEach(c=>{
+            data.comments.forEach(c => {
                 const div = document.createElement('div');
-                div.className='bg-white p-6 rounded-2xl shadow-lg border border-gray-100';
-                div.innerHTML=`
+                div.className = 'bg-white p-6 rounded-2xl shadow-lg border border-gray-100';
+                div.innerHTML = `
                     <div class="flex items-start space-x-4">
                         <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
                             <span class="text-white font-bold">${c.username.charAt(0).toUpperCase()}</span>
@@ -205,9 +205,10 @@ function loadComments(page = 1) {
                 `;
                 container.appendChild(div);
 
+                // render replies
                 const replyDiv = div.querySelector(`#replies-${c.id}`);
                 c.replies.forEach(r=>{
-                    const rDiv=document.createElement('div');
+                    const rDiv = document.createElement('div');
                     rDiv.className='bg-gray-50 p-4 rounded-xl mb-2';
                     rDiv.innerHTML=`
                         <div class="flex items-start space-x-3">
@@ -228,32 +229,36 @@ function loadComments(page = 1) {
             });
 
             for(let i=1;i<=data.totalPages;i++){
-                const btn=document.createElement('button');
-                btn.textContent=i;
-                btn.className=`px-3 py-1 rounded-lg ${i===data.currentPage?'bg-green-500 text-white':'bg-gray-200 text-gray-700 hover:bg-gray-300'}`;
-                btn.onclick=()=>loadComments(i);
+                const btn = document.createElement('button');
+                btn.textContent = i;
+                btn.className = `px-3 py-1 rounded-lg ${i===data.currentPage?'bg-green-500 text-white':'bg-gray-200 text-gray-700 hover:bg-gray-300'}`;
+                btn.onclick = () => loadComments(i);
                 pagination.appendChild(btn);
             }
         });
 }
 
+// Main comment submit
 document.getElementById('commentForm')?.addEventListener('submit', e=>{
     e.preventDefault();
-    const comment=document.getElementById('commentText').value.trim();
+    const comment = document.getElementById('commentText').value.trim();
     if(!comment) return;
     fetch('comments_ajax.php',{
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({room_id: roomId, comment})
+        body: JSON.stringify({room_id: roomId, comment})
     }).then(res=>res.json()).then(data=>{
-        if(data.success){ document.getElementById('commentText').value=''; loadComments(currentPage); }
-        else alert(data.msg);
+        if(data.success){
+            document.getElementById('commentText').value='';
+            loadComments(currentPage);
+        } else alert(data.msg);
     });
 });
 
+// Reply
 function replyComment(parentId, btn){
     if(document.getElementById(`replyBox-${parentId}`)) return;
-    const div=document.createElement('div');
+    const div = document.createElement('div');
     div.id=`replyBox-${parentId}`;
     div.className='mt-2';
     div.innerHTML=`<textarea id="replyText-${parentId}" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="Write a reply..."></textarea>
@@ -267,13 +272,14 @@ function sendReply(parentId){
     fetch('comments_ajax.php',{
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({room_id: roomId, comment:text, parent_id: parentId})
+        body: JSON.stringify({room_id: roomId, comment:text, parent_id: parentId})
     }).then(res=>res.json()).then(data=>{
         if(data.success) loadComments(currentPage);
         else alert(data.msg);
     });
 }
 
+// Edit & Delete
 function editComment(id, btn){
     const textP=document.getElementById(`commentText-${id}`);
     const oldText=textP.textContent;
