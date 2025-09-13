@@ -74,7 +74,7 @@
       <!-- Comments -->
       <li>
         <a href="index.php?page=comments">
-          <div class="parent-icon"><span class="material-symbols-outlined">reviews</span></div>
+          <div class="parent-icon"><span class="material-symbols-outlined">campaign</span></div>
           <div class="menu-title">Comments</div>
         </a>
       </li>
