@@ -4,7 +4,6 @@ require_once __DIR__ . '/../../admin/config/db_config.php';
 
 if (session_status() === PHP_SESSION_NONE) session_start();
 
-// Database connection
 $database = new Database();
 $db = $database->db_connection();
 
@@ -28,7 +27,7 @@ if ($room_id > 0) {
     }
 }
 
-// যদি ফর্ম সাবমিট করা হয়
+// Form submit
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user_name      = trim($_POST['name']);
     $user_email     = trim($_POST['email']);
@@ -37,29 +36,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $check_in       = $_POST['check_in'];
     $check_out      = $_POST['check_out'];
     $transaction_id = trim($_POST['transaction_id'] ?? '');
-    $user_id        = $_SESSION['user_id'] ?? 0; // session থেকে ইউজার আইডি
+    $user_id        = $_SESSION['user_id'] ?? 0;
 
-    // nights হিসাব করা
+    // nights
     $date1 = new DateTime($check_in);
     $date2 = new DateTime($check_out);
     $nights = $date1->diff($date2)->days;
 
     try {
-        // আবারও room info বের করা যাতে fresh থাকে
         $roomStmt = $db->prepare("SELECT price, total_rooms FROM rooms WHERE id = :room_id LIMIT 1");
         $roomStmt->execute([':room_id' => $room_id]);
         $roomData = $roomStmt->fetch(PDO::FETCH_ASSOC);
 
-        if (!$roomData) {
-            throw new Exception("Room not found.");
-        }
+        if (!$roomData) throw new Exception("Room not found.");
 
         $room_price   = (float)$roomData['price'];
         $total_rooms  = (int)$roomData['total_rooms'];
         $total_price  = $nights * $room_price;
-        $advance_amount = $total_price * 0.20; // 20% advance
+        $advance_amount = $total_price * 0.20;
 
-        // ওই তারিখে কত বুকিং আছে চেক করা
+        // Room availability check
         $checkAvailability = $db->prepare("
             SELECT COUNT(*) 
             FROM bookings 
@@ -89,14 +85,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             ";
         } else {
+            // Always default status = checking
+            $payment_status = 'checking';
+
             // Insert booking
             $stmt = $db->prepare("
                 INSERT INTO bookings 
                 (user_id, room_id, user_name, user_email, user_phone, check_in, check_out, nights, total_price, advance_amount, transaction_id, status, payment_status) 
                 VALUES (:user_id, :room_id, :user_name, :user_email, :user_phone, :check_in, :check_out, :nights, :total_price, :advance_amount, :transaction_id, 'pending', :payment_status)
             ");
-
-            $payment_status = !empty($transaction_id) ? 'paid' : 'pending';
 
             $stmt->execute([
                 ':user_id'        => $user_id,
@@ -113,32 +110,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':payment_status' => $payment_status
             ]);
 
-            if ($payment_status === 'paid') {
-                $message = "
-                    <div class='alert alert-success shadow-lg my-4'>
-                        <div>
-                            <svg xmlns='http://www.w3.org/2000/svg' class='stroke-current flex-shrink-0 h-6 w-6' fill='none' viewBox='0 0 24 24'>
-                                <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' 
-                                      d='M9 12l2 2l4-4m6 2a9 9 0 11-18 0a9 9 0 0118 0z' />
-                            </svg>
-                            <span>✅ Booking successful & advance payment received! We received your advance of <strong>" . number_format($advance_amount, 0) . " Tk</strong>.</span>
-                        </div>
+            $message = "
+                <div class='alert alert-success shadow-lg my-4'>
+                    <div>
+                        <svg xmlns='http://www.w3.org/2000/svg' class='stroke-current flex-shrink-0 h-6 w-6' fill='none' viewBox='0 0 24 24'>
+                            <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M9 12l2 2l4-4m6 2a9 9 0 11-18 0a9 9 0 0118 0z' />
+                        </svg>
+                        <span>✅ Booking successful! Payment status: <strong>{$payment_status}</strong></span>
                     </div>
-                ";
-            } else {
-                $message = "
-                    <div class='alert alert-success shadow-lg my-4'>
-                        <div>
-                            <svg xmlns='http://www.w3.org/2000/svg' class='stroke-current flex-shrink-0 h-6 w-6' fill='none' viewBox='0 0 24 24'>
-                                <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' 
-                                      d='M9 12l2 2l4-4m6 2a9 9 0 11-18 0a9 9 0 0118 0z' />
-                            </svg>
-                            <span>✅ Booking successful! Please complete your payment.</span>
-                        </div>
-                    </div>
-                ";
-            }
+                </div>
+            ";
         }
+
     } catch (Exception $e) {
         $message = "
             <div class='alert alert-error shadow-lg my-4'>
@@ -165,47 +148,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
       <!-- Name -->
       <div class="form-control">
-        <label class="label">
-          <span class="label-text font-semibold">Your Name</span>
-        </label>
-        <input type="text" name="name" placeholder="Enter your name"
-               class="input input-bordered w-full" required>
+        <label class="label"><span class="label-text font-semibold">Your Name</span></label>
+        <input type="text" name="name" placeholder="Enter your name" class="input input-bordered w-full" required>
       </div>
 
       <!-- Email -->
       <div class="form-control">
-        <label class="label">
-          <span class="label-text font-semibold">Email</span>
-        </label>
-        <input type="email" name="email" placeholder="Enter your email"
-               class="input input-bordered w-full" required>
+        <label class="label"><span class="label-text font-semibold">Email</span></label>
+        <input type="email" name="email" placeholder="Enter your email" class="input input-bordered w-full" required>
       </div>
 
       <!-- Phone -->
       <div class="form-control">
-        <label class="label">
-          <span class="label-text font-semibold">Phone</span>
-        </label>
-        <input type="text" name="phone" placeholder="Enter your phone number"
-               class="input input-bordered w-full" required>
+        <label class="label"><span class="label-text font-semibold">Phone</span></label>
+        <input type="text" name="phone" placeholder="Enter your phone number" class="input input-bordered w-full" required>
       </div>
-      
+
       <!-- Check In -->
       <div class="form-control">
-        <label class="label">
-          <span class="label-text font-semibold">Check-In</span>
-        </label>
-        <input type="date" name="check_in" value="<?= htmlspecialchars($check_in) ?>"
-               class="input input-bordered w-full" required>
+        <label class="label"><span class="label-text font-semibold">Check-In</span></label>
+        <input type="date" name="check_in" value="<?= htmlspecialchars($check_in) ?>" class="input input-bordered w-full" required>
       </div>
 
       <!-- Check Out -->
       <div class="form-control">
-        <label class="label">
-          <span class="label-text font-semibold">Check-Out</span>
-        </label>
-        <input type="date" name="check_out" value="<?= htmlspecialchars($check_out) ?>"
-               class="input input-bordered w-full" required>
+        <label class="label"><span class="label-text font-semibold">Check-Out</span></label>
+        <input type="date" name="check_out" value="<?= htmlspecialchars($check_out) ?>" class="input input-bordered w-full" required>
       </div>
 
       <!-- Payment Instruction -->
@@ -229,11 +197,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
       <!-- Transaction ID -->
       <div class="form-control">
-        <label class="label">
-          <span class="label-text font-semibold">Transaction ID (after bKash/Nagad Send money )</span>
-        </label>
-        <input type="text" name="transaction_id" placeholder="Enter your bKash/Nagad Txn ID"
-               class="input input-bordered w-full">
+        <label class="label"><span class="label-text font-semibold">Transaction ID (after bKash/Nagad Send money)</span></label>
+        <input type="text" name="transaction_id" placeholder="Enter your bKash/Nagad Txn ID" class="input input-bordered w-full">
       </div>
 
       <!-- Submit -->
