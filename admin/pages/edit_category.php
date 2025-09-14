@@ -38,7 +38,7 @@ if (isset($_POST['updateCategory'])) {
 
         // Handle new image upload
         if (!empty($_FILES['category_image']['name'])) {
-            $uploadDir = __DIR__ . '/../uploads/';
+            $uploadDir = __DIR__ . '/../uploads/categories/';
             if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0777, true);
             }
