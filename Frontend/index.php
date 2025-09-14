@@ -190,9 +190,9 @@ $blogs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </div>
 
                         <div class="flex gap-3 mt-auto">
-                            <a href="pages/view_room.php?id=<?= $room['id'] ?>"
+                            <a href="pages/rooms.php?id=<?= $room['id'] ?>"
                                class="bg-green-500 text-white py-2 rounded font-semibold hover:scale-105 transition-all duration-300 flex-1 text-center">
-                                View Details
+                               See availability
                             </a>
                         </div>
                     </div>
@@ -222,7 +222,7 @@ $blogs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </section>
 
 
-
+<!-- blog -->
 
 <section class="my-10 mx-3 md:mx-16">
     <div class="text-center mb-8">
@@ -299,11 +299,6 @@ $blogs = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 </section>
-
-
-
-
-
 
 <!-- testimonials -->
 <section class="py-8 bg-gray-50">

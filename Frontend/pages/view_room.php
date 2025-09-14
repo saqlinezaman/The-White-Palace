@@ -101,21 +101,21 @@ require_once '../includes/header.php';
                 </div>
             <?php endif; ?>
 
-            <form action="<?= $isLoggedIn ? 'book_room.php' : '../../auth/login.php' ?>" method="GET" class="space-y-4 bg-gray-50 p-5 rounded-lg shadow-md">
+            <form action="<?= !$isLoggedIn ? '../../auth/login.php' : 'book_room.php' ?>" method="GET" class="space-y-4 bg-gray-50 p-5 rounded-lg shadow-md">
                 <input type="hidden" name="room_id" value="<?= $room['id']; ?>">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Check In</label>
-                    <input type="date" name="check_in" value="<?= htmlspecialchars($checkIn); ?>" class="w-full border rounded p-2">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Check Out</label>
-                    <input type="date" name="check_out" value="<?= htmlspecialchars($checkOut); ?>" class="w-full border rounded p-2">
-                </div>
+                <?php if ($isLoggedIn): ?>
+                    <div class="hidden">
+                        <label class="block text-sm font-medium text-gray-700">Check In</label>
+                        <input type="date" name="check_in" value="<?= htmlspecialchars($checkIn); ?>" class="w-full border rounded p-2">
+                    </div>
+                    <div class="hidden">
+                        <label class="block text-sm font-medium text-gray-700">Check Out</label>
+                        <input type="date" name="check_out" value="<?= htmlspecialchars($checkOut); ?>" class="w-full border rounded p-2">
+                    </div>
+                <?php endif; ?>
                 <button type="submit" class="w-full bg-green-500 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition"
-                        <?= ($room['available_rooms'] <= 0) ? 'disabled' : ''; ?>>
-                    <?= $isLoggedIn 
-                        ? (($room['available_rooms'] > 0) ? 'Book Now' : 'Unavailable') 
-                        : 'Login to Book Room'; ?>
+                        <?= $isLoggedIn && $room['available_rooms'] <= 0 ? 'disabled' : ''; ?>>
+                    <?= !$isLoggedIn ? 'Login to Book Room' : ($room['available_rooms'] > 0 ? 'Book Now' : 'Unavailable') ?>
                 </button>
             </form>
         </div>
@@ -277,9 +277,14 @@ function replyComment(parentId, btn, replyToId) {
     replyBox.className = 'mt-2';
     let defaultText = '';
     if (replyToId) {
-        // Fetch the username from the replies data
+        // Fetch the username from the reply's data
         const replyElement = document.querySelector(`#commentText-${replyToId}`).closest('.bg-gray-50').querySelector('h5');
         const replyToUsername = replyElement ? replyElement.textContent : 'Unknown';
+        defaultText = `@${replyToUsername} `;
+    } else {
+        // Fetch the username from the main comment's <h4> tag
+        const commentElement = btn.closest('.bg-white').querySelector('h4');
+        const replyToUsername = commentElement ? commentElement.textContent : 'Unknown';
         defaultText = `@${replyToUsername} `;
     }
     replyBox.innerHTML = `<textarea id="replyText-${parentId}-${replyToId || 'main'}" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-xl 
