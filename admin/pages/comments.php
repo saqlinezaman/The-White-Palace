@@ -1,5 +1,5 @@
 <?php
-ob_start(); // Start output buffering
+ob_start();
 if (session_status() === PHP_SESSION_NONE) session_start();
 
 require_once __DIR__ . '/../../admin/config/db_config.php';
@@ -29,23 +29,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     }
 }
 
-// Fetch all comments with user & room info
+// Fetch all comments with user & room/blog info
 $stmt = $db->prepare("
-    SELECT c.id AS comment_id, c.comment, c.created_at, u.username, u.email, r.name AS room_name
+    SELECT 
+        c.id AS comment_id, 
+        c.comment, 
+        c.created_at, 
+        u.username, 
+        u.email, 
+        COALESCE(r.name, b.title) AS source_name,
+        CASE 
+            WHEN c.room_id IS NOT NULL THEN 'Room'
+            WHEN c.blog_id IS NOT NULL THEN 'Blog'
+            ELSE 'Unknown'
+        END AS source_type
     FROM comments c
     JOIN users u ON c.user_id = u.id
-    JOIN rooms r ON c.room_id = r.id
+    LEFT JOIN rooms r ON c.room_id = r.id
+    LEFT JOIN blogs b ON c.blog_id = b.id
     ORDER BY c.created_at DESC
 ");
 $stmt->execute();
 $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Include header after handling deletions
 require_once __DIR__ . '/../includes/header.php';
 ?>
 
 <div class="container mt-5">
-    <h2 class="mb-4">Room Comments</h2>
+    <h2 class="mb-4">All Comments</h2>
     
     <?php if (isset($_SESSION['message'])): ?>
         <div class="alert alert-success">
@@ -74,11 +85,12 @@ require_once __DIR__ . '/../includes/header.php';
 
     <div class="table-responsive">
         <table class="table table-bordered table-hover text-center">
-            <thead class="">
+            <thead>
                 <tr>
                     <th><input type="checkbox" id="selectAll"></th>
                     <th>#</th>
-                    <th>Room Name</th>
+                    <th>Source</th>
+                    <th>Type</th>
                     <th>User Name</th>
                     <th>Email</th>
                     <th>Comment</th>
@@ -91,7 +103,8 @@ require_once __DIR__ . '/../includes/header.php';
                 <tr>
                     <td><input type="checkbox" name="comment_ids[]" value="<?= $c['comment_id'] ?>" form="deleteSelectedForm" class="rowCheckbox"></td>
                     <td><?= $i+1 ?></td>
-                    <td><?= htmlspecialchars($c['room_name']) ?></td>
+                    <td><?= htmlspecialchars($c['source_name']) ?></td>
+                    <td><?= htmlspecialchars($c['source_type']) ?></td>
                     <td><?= htmlspecialchars($c['username']) ?></td>
                     <td><?= htmlspecialchars($c['email']) ?></td>
                     <td><?= nl2br(htmlspecialchars($c['comment'])) ?></td>
@@ -117,34 +130,27 @@ document.addEventListener('DOMContentLoaded', function() {
     const deleteAllForm = document.getElementById('deleteAllForm');
     const deleteSelectedForm = document.getElementById('deleteSelectedForm');
 
-    // Function to toggle button visibility
     function toggleButtons() {
         const anyChecked = Array.from(rowCheckboxes).some(checkbox => checkbox.checked);
         if (selectAllCheckbox.checked) {
-            // Show only "Delete All" when "Select All" is checked
             deleteAllForm.style.display = 'inline-block';
             deleteSelectedForm.style.display = 'none';
         } else {
-            // Show "Delete Selected" only if at least one row is checked and "Select All" is not checked
             deleteAllForm.style.display = 'none';
             deleteSelectedForm.style.display = anyChecked ? 'inline-block' : 'none';
         }
     }
 
-    // Initial state
     toggleButtons();
 
-    // Handle "Select All" checkbox
     selectAllCheckbox.addEventListener('change', function() {
         rowCheckboxes.forEach(checkbox => checkbox.checked = this.checked);
         toggleButtons();
     });
 
-    // Handle individual row checkboxes
     rowCheckboxes.forEach(checkbox => {
         checkbox.addEventListener('change', function() {
-            // Update "Select All" state based on all rows being checked
-            const allChecked = Array.from(rowCheckboxes).every(checkbox => checkbox.checked);
+            const allChecked = Array.from(rowCheckboxes).every(cb => cb.checked);
             selectAllCheckbox.checked = allChecked;
             toggleButtons();
         });
@@ -153,5 +159,5 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <?php
-ob_end_flush(); // Flush the output buffer
+ob_end_flush();
 ?>

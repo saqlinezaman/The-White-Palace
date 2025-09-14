@@ -200,29 +200,37 @@ function loadComments(page = 1) {
                                 </div>` : ''}
                             </div>
                             <p class="text-gray-700 leading-relaxed" id="commentText-${c.id}">${c.comment}</p>
-                            <div class="mt-2"><button onclick="replyComment(${c.id}, this)" class="text-green-600 hover:underline text-sm">Reply</button></div>
+                            <div class="mt-2"><button onclick="replyComment(${c.id}, this, null)" class="text-green-600 hover:underline text-sm">Reply</button></div>
                             <div id="replies-${c.id}" class="ml-6 mt-2"></div>
                         </div>
                     </div>
                 `;
                 container.appendChild(div);
 
-                // render replies
+                // render replies with reply option
                 const replyDiv = div.querySelector(`#replies-${c.id}`);
-                c.replies.forEach(r=>{
+                c.replies.forEach(r => {
                     const rDiv = document.createElement('div');
-                    rDiv.className='bg-gray-50 p-4 rounded-xl mb-2';
-                    rDiv.innerHTML=`
+                    rDiv.className = 'bg-gray-50 p-4 rounded-xl mb-2';
+                    rDiv.innerHTML = `
                         <div class="flex items-start space-x-3">
                             <div class="w-8 h-8 bg-green-400 rounded-full flex items-center justify-center flex-shrink-0">
                                 <span class="text-white font-bold">${r.username.charAt(0).toUpperCase()}</span>
                             </div>
                             <div class="flex-1">
-                                <div class="flex justify-between mb-1">
-                                    <h5 class="font-medium text-gray-800">${r.username}</h5>
-                                    <p class="text-xs text-gray-500">${r.created_at}</p>
+                                <div class="flex items-center justify-between mb-1">
+                                    <div class="flex items-center space-x-2">
+                                        <h5 class="font-medium text-gray-800">${r.username}</h5>
+                                        <p class="text-xs text-gray-500">${r.created_at}</p>
+                                    </div>
+                                    ${r.canEdit ? `
+                                    <div class="flex gap-2">
+                                        <button onclick="editComment(${r.id}, this)" class="text-blue-600 hover:underline text-sm">Edit</button>
+                                        <button onclick="deleteComment(${r.id})" class="text-red-600 hover:underline text-sm">Delete</button>
+                                    </div>` : ''}
                                 </div>
-                                <p class="text-gray-700 text-sm">${r.comment}</p>
+                                <p class="text-gray-700 text-sm" id="commentText-${r.id}">${r.comment}</p>
+                                <div class="mt-1"><button onclick="replyComment(${c.id}, this, ${r.id})" class="text-green-600 hover:underline text-sm">Reply</button></div>
                             </div>
                         </div>
                     `;
@@ -230,83 +238,112 @@ function loadComments(page = 1) {
                 });
             });
 
-            for(let i=1;i<=data.totalPages;i++){
+            for(let i=1; i<=data.totalPages; i++){
                 const btn = document.createElement('button');
                 btn.textContent = i;
                 btn.className = `px-3 py-1 rounded-lg ${i===data.currentPage?'bg-green-500 text-white':'bg-gray-200 text-gray-700 hover:bg-gray-300'}`;
                 btn.onclick = () => loadComments(i);
                 pagination.appendChild(btn);
             }
-        });
+        })
+        .catch(error => console.error('Error loading comments:', error));
 }
 
 // Main comment submit
-document.getElementById('commentForm')?.addEventListener('submit', e=>{
+document.getElementById('commentForm')?.addEventListener('submit', e => {
     e.preventDefault();
     const comment = document.getElementById('commentText').value.trim();
-    if(!comment) return;
-    fetch('comments_ajax.php',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
+    if (!comment) return;
+    fetch('comments_ajax.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({room_id: roomId, comment})
-    }).then(res=>res.json()).then(data=>{
-        if(data.success){
-            document.getElementById('commentText').value='';
+    }).then(res => res.json()).then(data => {
+        if (data.success) {
+            document.getElementById('commentText').value = '';
             loadComments(currentPage);
         } else alert(data.msg);
     });
 });
 
 // Reply
-function replyComment(parentId, btn){
-    if(document.getElementById(`replyBox-${parentId}`)) return;
-    const div = document.createElement('div');
-    div.id=`replyBox-${parentId}`;
-    div.className='mt-2';
-    div.innerHTML=`<textarea id="replyText-${parentId}" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="Write a reply..."></textarea>
-    <button class="bg-green-500 text-white px-4 py-2 rounded mt-1" onclick="sendReply(${parentId})">Reply</button>`;
-    btn.parentNode.appendChild(div);
+function replyComment(parentId, btn, replyToId) {
+    let replyBox = document.getElementById(`replyBox-${parentId}-${replyToId || 'main'}`);
+    if (replyBox) {
+        replyBox.remove(); // Remove existing reply box to allow multiple replies
+    }
+    replyBox = document.createElement('div');
+    replyBox.id = `replyBox-${parentId}-${replyToId || 'main'}`;
+    replyBox.className = 'mt-2';
+    let defaultText = '';
+    if (replyToId) {
+        // Fetch the username from the replies data
+        const replyElement = document.querySelector(`#commentText-${replyToId}`).closest('.bg-gray-50').querySelector('h5');
+        const replyToUsername = replyElement ? replyElement.textContent : 'Unknown';
+        defaultText = `@${replyToUsername} `;
+    }
+    replyBox.innerHTML = `<textarea id="replyText-${parentId}-${replyToId || 'main'}" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-xl 
+                     focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="Write your reply...">${defaultText}</textarea>
+                     <button class="bg-green-500 text-white px-4 py-2 rounded mt-1" onclick="sendReply(${parentId}, ${replyToId})">Reply</button>`;
+    btn.parentNode.appendChild(replyBox);
 }
 
-function sendReply(parentId){
-    const text=document.getElementById(`replyText-${parentId}`).value.trim();
-    if(!text) return;
-    fetch('comments_ajax.php',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({room_id: roomId, comment:text, parent_id: parentId})
-    }).then(res=>res.json()).then(data=>{
-        if(data.success) loadComments(currentPage);
-        else alert(data.msg);
+function sendReply(parentId, replyToId) {
+    const text = document.getElementById(`replyText-${parentId}-${replyToId || 'main'}`).value.trim();
+    if (!text) return;
+    fetch('comments_ajax.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({room_id: roomId, comment: text, parent_id: parentId, reply_to_id: replyToId})
+    }).then(res => res.json()).then(data => {
+        if (data.success) {
+            loadComments(currentPage);
+            const replyBox = document.getElementById(`replyBox-${parentId}-${replyToId || 'main'}`);
+            if (replyBox) replyBox.remove();
+        } else alert(data.msg);
     });
 }
 
 // Edit & Delete
-function editComment(id, btn){
-    const textP=document.getElementById(`commentText-${id}`);
-    const oldText=textP.textContent;
-    const textarea=document.createElement('textarea');
-    textarea.className='w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent';
-    textarea.value=oldText;
+function editComment(id, btn) {
+    const textP = document.getElementById(`commentText-${id}`);
+    const oldText = textP.textContent;
+    const textarea = document.createElement('textarea');
+    textarea.className = 'w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent';
+    textarea.value = oldText;
     textP.replaceWith(textarea);
-    btn.textContent='Save';
-    btn.onclick=()=>{ 
-        fetch('comments_ajax.php',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({id, comment:textarea.value})})
-        .then(res=>res.json()).then(data=>{
-            if(data.success) loadComments(currentPage);
+    btn.textContent = 'Save';
+    btn.onclick = () => { 
+        fetch('comments_ajax.php', {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({id, comment: textarea.value})
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) loadComments(currentPage);
             else alert(data.msg);
-        });
+        })
+        .catch(error => console.error('Error editing comment:', error));
     };
 }
 
-function deleteComment(id){
-    if(!confirm('Are you sure you want to delete this comment?')) return;
-    fetch('comments_ajax.php',{method:'DELETE',headers:{'Content-Type':'application/json'},body: JSON.stringify({id})})
-    .then(res=>res.json()).then(data=>{
-        if(data.success) loadComments(currentPage);
+function deleteComment(id) {
+    if (!confirm('Are you sure you want to delete this comment?')) return;
+    fetch('comments_ajax.php', {
+        method: 'DELETE',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({id})
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) loadComments(currentPage);
         else alert(data.msg);
-    });
+    })
+    .catch(error => console.error('Error deleting comment:', error));
 }
 
 loadComments();
 </script>
+
+<?php require_once '../includes/footer.php'; ?>
