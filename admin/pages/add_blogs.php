@@ -13,123 +13,93 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $description = trim($_POST['description'] ?? '');
     $image = $_FILES['image'] ?? null;
 
-    // Validation
     if (empty($title)) {
-        $errors[] = 'Title is required.';
+        $errors[] = "Title is required.";
     }
     if (empty($description)) {
-        $errors[] = 'Description is required.';
+        $errors[] = "Description is required.";
+    }
+    if (!$image || $image['error'] !== UPLOAD_ERR_OK) {
+        $errors[] = "Image is required.";
     }
 
-    // Image upload
-    $image_name = '';
-    if ($image && $image['error'] === UPLOAD_ERR_OK) {
-        $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
-        $max_size = 5 * 1024 * 1024; // 5MB
-        if (!in_array($image['type'], $allowed_types)) {
-            $errors[] = 'Only JPEG, PNG, or GIF images are allowed.';
-        } elseif ($image['size'] > $max_size) {
-            $errors[] = 'Image size must not exceed 5MB.';
-        } else {
-            $image_name = time() . '_' . basename($image['name']);
-            $upload_path = __DIR__ . '/../uploads/blogs/' . $image_name;
-            if (!move_uploaded_file($image['tmp_name'], $upload_path)) {
-                $errors[] = 'Failed to upload image.';
-            }
-        }
-    }
-
-    // Insert into DB if no errors
     if (empty($errors)) {
-        try {
-            $stmt = $db->prepare("INSERT INTO blogs (title, description, image) VALUES (:title, :description, :image)");
-            $stmt->execute([
-                ':title' => $title,
-                ':description' => $description,
-                ':image' => $image_name
-            ]);
-            $success = 'Blog added successfully!';
-        } catch (PDOException $e) {
-            $errors[] = 'Database error: ' . $e->getMessage();
+        // Image upload
+        $uploadDir = __DIR__ . '/../uploads/blogs/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+
+        $imageName = time() . '_' . basename($image['name']);
+        $targetPath = $uploadDir . $imageName;
+
+        if (move_uploaded_file($image['tmp_name'], $targetPath)) {
+            $stmt = $db->prepare("INSERT INTO blogs (title, image, description) VALUES (?, ?, ?)");
+            $stmt->execute([$title, $imageName, $description]);
+            $success = "Blog added successfully!";
+        } else {
+            $errors[] = "Failed to upload image.";
         }
     }
 }
 ?>
+<script>
+  tinymce.init({
+    selector: '#description',
+    plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+    toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+    menubar: false
+  });
+</script>
 
-<section class="my-10 mx-3 md:mx-16">
-    <div class="row justify-content-center">
-        <div class="col-md-10">
-            <div class="card shadow-sm">
-                <div class="card-body p-4">
-                    <h4 class="mb-4"><?= $success ? 'Add Another Blog' : 'Add New Blog' ?></h4>
-
-                    <?php if (!empty($errors)): ?>
-                        <div class="alert alert-danger">
-                            <ul class="mb-0">
-                                <?php foreach ($errors as $error): ?>
-                                    <li><?= htmlspecialchars($error) ?></li>
-                                <?php endforeach; ?>
-                            </ul>
-                        </div>
-                    <?php endif; ?>
-
-                    <?php if ($success): ?>
-                        <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
-                    <?php endif; ?>
-
-                    <form action="" method="POST" enctype="multipart/form-data">
-                        <!-- Blog Title -->
-                        <div class="row mb-3">
-                            <label for="title" class="col-sm-3 col-form-label">Blog Title</label>
-                            <div class="col-sm-9">
-                                <div class="position-relative input-icon">
-                                    <input type="text" class="form-control" id="title" name="title" 
-                                           placeholder="Enter Blog Title"
-                                           value="<?= htmlspecialchars($_POST['title'] ?? '') ?>" required>
-                                    <span class="position-absolute top-50 translate-middle-y">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Description -->
-                        <div class="row mb-3">
-                            <label for="description" class="col-sm-3 col-form-label">Description</label>
-                            <div class="col-sm-9">
-                                <textarea class="form-control" id="description" name="description" rows="5" 
-                                          placeholder="Write blog description..." required><?= htmlspecialchars($_POST['description'] ?? '') ?></textarea>
-                            </div>
-                        </div>
-
-                        <!-- Image Upload -->
-                        <div class="row mb-3">
-                            <label for="image" class="col-sm-3 col-form-label">Upload Image</label>
-                            <div class="col-sm-9">
-                                <div class="position-relative input-icon">
-                                    <input type="file" class="form-control" id="image" name="image"
-                                           accept="image/jpeg,image/png,image/gif">
-                                    <span class="position-absolute top-50 translate-middle-y">
-                                        <i class="bi bi-image"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Submit/Reset -->
-                        <div class="row">
-                            <label class="col-sm-3 col-form-label"></label>
-                            <div class="col-sm-9">
-                                <div class="d-md-flex d-grid align-items-center gap-3">
-                                    <button type="submit" class="btn btn-primary px-4">Add Blog</button>
-                                    <a href="blogs_table.php" class="btn btn-light px-4">Back to Blogs List</a>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-
+<div class="container mt-2">
+        <div class="card">
+            <div class="card-body">
+            <h4 class="mb-5">Add New Blog</h4>
+            <?php if (!empty($errors)): ?>
+                <div class="alert alert-danger mt-2">
+                    <?php foreach ($errors as $error) echo "<p>$error</p>"; ?>
                 </div>
-            </div>
+            <?php endif; ?>
+
+            <?php if ($success): ?>
+                <div class="alert alert-success mt-2"><?= $success; ?></div>
+            <?php endif; ?>
+
+            <form method="post" enctype="multipart/form-data" class="form-horizontal">
+                <!-- Title -->
+                <div class="row mb-3">
+                    <label for="title" class="col-sm-2 col-form-label">Title</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="title" id="title" class="form-control" required>
+                    </div>
+                </div>
+
+                <!-- Image -->
+                <div class="row mb-3">
+                    <label for="image" class="col-sm-2 col-form-label">Thumbnail</label>
+                    <div class="col-sm-10">
+                        <input type="file" name="image" id="image" class="form-control" accept="image/*" required>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div class="row mb-3">
+                    <label for="description" class="col-sm-2 col-form-label">Description</label>
+                    <div class="col-sm-10">
+                        <textarea name="description" id="description" rows="10" class="form-control"></textarea>
+                    </div>
+                </div>
+
+                <!-- Submit -->
+                <div class="row mb-3">
+                    <div class="col-sm-10 offset-sm-2">
+                        <button type="submit" class="btn btn-success">Add Blog</button>
+                    </div>
+                </div>
+            </form>
+        </div>
         </div>
     </div>
-</section>
+</div>
+

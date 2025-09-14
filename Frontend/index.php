@@ -132,7 +132,9 @@ $blogs = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="text-center mb-8">
         <h1 class="text-4xl font-bold text-gray-800 mb-2">Book Your Stay</h1>
         <p class="text-lg text-gray-600">Choose from our carefully curated selection of rooms</p>
-        <div class="w-24 h-1 bg-gradient-to-r from-green-400 to-blue-500 mx-auto mt-4 rounded"></div>
+        <div class="w-24 h-1 bg-gradient-to-r from-green-400 to-blue-500 mx-auto mt-4 rounded">
+
+        </div>
     </div>
 
     <!-- Room Carousel -->
@@ -273,10 +275,11 @@ $blogs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </div>
 
                         <div class="bg-gray-900 py-4 px-6">
-                            <button onclick="openModal('modal-<?= $blog['id'] ?>')" class="bg-white font-medium text-gray-900 py-2 px-5 rounded">
-                                Read More
-                            </button>
-                        </div>
+    <a href="pages/view_blog.php?id=<?= $blog['id'] ?>" 
+       class="bg-white font-medium text-gray-900 py-2 px-5 rounded inline-block text-center">
+        Read More
+    </a>
+</div>
                     </div>
                 </div>
                 <?php endforeach; ?>

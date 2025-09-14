@@ -60,6 +60,7 @@
     <!--end theme customization-->
 
     <!--plugins-->
+
     <script src="<?= BASE_URL ?>assets/js/jquery.min.js"></script>
     <script src="<?= BASE_URL ?>assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
     <script src="<?= BASE_URL ?>assets/plugins/metismenu/js/metisMenu.min.js"></script>

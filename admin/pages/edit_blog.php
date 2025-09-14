@@ -62,7 +62,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($errors)) {
         try {
-            $stmt = $db->prepare("UPDATE blogs SET title = :title, description = :description, image = :image WHERE id = :id");
+            $stmt = $db->prepare("UPDATE blogs 
+                                  SET title = :title, description = :description, image = :image 
+                                  WHERE id = :id");
             $stmt->execute([
                 ':title' => $title,
                 ':description' => $description,
@@ -80,13 +82,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
+<script>
+  tinymce.init({
+    selector: '#description',
+    plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+    toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+    menubar: false,
+    height: 300
+  });
+</script>
 
 <section class="my-10 mx-3 md:mx-16">
     <div class="row justify-content-center">
         <div class="col-md-10">
-            <div class="card shadow-sm">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Edit Blog</h4>
+                </div>
                 <div class="card-body p-4">
-                    <h4 class="mb-4">Edit Blog</h4>
 
                     <?php if (!empty($errors)): ?>
                         <div class="alert alert-danger">
@@ -107,14 +120,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="row mb-3">
                             <label for="title" class="col-sm-3 col-form-label">Blog Title</label>
                             <div class="col-sm-9">
-                                <div class="position-relative input-icon">
-                                    <input type="text" class="form-control" id="title" name="title" 
-                                           placeholder="Enter Blog Title"
-                                           value="<?= htmlspecialchars($blog['title']) ?>" required>
-                                    <span class="position-absolute top-50 translate-middle-y">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </span>
-                                </div>
+                                <input type="text" class="form-control" id="title" name="title"
+                                       value="<?= htmlspecialchars($blog['title']) ?>" required>
                             </div>
                         </div>
 
@@ -122,8 +129,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="row mb-3">
                             <label for="description" class="col-sm-3 col-form-label">Description</label>
                             <div class="col-sm-9">
-                                <textarea class="form-control" id="description" name="description" rows="5" 
-                                          placeholder="Write blog description..." required><?= htmlspecialchars($blog['description']) ?></textarea>
+                                <textarea class="form-control" id="description" name="description" rows="10"
+                                          required><?= htmlspecialchars($blog['description']) ?></textarea>
                             </div>
                         </div>
 
@@ -132,8 +139,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="row mb-3">
                             <label class="col-sm-3 col-form-label">Current Image</label>
                             <div class="col-sm-9">
-                                <img src="../admin/uploads/blogs/<?= htmlspecialchars($blog['image']); ?>" 
-                                     alt="Blog Image" style="max-width: 150px; height:auto;">
+                                <img src="../admin/uploads/blogs/<?= htmlspecialchars($blog['image']); ?>"
+                                     alt="Blog Image" class="img-thumbnail" style="max-width: 180px;">
                             </div>
                         </div>
                         <?php endif; ?>
@@ -142,23 +149,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="row mb-3">
                             <label for="image" class="col-sm-3 col-form-label">Change Image</label>
                             <div class="col-sm-9">
-                                <div class="position-relative input-icon">
-                                    <input type="file" class="form-control" id="image" name="image" 
-                                           accept="image/jpeg,image/png,image/gif">
-                                    <span class="position-absolute top-50 translate-middle-y">
-                                        <i class="bi bi-image"></i>
-                                    </span>
-                                </div>
+                                <input type="file" class="form-control" id="image" name="image"
+                                       accept="image/jpeg,image/png,image/gif">
                             </div>
                         </div>
 
                         <!-- Buttons -->
                         <div class="row">
-                            <label class="col-sm-3 col-form-label"></label>
-                            <div class="col-sm-9">
+                            <div class="col-sm-9 offset-sm-3">
                                 <div class="d-md-flex d-grid align-items-center gap-3">
-                                    <button type="submit" class="btn btn-primary px-4">Update Blog</button>
-                                    <a href="blogs_table.php" class="btn btn-light px-4">Back to Blogs List</a>
+                                    <button type="submit" class="btn btn-success px-4">Update Blog</button>
+                                    <a href="blogs_table.php" class="btn btn-secondary px-4">Back to Blogs List</a>
                                 </div>
                             </div>
                         </div>

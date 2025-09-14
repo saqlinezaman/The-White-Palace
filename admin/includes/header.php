@@ -28,6 +28,8 @@ define("BASE_URL", "/thewhitepalace/admin/");
   <link href="<?= BASE_URL ?>assets/css/semi-dark-theme.css" rel="stylesheet">
   <link href="<?= BASE_URL ?>assets/css/minimal-theme.css" rel="stylesheet">
   <link href="<?= BASE_URL ?>assets/css/shadow-theme.css" rel="stylesheet">
+<script src="https://cdn.tiny.cloud/1/b0vka1a0o2pmw8tslxinbmomkz7k45idtfea9zr5j7o05o6l/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous"></script>
+
 
 </head>
 
