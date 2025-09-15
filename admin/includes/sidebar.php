@@ -48,6 +48,13 @@
         </a>
       </li>
 
+      <!-- Coupon -->
+      <li>
+        <a href="index.php?page=coupon">
+          <div class="parent-icon"><span class="material-symbols-outlined">confirmation_number</span></div>
+          <div class="menu-title">Coupon</div>
+        </a>
+      </li>
       <!-- Bookings -->
       <li>
         <a href="index.php?page=manage_bookings">
@@ -55,29 +62,30 @@
           <div class="menu-title">Bookings</div>
         </a>
       </li>
-<li class="nav-item">
-  <a class="nav-link d-flex align-items-center" data-bs-toggle="collapse" href="#blogsMenu" role="button" aria-expanded="false" aria-controls="blogsMenu">
-    <div class="parent-icon">
-      <span class="material-symbols-outlined">article</span>
-    </div>
-    <div class="menu-title ms-2">Blogs</div>
-    <span class="ms-auto material-symbols-outlined">expand_more</span>
-  </a>
-  <div class="collapse" id="blogsMenu">
-    <ul class="nav flex-column ms-4">
       <li class="nav-item">
-        <a class="nav-link" href="index.php?page=blogs">
-          <span class="material-symbols-outlined">chevron_right</span> All Blogs
+        <a class="nav-link d-flex align-items-center" data-bs-toggle="collapse" href="#blogsMenu" role="button"
+          aria-expanded="false" aria-controls="blogsMenu">
+          <div class="parent-icon">
+            <span class="material-symbols-outlined">article</span>
+          </div>
+          <div class="menu-title ms-2">Blogs</div>
+          <span class="ms-auto material-symbols-outlined">expand_more</span>
         </a>
+        <div class="collapse" id="blogsMenu">
+          <ul class="nav flex-column ms-4">
+            <li class="nav-item">
+              <a class="nav-link" href="index.php?page=blogs">
+                <span class="material-symbols-outlined">chevron_right</span> All Blogs
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.php?page=add_blogs">
+                <span class="material-symbols-outlined">chevron_right</span> Write Blogs
+              </a>
+            </li>
+          </ul>
+        </div>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="index.php?page=add_blogs">
-          <span class="material-symbols-outlined">chevron_right</span> Write Blogs
-        </a>
-      </li>
-    </ul>
-  </div>
-</li>
 
 
       <!-- Testimonials -->

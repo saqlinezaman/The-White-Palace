@@ -222,7 +222,7 @@ require_once __DIR__ . '/../includes/header.php';
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Transaction ID</label>
                             <input type="text" name="transaction_id"
                                    placeholder="Enter your bKash/Nagad Transaction ID"
-                                   class="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500">
+                                   class="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500" required >
                         </div>
 
                         <button type="submit"
@@ -233,13 +233,67 @@ require_once __DIR__ . '/../includes/header.php';
                 </div>
 
                 <!-- Info Panel -->
-                <div class="bg-gray-900 p-8 lg:p-12 text-white">
-                    <h3 class="text-3xl font-bold mb-8">Why Choose The White Palace?</h3>
-                    <p class="text-green-100">Premium Quality, Secure Booking, 24/7 Support, Best Price Guarantee</p>
+                  <!-- Info Panel -->
+                <div class="bg-gray-900 p-8 lg:p-12 text-white relative overflow-hidden">
+                    <div class="relative z-10">
+                        <h3 class="text-3xl font-bold mb-8">Why Choose The White Palace?</h3>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-start">
+                                <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 mr-4">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-lg mb-2">Premium Quality</h4>
+                                    <p class="text-green-100">Luxury accommodations with world-class amenities and exceptional service.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start">
+                                <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 mr-4">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-lg mb-2">Secure Booking</h4>
+                                    <p class="text-green-100">Your personal information and payment details are completely secure with us.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start">
+                                <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 mr-4">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 2.25A9.75 9.75 0 1 0 21.75 12 9.75 9.75 0 0 0 12 2.25Z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-lg mb-2">24/7 Support</h4>
+                                    <p class="text-green-100">Round-the-clock customer support to assist you throughout your stay.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contact Info -->
+                        <div class="mt-12 pt-5 border-t border-white/20">
+                            <h4 class="font-bold text-lg mb-4">Need Help?</h4>
+                            <div class="space-y-2">
+                                <p class="text-green-100">📞 Phone: +880 1234-567890</p>
+                                <p class="text-green-100">📧 Email: booking@whitepalace.com</p>
+                                <p class="text-green-100">🕒 Available 24/7</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Decorative Elements -->
+                    <div class="absolute top-10 right-10 w-24 h-24 bg-white/10 rounded-full blur-2xl"></div>
+                    <div class="absolute bottom-20 left-10 w-32 h-32 bg-white/5 rounded-full blur-3xl"></div>
                 </div>
             </div>
         </div>
-    </div>
+            </div>
 </section>
 
 <script>
