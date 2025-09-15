@@ -90,7 +90,7 @@
 
       <!-- Testimonials -->
       <li>
-        <a href="index.php?page=manage_testimonial">
+        <a href="index.php?page=testimonials">
           <div class="parent-icon"><span class="material-symbols-outlined">reviews</span></div>
           <div class="menu-title">Testimonials</div>
         </a>
