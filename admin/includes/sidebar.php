@@ -25,11 +25,24 @@
       </li>
 
       <!-- Dashboard -->
-      <li>
-        <a href="index.php?page=dashboard">
-          <div class="parent-icon"><span class="material-symbols-outlined">dashboard</span></div>
-          <div class="menu-title">Dashboard</div>
+      <li class="nav-item">
+        <a class="nav-link d-flex align-items-center" data-bs-toggle="collapse" href="#blogsMenu" role="button"
+          aria-expanded="false" aria-controls="blogsMenu">
+          <div class="parent-icon">
+            <span class="material-symbols-outlined">dashboard</span>
+          </div>
+          <div class="menu-title ms-2">Dashboard</div>
+          <span class="ms-auto material-symbols-outlined">expand_more</span>
         </a>
+        <div class="collapse" id="blogsMenu">
+          <ul class="nav flex-column ms-4">
+            <li class="nav-item">
+              <a class="nav-link" href="index.php?page=users">
+                <span class="material-symbols-outlined">chevron_right</span>Users
+              </a>
+            </li>
+          </ul>
+        </div>
       </li>
 
 
@@ -62,6 +75,7 @@
           <div class="menu-title">Bookings</div>
         </a>
       </li>
+      <!-- blogs -->
       <li class="nav-item">
         <a class="nav-link d-flex align-items-center" data-bs-toggle="collapse" href="#blogsMenu" role="button"
           aria-expanded="false" aria-controls="blogsMenu">

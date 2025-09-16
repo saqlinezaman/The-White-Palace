@@ -69,6 +69,11 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                        class="px-3 py-2  hover:bg-green-600 hover:text-white rounded transition <?= ($currentPage == 'rooms.php') ? 'bg-green-500 text-white font-bold' : '' ?>">
                         Our Rooms
                     </a>
+                    
+                    <a href="../404.php" 
+                       class="px-3 py-2  hover:bg-green-600 hover:text-white rounded transition <?= ($currentPage == 'packages.php') ? 'bg-green-500 text-white font-bold' : '' ?>">
+                        Packages
+                    </a>
                     <a href="<?= $BASE_URL ?>/pages/about.php" 
                        class="px-3 py-2  hover:bg-green-600 hover:text-white rounded transition <?= ($currentPage == 'about.php') ? 'bg-green-500 text-white font-bold' : '' ?>">
                         About

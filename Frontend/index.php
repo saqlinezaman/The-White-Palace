@@ -414,7 +414,7 @@ $blogs = $blogsStmt->fetchAll(PDO::FETCH_ASSOC);
 <!-- review pop up -->
 <?php if ($booking_to_review): ?>
     <div id="reviewModal" class="fixed inset-0 z-50 bg-black bg-opacity-50 hidden items-center justify-center p-4">
-        <div class="bg-gray-900 rounded-3xl shadow-2xl w-full max-w-md relative overflow-hidden max-h-[500px]">
+        <div class=" bg-white rounded-3xl shadow-2xl w-full max-w-md relative overflow-hidden max-h-[500px]">
 
             <!-- Header Section -->
             <div class="bg-green-500 px-8 py-4 text-white relative">
@@ -434,13 +434,13 @@ $blogs = $blogsStmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="px-8 py-4">
                 <!-- Success Message -->
                 <div id="reviewMessage" class="hidden text-center mb-4">
-                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                        <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <svg class="w-6 h-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                         </svg>
                     </div>
-                    <h3 class="text-lg font-bold text-white mb-1">Thank You!</h3>
-                    <p class="text-gray-300 text-sm">Your review helps us serve you better</p>
+                    <h3 class="text-lg font-bold text-gray-900 mb-1">Thank You!</h3>
+                    <p class="text-gray-900 text-sm">Your review helps us serve you better</p>
                 </div>
 
                 <!-- Review Form -->
@@ -449,8 +449,8 @@ $blogs = $blogsStmt->fetchAll(PDO::FETCH_ASSOC);
 
                     <!-- Rating Section -->
                     <div>
-                        <label class="block text-sm font-semibold text-gray-300 mb-2">How was your experience?</label>
-                        <div class="bg-gray-800 p-3 rounded-2xl">
+                        <label class="block text-sm font-semibold text-gray-900 mb-2">How was your experience?</label>
+                        <div class="bg-gray-100 p-3 rounded">
                             <select name="rating"
                                 class="w-full bg-transparent border-0 text-base font-medium text-gray-500 focus:ring-0 focus:outline-none"
                                 required>
@@ -466,17 +466,17 @@ $blogs = $blogsStmt->fetchAll(PDO::FETCH_ASSOC);
 
                     <!-- Review Text Section -->
                     <div>
-                        <label class="block text-sm font-semibold text-gray-500 mb-2">Share your thoughts</label>
+                        <label class="block text-sm font-semibold text-gray-900 mb-2">Share your thoughts</label>
                         <div class="relative">
                             <textarea name="review_text" rows="3"
-                                class="w-full px-3 py-2 border border-gray-700 rounded-2xl focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none transition-all duration-300 bg-gray-800 text-gray-300"
+                                class="w-full px-3 py-2 border border-gray-700 rounded focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none transition-all duration-300 bg-gray-100 text-gray-900"
                                 placeholder="Tell us about your experience..." required></textarea>
                         </div>
                     </div>
 
                     <!-- Submit Button -->
                     <button type="submit"
-                        class="w-full  bg-green-500 to hover::bg-green-600 text-white font-bold py-3 px-4 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                        class="w-full  bg-green-500 to hover::bg-green-600 text-white font-bold py-3 px-4 rounded transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
                         Submit Review
                     </button>
                 </form>
@@ -640,6 +640,7 @@ $blogs = $blogsStmt->fetchAll(PDO::FETCH_ASSOC);
     // Initialize slider
     updateSlider();
 </script>
+
 <!-- testimonial carousel -->
 <script>
 document.addEventListener('DOMContentLoaded', () => {
