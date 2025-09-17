@@ -24,12 +24,8 @@ if (isset($_GET['action'], $_GET['id'])) {
 
 // Pagination setup
 $limit = 15;
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-
-// page minimum 1 হবে
-if ($page < 1) {
-    $page = 1;
-}
+$page = isset($_GET['pagination']) ? (int)$_GET['pagination'] : 1;
+if ($page < 1) $page = 1;
 
 $start = ($page - 1) * $limit;
 
@@ -38,7 +34,7 @@ $totalStmt = $db->query("SELECT COUNT(*) as total FROM users");
 $total = $totalStmt->fetch(PDO::FETCH_ASSOC)['total'];
 $pages = ceil($total / $limit);
 
-// যদি start বড় হয় total এর চেয়ে, তাহলে page আবার 1 করে দাও
+// Start point exceeds total
 if ($start >= $total) {
     $page = 1;
     $start = 0;
@@ -66,7 +62,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <th>Email</th>
                 <th>Status</th>
                 <th>Created At</th>
-                <th>Action</th>
+                <!-- <th>Action</th> -->
             </tr>
         </thead>
         <tbody>
@@ -79,13 +75,13 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <?= $user['status'] == 1 ? '<span class="badge bg-danger">Blocked</span>' : '<span class="badge bg-success">Active</span>' ?>
                 </td>
                 <td><?= htmlspecialchars($user['created_at']) ?></td>
-                <td>
+                <!-- <td>
                     <?php if ($user['status'] == 0): ?>
                         <a href="index.php?page=users&action=block&id=<?= $user['id'] ?>" class="btn btn-sm btn-danger">Block</a>
                     <?php else: ?>
                         <a href="index.php?page=users&action=unblock&id=<?= $user['id'] ?>" class="btn btn-sm btn-success">Unblock</a>
                     <?php endif; ?>
-                </td>
+                </td> -->
             </tr>
         <?php endforeach; ?>
         </tbody>
@@ -96,7 +92,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
       <ul class="pagination">
         <?php for ($i = 1; $i <= $pages; $i++): ?>
             <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
-                <a class="page-link" href="?page=users&page=<?= $i ?>"><?= $i ?></a>
+                <a class="page-link" href="index.php?page=users&pagination=<?= $i ?>"><?= $i ?></a>
             </li>
         <?php endfor; ?>
       </ul>

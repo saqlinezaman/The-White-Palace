@@ -48,7 +48,7 @@ require_once __DIR__.'/../includes/header.php';
     <?php else: ?>
         <div class="table-responsive">
             <table class="table table-bordered table-striped text-center">
-                <thead class="table-dark">
+                <thead class="">
                     <tr>
                         <th>#</th>
                         <th>Reviewer Name</th>
