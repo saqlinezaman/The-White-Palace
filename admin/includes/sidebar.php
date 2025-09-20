@@ -61,11 +61,11 @@
         </a>
       </li>
 
-      <!-- Coupon -->
+      <!-- services -->
       <li>
-        <a href="index.php?page=coupon">
+        <a href="index.php?page=services">
           <div class="parent-icon"><span class="material-symbols-outlined">confirmation_number</span></div>
-          <div class="menu-title">Coupon</div>
+          <div class="menu-title">Services</div>
         </a>
       </li>
       <!-- Bookings -->

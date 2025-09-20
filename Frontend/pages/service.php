@@ -1,4 +1,16 @@
-<?php require_once __DIR__ . '/../includes/header.php'; ?>
+<?php 
+require_once __DIR__ . '/../../admin/config/db_config.php';
+
+$database = new Database();
+$db = $database->db_connection();
+
+// সব services আনো
+$stmt = $db->prepare("SELECT * FROM services ORDER BY id ASC");
+$stmt->execute();
+$services = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+require_once __DIR__ . '/../includes/header.php'; 
+?>
 
 <div class="bg-gray-50">
     <!-- Services Hero Section -->
@@ -12,129 +24,60 @@
             </div>
         </div>
     </section>
-
-    <!-- Main Services Section -->
-    <section class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Premium Services</h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                    From luxury accommodations to personalized concierge services, we provide everything you need for a perfect stay
-                </p>
-                <div class="w-40 h-1 bg-gradient-to-r from-green-400 to-blue-500 mx-auto mt-4 rounded"></div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Room Service -->
-                <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
-                    <div class="w-16 h-16 bg-green-500 rounded-2xl flex items-center justify-center mb-6">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l-2.5-5M17 21a2 2 0 100-4 2 2 0 000 4zM9 21a2 2 0 100-4 2 2 0 000 4z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">24/7 Room Service</h3>
-                    <p class="text-gray-600 leading-relaxed mb-6">
-                        Enjoy gourmet meals and refreshments delivered directly to your room at any time of day or night.
-                    </p>
-                    <ul class="text-gray-600 space-y-2">
-                        <li class="flex items-center"><span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>24-hour dining menu</li>
-                        <li class="flex items-center"><span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>International cuisine</li>
-                        <li class="flex items-center"><span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>Special dietary options</li>
-                    </ul>
-                </div>
-
-                <!-- Concierge Service -->
-                <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
-                    <div class="w-16 h-16 bg-gray-900 rounded-2xl flex items-center justify-center mb-6">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Personal Concierge</h3>
-                    <p class="text-gray-600 leading-relaxed mb-6">
-                        Our dedicated concierge team is available to assist with reservations, bookings, and local recommendations.
-                    </p>
-                    <ul class="text-gray-600 space-y-2">
-                        <li class="flex items-center"><span class="w-2 h-2 bg-gray-900 rounded-full mr-3"></span>Restaurant reservations</li>
-                        <li class="flex items-center"><span class="w-2 h-2 bg-gray-900 rounded-full mr-3"></span>Event planning</li>
-                        <li class="flex items-center"><span class="w-2 h-2 bg-gray-900 rounded-full mr-3"></span>Local attractions guide</li>
-                    </ul>
-                </div>
-
-                <!-- Spa & Wellness -->
-                <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
-                    <div class="w-16 h-16 bg-green-500 rounded-2xl flex items-center justify-center mb-6">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Spa & Wellness</h3>
-                    <p class="text-gray-600 leading-relaxed mb-6">
-                        Rejuvenate your body and mind with our premium spa treatments and wellness facilities.
-                    </p>
-                    <ul class="text-gray-600 space-y-2">
-                        <li class="flex items-center"><span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>Massage therapy</li>
-                        <li class="flex items-center"><span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>Fitness center</li>
-                        <li class="flex items-center"><span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>Yoga & meditation</li>
-                    </ul>
-                </div>
-
-                <!-- Transportation -->
-                <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
-                    <div class="w-16 h-16 bg-gray-900 rounded-2xl flex items-center justify-center mb-6">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m0 0V7a2 2 0 012 2v6.586a1 1 0 01-.293.707L16 18l-1.707 1.707A1 1 0 0113.586 20H10.414a1 1 0 01-.707-.293L8 18l-1.707-1.707A1 1 0 016 15.586V9a2 2 0 012-2V7"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Transportation</h3>
-                    <p class="text-gray-600 leading-relaxed mb-6">
-                        Convenient and comfortable transportation services for airport transfers and city tours.
-                    </p>
-                    <ul class="text-gray-600 space-y-2">
-                        <li class="flex items-center"><span class="w-2 h-2 bg-gray-900 rounded-full mr-3"></span>Airport pickup/drop-off</li>
-                        <li class="flex items-center"><span class="w-2 h-2 bg-gray-900 rounded-full mr-3"></span>City tours</li>
-                        <li class="flex items-center"><span class="w-2 h-2 bg-gray-900 rounded-full mr-3"></span>Car rental service</li>
-                    </ul>
-                </div>
-
-                <!-- Business Services -->
-                <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
-                    <div class="w-16 h-16 bg-green-500 rounded-2xl flex items-center justify-center mb-6">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-4m-5 0H9m0 0H5m0 0h4M9 7h6m-6 4h6m-6 4h6"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Business Center</h3>
-                    <p class="text-gray-600 leading-relaxed mb-6">
-                        Full-service business center with meeting rooms and modern technology for business travelers.
-                    </p>
-                    <ul class="text-gray-600 space-y-2">
-                        <li class="flex items-center"><span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>Meeting rooms</li>
-                        <li class="flex items-center"><span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>High-speed internet</li>
-                        <li class="flex items-center"><span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>Print & copy services</li>
-                    </ul>
-                </div>
-
-                <!-- Dining Experience -->
-                <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
-                    <div class="w-16 h-16 bg-gray-900 rounded-2xl flex items-center justify-center mb-6">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Fine Dining</h3>
-                    <p class="text-gray-600 leading-relaxed mb-6">
-                        Exquisite dining experiences with world-class chefs and premium ingredients.
-                    </p>
-                    <ul class="text-gray-600 space-y-2">
-                        <li class="flex items-center"><span class="w-2 h-2 bg-gray-900 rounded-full mr-3"></span>Multi-cuisine restaurant</li>
-                        <li class="flex items-center"><span class="w-2 h-2 bg-gray-900 rounded-full mr-3"></span>Rooftop bar</li>
-                        <li class="flex items-center"><span class="w-2 h-2 bg-gray-900 rounded-full mr-3"></span>Private dining rooms</li>
-                    </ul>
-                </div>
-            </div>
+<!-- Main Services Section -->
+<section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Premium Services</h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                From luxury accommodations to personalized concierge services, we provide everything you need for a perfect stay
+            </p>
+            <div class="w-40 h-1 bg-gradient-to-r from-green-400 to-blue-500 mx-auto mt-4 rounded"></div>
         </div>
-    </section>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <?php foreach ($services as $service): ?>
+                <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 flex flex-col h-[400px]">
+                    
+                    <!-- Icon Section -->
+                   <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-6"
+     style="background-color: <?= htmlspecialchars($service['color']) ?>;">
+    <i class="fa-solid fa-<?= htmlspecialchars($service['icon']) ?> text-white text-4xl"></i>
+</div>
+ <!-- Icon Section -->
+                  
+
+                    <!-- Title -->
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">
+                        <?= htmlspecialchars($service['title']) ?>
+                    </h3>
+
+                    <!-- Description -->
+                    <p class="text-gray-600 leading-relaxed  flex-grow">
+                        <?= htmlspecialchars($service['description']) ?>
+                    </p>
+
+                    <!-- Features -->
+                    <?php 
+                        $features = json_decode($service['features'], true);
+                        if ($features && is_array($features)): 
+                    ?>
+                        <ul class="text-gray-600 space-y-2 mt-auto">
+                            <?php foreach ($features as $feature): ?>
+                                <li class="flex items-center">
+                                    <span class=" "><i class="fa fa-circle text-green-500 mr-2"></i></span>
+                                    <?= htmlspecialchars($feature) ?>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    <?php endif; ?>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</section>
+
+
 
     <!-- Special Amenities Section -->
     <section class="py-20 bg-gray-50">
@@ -320,5 +263,6 @@
         <div class="absolute top-1/3 right-1/3 w-16 h-16 bg-green-300/25 rounded-full blur-xl"></div>
     </section>
 </div>
+ <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>
