@@ -37,10 +37,10 @@ require_once __DIR__ . '/../includes/header.php';
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <?php foreach ($services as $service): ?>
-                <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 flex flex-col h-[400px]">
+                <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 flex flex-col h-[450px]">
                     
                     <!-- Icon Section -->
-                   <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-6"
+                   <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 p-5"
      style="background-color: <?= htmlspecialchars($service['color']) ?>;">
     <i class="fa-solid fa-<?= htmlspecialchars($service['icon']) ?> text-white text-4xl"></i>
 </div>

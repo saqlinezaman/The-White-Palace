@@ -117,6 +117,20 @@ require_once __DIR__ . '/../includes/sidebar.php';
                     </tr>
                 <?php else: ?>
                     <?php foreach ($rows as $b): ?>
+                        <?php
+                        $extraServices = json_decode($b['extra_services'], true) ?? [];
+                        $servicesList = [];
+                        if (!empty($extraServices)) {
+                            $placeholders = implode(',', array_fill(0, count($extraServices), '?'));
+                            $stmtServices = $db->prepare("SELECT title, price FROM services WHERE id IN ($placeholders)");
+                            $stmtServices->execute($extraServices);
+                            $servicesData = $stmtServices->fetchAll(PDO::FETCH_ASSOC);
+                            foreach ($servicesData as $s) {
+                                $servicesList[] = $s['title'] . ' (৳' . number_format($s['price'], 2) . ')';
+                            }
+                        }
+                        $extraServicesStr = implode(', ', $servicesList);
+                        ?>
                         <tr class="booking-row">
                             <form method="POST">
                                 <input type="hidden" name="booking_id" value="<?= $b['id'] ?>">
@@ -139,7 +153,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                                         <option value="complete" <?= $b['status'] == 'complete' ? 'selected' : '' ?>>Complete
                                         </option>
                                     </select>
-                                                                    <span class="badge 
+                                    <span class="badge 
                                     <?= $b['status'] == 'approved' ? 'bg-success' :
                                             ($b['status'] == 'pending' ? 'bg-warning' :
                                                 ($b['status'] == 'rejected' ? 'bg-danger' : 'bg-info')) ?> text-white"
@@ -179,8 +193,8 @@ require_once __DIR__ . '/../includes/sidebar.php';
                                         data-checkin="<?= $b['check_in'] ?>" data-checkout="<?= $b['check_out'] ?>"
                                         data-total="<?= $b['total_price'] ?>" data-advance="<?= $b['advance_amount'] ?>"
                                         data-due="<?= $b['total_price'] - $b['advance_amount'] ?>"
-                                        data-payment="<?= ucfirst($b['payment_status']) ?>"
-                                        data-transaction="<?= $b['transaction_id'] ?>">View All</button>
+                                        data-payment="<?= ucfirst($b['payment_status']) ?>" data-transaction="<?= $b['transaction_id'] ?>"
+                                        data-extra_services="<?= htmlspecialchars($extraServicesStr) ?>">View All</button>
 
                                     <?php if ($b['invoice_sent'] ?? 0): ?>
                                         <span class="badge bg-success">Sended</span>
@@ -312,6 +326,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const due = this.dataset.due;
             const payment = this.dataset.payment;
             const trx = this.dataset.transaction;
+            const extra_services = this.dataset.extra_services;
 
             currentDetails = `
             <div id="invoiceContent" style="font-family: Arial; font-size: 14px; color: #333;">
@@ -327,6 +342,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     <tr><th>Phone</th><td>${phone}</td></tr>
                     <tr><th>Check-in</th><td>${checkin}</td></tr>
                     <tr><th>Check-out</th><td>${checkout}</td></tr>
+                    <tr><th>Extra Services</th><td>${extra_services || 'None'}</td></tr>
                     <tr><th>Total Price</th><td>৳${parseFloat(total).toFixed(2)}</td></tr>
                     <tr><th>Advance Paid</th><td>৳${parseFloat(advance).toFixed(2)}</td></tr>
                     <tr><th>Due</th><td>৳${parseFloat(due).toFixed(2)}</td></tr>

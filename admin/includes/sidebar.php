@@ -37,6 +37,11 @@
         <div class="collapse" id="blogsMenu">
           <ul class="nav flex-column ms-4">
             <li class="nav-item">
+              <a class="nav-link" href="index.php?page=dashboard">
+                <span class="material-symbols-outlined">chevron_right</span>Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="index.php?page=users">
                 <span class="material-symbols-outlined">chevron_right</span>Users
               </a>
@@ -44,7 +49,6 @@
           </ul>
         </div>
       </li>
-
 
       <!-- categories -->
       <li>
@@ -60,19 +64,18 @@
           <div class="menu-title">Rooms</div>
         </a>
       </li>
-
-      <!-- services -->
-      <li>
-        <a href="index.php?page=services">
-          <div class="parent-icon"><span class="material-symbols-outlined">confirmation_number</span></div>
-          <div class="menu-title">Services</div>
-        </a>
-      </li>
       <!-- Bookings -->
       <li>
         <a href="index.php?page=manage_bookings">
           <div class="parent-icon"><span class="material-symbols-outlined">event_available</span></div>
           <div class="menu-title">Bookings</div>
+        </a>
+      </li>
+        <!-- services -->
+      <li>
+        <a href="index.php?page=services">
+          <div class="parent-icon"><span class="material-symbols-outlined">confirmation_number</span></div>
+          <div class="menu-title">Services</div>
         </a>
       </li>
       <!-- blogs -->

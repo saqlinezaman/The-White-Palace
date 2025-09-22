@@ -201,6 +201,19 @@ class User
     {
         $due_amount = $booking['total_price'] - $booking['advance_amount'];
 
+        $extraServices = json_decode($booking['extra_services'], true) ?? [];
+        $servicesList = [];
+        if (!empty($extraServices)) {
+            $placeholders = implode(',', array_fill(0, count($extraServices), '?'));
+            $stmtServices = $this->connection->prepare("SELECT title, price FROM services WHERE id IN ($placeholders)");
+            $stmtServices->execute($extraServices);
+            $servicesData = $stmtServices->fetchAll(PDO::FETCH_ASSOC);
+            foreach ($servicesData as $s) {
+                $servicesList[] = $s['title'] . ' (Taka: ' . number_format($s['price'], 2, '.', ',') . ')';
+            }
+        }
+        $extraServicesStr = implode(', ', $servicesList);
+
         $subject = "Booking Invoice - #" . htmlspecialchars($booking['id']);
         $message = '
         <div style="font-family: Arial, sans-serif; font-size: 14px; color: #333;">
@@ -217,6 +230,7 @@ class User
                 <tr><td><strong>Phone</strong></td><td>' . htmlspecialchars($booking['user_phone']) . '</td></tr>
                 <tr><td><strong>Check-in</strong></td><td>' . htmlspecialchars($booking['check_in']) . '</td></tr>
                 <tr><td><strong>Check-out</strong></td><td>' . htmlspecialchars($booking['check_out']) . '</td></tr>
+                <tr><td><strong>Extra Services</strong></td><td>' . htmlspecialchars($extraServicesStr ?? 'None') . '</td></tr>
                 <tr><td><strong>Total Nights</strong></td><td>' . htmlspecialchars($booking['nights'] ?? '') . '</td></tr>
                 <tr><td><strong>Total Price</strong></td><td>Taka: ' . number_format((float)$booking['total_price'], 2, '.', ',') . '</td></tr>
                 <tr><td><strong>Advance Paid</strong></td><td>Taka: ' . number_format((float)$booking['advance_amount'], 2, '.', ',') . '</td></tr>
@@ -231,7 +245,6 @@ class User
 
         return $this->sendMail($email, $subject, $message);
     }
-
     // sendMail function (changed to public)
     public function sendMail($email, $subject, $message)
     {
