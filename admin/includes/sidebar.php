@@ -1,3 +1,18 @@
+<?php
+// যদি session এ login থাকে
+if(isset($_SESSION['admin_logged_in'])) {
+    require_once __DIR__ . '/../config/db_config.php';
+    $database = new Database();
+    $db = $database->db_connection();
+
+    // ধরো session এ username আছে
+    $stmt = $db->prepare("SELECT * FROM admins LIMIT 1"); // যদি এক জন admin থাকে
+    $stmt->execute();
+    $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+}
+?>
+
+
 <!--start sidebar-->
 <aside class="sidebar-wrapper">
   <div class="sidebar-header">
@@ -26,7 +41,7 @@
 
       <!-- Dashboard -->
       <li class="nav-item">
-        <a class="nav-link d-flex align-items-center" data-bs-toggle="collapse" href="#blogsMenu" role="button"
+        <a class="nav-link d-flex align-items-center" data-bs-toggle="collapse" href="#dashMenu" role="button"
           aria-expanded="false" aria-controls="blogsMenu">
           <div class="parent-icon">
             <span class="material-symbols-outlined">dashboard</span>
@@ -34,7 +49,7 @@
           <div class="menu-title ms-2">Dashboard</div>
           <span class="ms-auto material-symbols-outlined">expand_more</span>
         </a>
-        <div class="collapse" id="blogsMenu">
+        <div class="collapse" id="dashMenu">
           <ul class="nav flex-column ms-4">
             <li class="nav-item">
               <a class="nav-link" href="index.php?page=dashboard">
@@ -132,41 +147,23 @@
     <!--end navigation-->
 
   </div>
+
+  <!-- bottom section for profile and log out -->
   <div class="sidebar-bottom dropdown dropup-center dropup">
     <div class="dropdown-toggle d-flex align-items-center px-3 gap-3 w-100 h-100" data-bs-toggle="dropdown">
       <div class="user-img">
-        <img src="../admin/assets/images/avatars/01.png" alt="">
+        <img src="../admin/uploads/profile/<?= htmlspecialchars($admin['profile_image'] ?? 'default.png') ?>"  alt="">
       </div>
       <div class="user-info">
-        <h5 class="mb-0 user-name">Jhon Maxwell</h5>
-        <p class="mb-0 user-designation">UI Engineer</p>
+        <h5 class="mb-0 user-name">Md. Saqline Zaman</h5>
       </div>
     </div>
     <ul class="dropdown-menu dropdown-menu-end">
-      <li><a class="dropdown-item" href="javascript:;"><span class="material-symbols-outlined me-2">
+      <li><a class="dropdown-item" href="index.php?page=profile"><span class="material-symbols-outlined me-2">
             account_circle
           </span><span>Profile</span></a>
       </li>
-      <li><a class="dropdown-item" href="javascript:;"><span class="material-symbols-outlined me-2">
-            tune
-          </span><span>Settings</span></a>
-      </li>
-      <li><a class="dropdown-item" href="javascript:;"><span class="material-symbols-outlined me-2">
-            dashboard
-          </span><span>Dashboard</span></a>
-      </li>
-      <li><a class="dropdown-item" href="javascript:;"><span class="material-symbols-outlined me-2">
-            account_balance_wallet
-          </span><span>Earnings</span></a>
-      </li>
-      <li><a class="dropdown-item" href="javascript:;"><span class="material-symbols-outlined me-2">
-            cloud_download
-          </span><span>Downloads</span></a>
-      </li>
-      <li>
-        <div class="dropdown-divider mb-0"></div>
-      </li>
-      <li><a class="dropdown-item" href="javascript:;"><span class="material-symbols-outlined me-2">
+      <li><a class="dropdown-item" href="index.php?page=logout"><span class="material-symbols-outlined me-2">
             logout
           </span><span>Logout</span></a>
       </li>

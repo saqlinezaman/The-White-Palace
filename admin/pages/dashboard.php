@@ -1,8 +1,12 @@
-```php
 <?php
 ob_start();
 require_once __DIR__ . '/../config/db_config.php';
 require_once __DIR__ . '/../config/class.user.php';
+
+if(!isset($_SESSION['admin_logged_in'])){
+    header('Location: ../login.php');
+    exit;
+}
 
 $database = new Database();
 $db = $database->db_connection();
@@ -119,7 +123,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                             </div>
                         </div>
                         <div class="progress mt-3" style="height: 4.5px;">
-                            <div class="progress-bar" role="progressbar" style="width: 75%;"></div>
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 75%;"></div>
                         </div>
                     </div>
                 </div>
@@ -139,7 +143,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                             </div>
                         </div>
                         <div class="progress mt-3" style="height: 4.5px;">
-                            <div class="progress-bar" role="progressbar" style="width: 75%;"></div>
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: 75%;"></div>
                         </div>
                     </div>
                 </div>
@@ -366,4 +370,3 @@ require_once __DIR__ . '/../includes/sidebar.php';
 </script>
 
 <?php ob_end_flush(); ?>
-```
