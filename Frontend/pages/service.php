@@ -232,36 +232,36 @@ require_once __DIR__ . '/../includes/header.php';
     </div>
 </section>
 
-    <!-- Call to Action Section -->
-    <section class="h-[60vh] bg-gradient-to-br from-green-600 via-green-500 to-gray-800 relative overflow-hidden flex items-center justify-center">
-        <div class="absolute inset-0 bg-gradient-to-r from-green-700/40 to-black/20"></div>
-        <div class="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
-            <h2 class="text-3xl md:text-5xl font-bold mb-6 text-white">
-                Experience Our Premium Services
-            </h2>
-            <p class="text-lg md:text-xl text-green-50 mb-8 max-w-2xl mx-auto leading-relaxed">
-                Book your stay today and enjoy world-class amenities and personalized service
-            </p>
-            <div class="flex flex-col sm:flex-row gap-6 justify-center items-center mt-8">
-                <a href="/rooms" class="inline-flex items-center bg-white hover:bg-gray-100 text-gray-900 px-10 py-4 rounded-full font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl min-w-[200px] justify-center">
-                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-4m-5 0H9m0 0H5m0 0h4M9 7h6m-6 4h6m-6 4h6"></path>
-                    </svg>
-                    Book Your Stay
-                </a>
-                <a href="/contact" class="inline-flex items-center bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 px-10 py-4 rounded-full font-bold text-lg transition-all duration-300 transform hover:scale-105 min-w-[200px] justify-center">
-                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                    </svg>
-                    Contact Us
-                </a>
-            </div>
+   <!-- Call to Action Section -->
+<section class="md:h-[60vh] bg-gradient-to-br from-green-600 via-green-500 to-gray-800 relative overflow-hidden flex items-center justify-center md:p-0 p-5">
+    <div class="absolute inset-0 bg-gradient-to-r from-green-700/40 to-black/20"></div>
+    <div class="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
+        <h2 class="text-3xl md:text-5xl font-bold mb-6 text-white">
+            Ready to Start Your Journey?
+        </h2>
+        <p class="text-lg md:text-xl text-green-50 mb-8 max-w-2xl mx-auto leading-relaxed">
+            Experience luxury, comfort, and exceptional service with The White Palace
+        </p>
+        <div class="flex flex-col sm:flex-row gap-6 justify-center items-center mt-8">
+            <a href="<?= $BASE_URL ?>/pages/rooms.php" class="inline-flex items-center bg-white hover:bg-gray-100 text-gray-900 px-10 py-4 rounded-full font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl min-w-[200px] justify-center">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-4m-5 0H9m0 0H5m0 0h4M9 7h6m-6 4h6m-6 4h6"></path>
+                </svg>
+                Book Your Room
+            </a>
+            <a href="<?= $BASE_URL ?>/pages/contact_us.php" class="inline-flex items-center bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 px-10 py-4 rounded-full font-bold text-lg transition-all duration-300 transform hover:scale-105 min-w-[200px] justify-center">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                </svg>
+                Contact Us
+            </a>
         </div>
-        <!-- Decorative Elements -->
-        <div class="absolute top-20 left-20 w-24 h-24 bg-green-400/20 rounded-full blur-2xl"></div>
-        <div class="absolute bottom-20 right-20 w-32 h-32 bg-green-500/15 rounded-full blur-3xl"></div>
-        <div class="absolute top-1/3 right-1/3 w-16 h-16 bg-green-300/25 rounded-full blur-xl"></div>
-    </section>
+    </div>
+    <!-- Decorative Elements -->
+    <div class="absolute top-20 left-20 w-24 h-24 bg-green-400/20 rounded-full blur-2xl"></div>
+    <div class="absolute bottom-20 right-20 w-32 h-32 bg-green-500/15 rounded-full blur-3xl"></div>
+    <div class="absolute top-1/3 right-1/3 w-16 h-16 bg-green-300/25 rounded-full blur-xl"></div>
+</section>
 </div>
  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 

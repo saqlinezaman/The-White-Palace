@@ -69,14 +69,12 @@ $blogs = $blogsStmt->fetchAll(PDO::FETCH_ASSOC);
                 memories in our world-class hospitality.
             </p>
             <div class="flex gap-4 justify-center">
-                <button
-                    class="btn bg-green-500 btn-lg text-white font-semibold px-8 hover:scale-105 transition-all duration-300">
+                <a href="<?= $BASE_URL ?>/pages/about.php"  class="btn bg-green-500 btn-lg text-white font-semibold px-8 hover:scale-105 transition-all duration-300">
                     Read More
-                </button>
-                <button
-                    class="btn btn-outline btn-lg font-semibold px-8 text-white border-white hover:bg-white hover:text-gray-800 transition-all duration-300">
-                    Learn More
-                </button>
+                </a>
+                <a href="<?= $BASE_URL ?>/pages/contact_us.php" class="btn btn-outline btn-lg font-semibold px-8 text-white border-white hover:bg-white hover:text-gray-800 transition-all duration-300">
+                    Contact Us
+                </a>
             </div>
         </div>
 
@@ -392,24 +390,36 @@ $blogs = $blogsStmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </section>
 
-<!-- Newsletter Section -->
-<div class="bg-success">
-    <div class="max-w-7xl mx-auto px-4 py-8">
-        <div class="text-center mb-6">
-            <h3 class="text-2xl font-bold text-gray-900 mb-2">Subscribe to Our Newsletter</h3>
-            <p class="text-white">Get updates about our latest offers and news</p>
-        </div>
-
-        <div class="flex flex-col sm:flex-row justify-center items-center gap-4 max-w-md mx-auto">
-            <input type="email" placeholder="Enter your email address"
-                class="flex-1 px-4 py-3 rounded-lg bg-white border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition-all duration-300" />
-            <button
-                class="px-6 py-3 bg-gray-800 hover:bg-gray-900 text-white font-semibold rounded-lg transition-all duration-300 hover:scale-105 whitespace-nowrap">
-                Subscribe Now
-            </button>
+<!-- Call to Action Section -->
+<section class="md:h-[60vh] bg-gradient-to-br from-green-600 via-green-500 to-gray-800 relative overflow-hidden flex items-center justify-center md:p-0 p-5">
+    <div class="absolute inset-0 bg-gradient-to-r from-green-700/40 to-black/20"></div>
+    <div class="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
+        <h2 class="text-3xl md:text-5xl font-bold mb-6 text-white">
+            Ready to Start Your Journey?
+        </h2>
+        <p class="text-lg md:text-xl text-green-50 mb-8 max-w-2xl mx-auto leading-relaxed">
+            Experience luxury, comfort, and exceptional service with The White Palace
+        </p>
+        <div class="flex flex-col sm:flex-row gap-6 justify-center items-center mt-8">
+            <a href="<?= $BASE_URL ?>/pages/rooms.php" class="inline-flex items-center bg-white hover:bg-gray-100 text-gray-900 px-10 py-4 rounded-full font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl min-w-[200px] justify-center">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-4m-5 0H9m0 0H5m0 0h4M9 7h6m-6 4h6m-6 4h6"></path>
+                </svg>
+                Book Your Room
+            </a>
+            <a href="<?= $BASE_URL ?>/pages/contact_us.php" class="inline-flex items-center bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 px-10 py-4 rounded-full font-bold text-lg transition-all duration-300 transform hover:scale-105 min-w-[200px] justify-center">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                </svg>
+                Contact Us
+            </a>
         </div>
     </div>
-</div>
+    <!-- Decorative Elements -->
+    <div class="absolute top-20 left-20 w-24 h-24 bg-green-400/20 rounded-full blur-2xl"></div>
+    <div class="absolute bottom-20 right-20 w-32 h-32 bg-green-500/15 rounded-full blur-3xl"></div>
+    <div class="absolute top-1/3 right-1/3 w-16 h-16 bg-green-300/25 rounded-full blur-xl"></div>
+</section>
 
 <!-- review pop up -->
 <?php if ($booking_to_review): ?>

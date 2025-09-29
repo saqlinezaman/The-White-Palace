@@ -73,48 +73,6 @@ $isLoggedIn = isset($_SESSION['user_id']);
                     <?= $blog['description'] ?>
                 </div>
             </div>
-
-            <!-- Tags Section -->
-            <div class="mt-12 pt-8 border-t border-gray-200">
-                <div class="flex items-center space-x-4">
-                    <span class="text-gray-500 font-semibold">Tags:</span>
-                    <div class="flex space-x-2">
-                        <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">Hotel</span>
-                        <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">Travel</span>
-                        <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">Luxury</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Share Section -->
-            <div class="mt-8 pt-8 border-t border-gray-200">
-                <div class="flex items-center justify-between">
-                    <h3 class="text-xl font-bold text-gray-900">Share This Article</h3>
-                    <div class="flex space-x-4">
-                        <!-- Twitter -->
-                        <a target="_blank" href="https://twitter.com/intent/tweet?url=<?=urlencode('http://yoursite.com/view_blog.php?id='.$blog_id)?>"
-                           class="bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-full transition-colors duration-300">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M24 4.557c-.883.392-1.832.656..."/>
-                            </svg>
-                        </a>
-                        <!-- Facebook -->
-                        <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<?=urlencode('http://yoursite.com/view_blog.php?id='.$blog_id)?>"
-                           class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full transition-colors duration-300">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M24 12.073c0-6.627-5.373-12..."/>
-                            </svg>
-                        </a>
-                        <!-- WhatsApp -->
-                        <a target="_blank" href="https://api.whatsapp.com/send?text=<?=urlencode($blog['title'].' - http://yoursite.com/view_blog.php?id='.$blog_id)?>"
-                           class="bg-green-500 hover:bg-green-600 text-white p-3 rounded-full transition-colors duration-300">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M17.472 14.382c-.297-.149-1.758..."/>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
 

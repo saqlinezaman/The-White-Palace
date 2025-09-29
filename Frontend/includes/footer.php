@@ -1,9 +1,9 @@
 </div>
 <!-- Footer Section -->
-<footer class="bg-gray-900 text-white">
+<footer class="bg-gray-900 text-white ">
     <!-- Main Footer Content -->
-    <div class="max-w-7xl mx-auto px-4 py-12">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <div class="max-w-7xl  px-4 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-20 ">
             
             <!-- Company Info -->
             <div class="space-y-4">
@@ -11,17 +11,17 @@
                 <p class="text-gray-300 leading-relaxed">
                     Experience luxury and comfort at its finest. Your perfect stay awaits at The White Palace with world-class hospitality and unforgettable memories.
                 </p>
-                <div class="flex space-x-3">
-                    <a href="#" class="text-2xl text-red-400 hover:text-red-300 transition-colors duration-300">
+                <div class="flex space-x-1">
+                    <a href="#" class="text-2xl text-green-500">
                         <i class="fa-brands fa-facebook"></i>
                     </a>
-                    <a href="#" class="text-2xl text-red-400 hover:text-red-300 transition-colors duration-300">
+                    <a href="#" class="text-2xl text-green-500">
                         <i class="fa-brands fa-instagram"></i>
                     </a>
-                    <a href="#" class="text-2xl text-red-400 hover:text-red-300 transition-colors duration-300">
+                    <a href="#" class="text-2xl text-green-500">
                         <i class="fa-brands fa-youtube"></i>
                     </a>
-                    <a href="#" class="text-2xl text-red-400 hover:text-red-300 transition-colors duration-300">
+                    <a href="#" class="text-2xl text-green-500">
                         <i class="fa-brands fa-twitter"></i>
                     </a>
                 </div>
@@ -32,31 +32,31 @@
                 <h3 class="text-xl font-semibold text-white mb-4 border-b border-gray-700 pb-2">Quick Links</h3>
                 <ul class="space-y-3">
                     <li>
-                        <a href="#" class="text-gray-300 hover:text-white hover:pl-2 transition-all duration-300 flex items-center">
+                        <a href="<?= $BASE_URL ?>/index.php" class="text-gray-300 hover:text-white hover:pl-2 transition-all duration-300 flex items-center">
                             <i class="fa-solid fa-arrow-right text-sm mr-2 text-green-400"></i>
                             Home
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="text-gray-300 hover:text-white hover:pl-2 transition-all duration-300 flex items-center">
+                        <a href="<?= $BASE_URL ?>/pages/about.php" class="text-gray-300 hover:text-white hover:pl-2 transition-all duration-300 flex items-center">
                             <i class="fa-solid fa-arrow-right text-sm mr-2 text-green-400"></i>
                             About Us
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="text-gray-300 hover:text-white hover:pl-2 transition-all duration-300 flex items-center">
+                        <a href="<?= $BASE_URL ?>/pages/about.php" class="text-gray-300 hover:text-white hover:pl-2 transition-all duration-300 flex items-center">
                             <i class="fa-solid fa-arrow-right text-sm mr-2 text-green-400"></i>
                             Our Rooms
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="text-gray-300 hover:text-white hover:pl-2 transition-all duration-300 flex items-center">
+                        <a href="<?= $BASE_URL ?>/pages/service.php" class="text-gray-300 hover:text-white hover:pl-2 transition-all duration-300 flex items-center">
                             <i class="fa-solid fa-arrow-right text-sm mr-2 text-green-400"></i>
                             Services
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="text-gray-300 hover:text-white hover:pl-2 transition-all duration-300 flex items-center">
+                        <a href="<?= $BASE_URL ?>/pages/contact_us.php" class="text-gray-300 hover:text-white hover:pl-2 transition-all duration-300 flex items-center">
                             <i class="fa-solid fa-arrow-right text-sm mr-2 text-green-400"></i>
                             Contact
                         </a>
@@ -64,7 +64,7 @@
                 </ul>
             </div>
 
-            <!-- Services -->
+            <!-- Services
             <div class="space-y-4">
                 <h3 class="text-xl font-semibold text-white mb-4 border-b border-gray-700 pb-2">Our Services</h3>
                 <ul class="space-y-3">
@@ -99,14 +99,14 @@
                         </a>
                     </li>
                 </ul>
-            </div>
+            </div> -->
 
             <!-- Contact Info -->
             <div class="space-y-4">
                 <h3 class="text-xl font-semibold text-white mb-4 border-b border-gray-700 pb-2">Contact Info</h3>
                 <div class="space-y-4">
                     <div class="flex items-start space-x-3">
-                        <i class="fa-solid fa-location-dot text-red-400 text-lg mt-1"></i>
+                        <i class="fa-solid fa-location-dot text-green-500 text-lg mt-1"></i>
                         <div>
                             <p class="text-gray-300 text-sm font-medium">Address</p>
                             <p class="text-white">Avenida Juan, 82, Paola Castillo</p>
@@ -114,7 +114,7 @@
                     </div>
                     
                     <div class="flex items-start space-x-3">
-                        <i class="fa-solid fa-phone text-red-400 text-lg mt-1"></i>
+                        <i class="fa-solid fa-phone text-green-500 text-lg mt-1"></i>
                         <div>
                             <p class="text-gray-300 text-sm font-medium">Phone</p>
                             <p class="text-white">+88 01745-654534</p>
@@ -122,7 +122,7 @@
                     </div>
                     
                     <div class="flex items-start space-x-3">
-                        <i class="fa-solid fa-envelope text-red-400 text-lg mt-1"></i>
+                        <i class="fa-solid fa-envelope text-green-500 text-lg mt-1"></i>
                         <div>
                             <p class="text-gray-300 text-sm font-medium">Email</p>
                             <p class="text-white">info@whitepalace.com</p>
@@ -130,7 +130,7 @@
                     </div>
                     
                     <div class="flex items-start space-x-3">
-                        <i class="fa-solid fa-clock text-red-400 text-lg mt-1"></i>
+                        <i class="fa-solid fa-clock text-green-500 text-lg mt-1"></i>
                         <div>
                             <p class="text-gray-300 text-sm font-medium">Working Hours</p>
                             <p class="text-white">24/7 Available</p>
