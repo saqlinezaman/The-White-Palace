@@ -57,6 +57,11 @@ if(isset($_SESSION['admin_logged_in'])) {
               </a>
             </li>
             <li class="nav-item">
+              <a class="nav-link" href="index.php?page=report">
+                <span class="material-symbols-outlined">chevron_right</span>report
+              </a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="index.php?page=users">
                 <span class="material-symbols-outlined">chevron_right</span>Users
               </a>
