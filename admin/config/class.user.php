@@ -250,6 +250,8 @@ class User
     {
         require_once __DIR__ . '/mailer/PHPMailer.php';
         require_once __DIR__ . '/mailer/SMTP.php';
+        require_once __DIR__ . '/mailer/Exception.php';
+
 
         $mail = new PHPMailer\PHPMailer\PHPMailer();
         $mail->isSMTP();
